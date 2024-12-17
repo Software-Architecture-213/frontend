@@ -42,6 +42,22 @@ const LoginPage = () => {
 
         {/* Brand Login Form */}
         {activeTab === 'brand' && <BrandLoginForm />}
+        
+        {/* Divider */}
+
+        { activeTab === 'brand' &&
+          <div className="mt-6 border-t pt-4 text-center text-gray-700">
+            <p>
+              Don’t have an account?{' '}
+              <a
+                href="/register"
+                className="text-gray-50 font-medium"
+              >
+                Register here
+              </a>
+            </p>
+          </div>
+        }
       </div>
     </div>
   );

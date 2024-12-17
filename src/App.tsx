@@ -7,6 +7,7 @@ import AdminAccountsTab from './pages/admin/AdminAccountsTab';
 import { AuthProvider } from './hooks/AuthContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import NotFoundPage from './pages/NoutFoundPage';
+import RegisterPage from './pages/auth/RegisterPage';
 
 
 
@@ -25,6 +26,7 @@ function App() {
               </Route>
             </Route>
             <Route path="login" element={<LoginPage />} />
+            <Route path="register" element={<RegisterPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </AuthProvider>
