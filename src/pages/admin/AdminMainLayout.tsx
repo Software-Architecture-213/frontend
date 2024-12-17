@@ -1,7 +1,10 @@
 // pages/admin/AdminDashboard.tsx
 import { Outlet, Link } from 'react-router-dom';
+import { useAuth } from '../../hooks/AuthContext';
 
 const AdminMainLayout = () => {
+  const authContext = useAuth()
+  console.log("authContext ", authContext)
   return (
     <div className="flex h-screen">
       {/* Sidebar */}

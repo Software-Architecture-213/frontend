@@ -4,6 +4,9 @@ import LoginPage from './pages/auth/LoginPage';
 import AdminMainLayout from './pages/admin/AdminMainLayout';
 import AdminDashboardTab from './pages/admin/AdminDashboardTab';
 import AdminAccountsTab from './pages/admin/AdminAccountsTab';
+import { AuthProvider } from './hooks/AuthContext';
+import ProtectedRoutes from './components/ProtectedRoutes';
+import NotFoundPage from './pages/NoutFoundPage';
 
 
 
@@ -12,17 +15,21 @@ function App() {
   return (
     <div className='h-screen w-screen'>
       <Router>
-        <Routes>
-        <Route path="admin" element={<AdminMainLayout />}>
-          <Route path='' element={<AdminDashboardTab />} />
-          <Route path="dashboard" element={<AdminDashboardTab />} />
-          <Route path="accounts" element={<AdminAccountsTab/>} />
-        </Route>
-        <Route path="login" element={<LoginPage />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route element={<ProtectedRoutes />}>
+              <Route path="admin" element={<AdminMainLayout />}>
+                <Route path='' element={<AdminDashboardTab />} />
+                <Route path="dashboard" element={<AdminDashboardTab />} />
+                <Route path="accounts" element={<AdminAccountsTab />} />
+              </Route>
+            </Route>
+            <Route path="login" element={<LoginPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </AuthProvider>
       </Router>
     </div>
-
   );
 }
 

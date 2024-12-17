@@ -1,7 +1,10 @@
 import axios, { AxiosResponse } from 'axios';
+import { BACKEND_URL } from '../constants/backend';
+
+console.log("BACKEND_URL ", BACKEND_URL)
 
 const axiosInstance = axios.create({
-  baseURL: process.env.VITE_BACKEND_URL,
+  baseURL: BACKEND_URL,
 });
 
 let accessToken: string | null = null;
@@ -70,12 +73,12 @@ axiosInstance.interceptors.response.use(
         let response;
 
         try {
-          response = await axios.post(`${process.env.VITE_BACKEND_DOMAIN}/api/identity/auth/refresh-token`, {
+          response = await axios.post(`${BACKEND_URL}/api/identity/auth/refresh-token`, {
             token: refreshToken,
           });
         } catch (firstError) {
           console.warn('First refresh attempt failed:', firstError);
-          response = await axios.post(`${process.env.VITE_BACKEND_DOMAIN}/api/brands/auth/refresh-token`, {
+          response = await axios.post(`${BACKEND_URL}/api/brands/auth/refresh-token`, {
             token: refreshToken,
           });
         }

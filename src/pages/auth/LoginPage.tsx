@@ -23,7 +23,7 @@ const LoginPage = () => {
             }`}
             onClick={() => handleTabChange('admin')}
           >
-            Admin Login
+            Admin
           </button>
           <button
             className={`w-1/2 py-2 ml-1 text-center focus:outline-none ${
@@ -33,7 +33,7 @@ const LoginPage = () => {
             }`}
             onClick={() => handleTabChange('brand')}
           >
-            Brand Login
+            Brand
           </button>
         </div>
 
