@@ -1,8 +1,38 @@
 #root {
   max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  background-color: #FBF6F4; /* Light cream background */
+}
+
+/* Background gradient */
+.main-bg-gradient {
+  background: linear-gradient(135deg, #f75f07, #FBF6F4);
+}
+
+/* Enhanced Shadow */
+.shadow-2xl {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Main color border */
+.border-main {
+  border-color: #f75f07;
+}
+
+
+.main-bg {
+  background-color: #f75f07 !important;
+}
+
+.secondary-bg {
+  background-color: #FBF6F4 !important;
+}
+
+.main-text {
+  color: #f75f07 !important;
+}
+.secondary-text {
+  color: #FBF6F4 !important;
 }
 
 .logo {
