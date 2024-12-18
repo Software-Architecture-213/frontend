@@ -8,6 +8,9 @@ import { AuthProvider } from './hooks/AuthContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import NotFoundPage from './pages/NoutFoundPage';
 import RegisterPage from './pages/auth/RegisterPage';
+import BrandMainLayout from './pages/brand/BrandMainLayout';
+import BrandDashboardTab from './pages/brand/BrandDashBoard';
+import BrandCampaign from './pages/brand/BrandCampain';
 
 
 
@@ -19,10 +22,17 @@ function App() {
         <AuthProvider>
           <Routes>
             <Route element={<ProtectedRoutes />}>
+              {/* Admin route */}
               <Route path="admin" element={<AdminMainLayout />}>
                 <Route path='' element={<AdminDashboardTab />} />
                 <Route path="dashboard" element={<AdminDashboardTab />} />
                 <Route path="accounts" element={<AdminAccountsTab />} />
+              </Route>
+              {/* Brand route */}
+              <Route path="brand" element={<BrandMainLayout/>}>
+                <Route path='' element={<BrandDashboardTab />} />
+                <Route path="dashboard" element={<BrandDashboardTab />} />
+                <Route path="campaign" element={<BrandCampaign />} />
               </Route>
             </Route>
             <Route path="login" element={<LoginPage />} />

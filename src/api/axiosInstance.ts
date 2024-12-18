@@ -83,18 +83,18 @@ axiosInstance.interceptors.response.use(
           });
         }
 
-        if (response.status !== 200 || !response.data.newAccessToken) {
+        if (response.status !== 200 || !response.data.accessToken) {
             console.error('Invalid refresh token or failed to get new access token.');
             return Promise.reject('Unable to refresh token');
           }
 
-        const { newAccessToken} = response.data;
-        setAccessToken(newAccessToken);
+        const { accessToken } = response.data;
+        setAccessToken(accessToken);
         // Process the queued requests
-        processQueue(null, newAccessToken);
+        processQueue(null, accessToken);
 
         // Retry the original request with the new access token
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         console.error('Both refresh attempts failed:', refreshError);

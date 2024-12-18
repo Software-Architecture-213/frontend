@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import { loginFormValidator } from "../../../utils/formValidator";
-import { identityAuthApi } from "../../../api/identityClient/identityAuthApi";
 import { setAccessToken, setRefreshToken } from "../../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/AuthContext";
@@ -20,37 +19,22 @@ const BrandLoginForm = () => {
     onSubmit: async (values) => {
       console.log("Form submitted with values: ", values);
       try {
-        const responseIdentity = await identityAuthApi.login(values.email, values.password)
-        console.log("Response when login as brand with identity ", responseIdentity)
-        const dataIdentity = await responseIdentity.data
-        var accessToken;
-        var refreshToken;
-        if (!dataIdentity.accessToken) {
-          const responseBrand = await brandApi.login(values.email, values.password)
-          console.log("Response when login as brand with brand ", responseBrand)
-          const dataBrand = await responseBrand.data;
-          if (!dataBrand.accessToken){
-            alert("Internal server error, please retry again"); 
-            return;
-          }
-          accessToken = dataBrand.accessToken
-          if (!dataBrand.refreshToken){
-            alert("Internal server error, please retry again"); 
-            return;
-          }
-          refreshToken = dataBrand.refreshToken
-        }
-        accessToken = dataIdentity.accessToken
-        if(!dataIdentity.refreshToken){
+        const response = await brandApi.login(values.email, values.password)
+        console.log("Response when login as brand with identity ", response)
+        const data = await response.data
+        if (!data.accessToken) {
           alert("Internal server error, please retry again"); 
           return;
         }
-        refreshToken = dataIdentity.refreshToken
-        setAccessToken(accessToken);
-        setRefreshToken(refreshToken);
+        setAccessToken(data.accessToken);
+        if (!data.refreshToken){
+          alert("Internal server error, please retry again"); 
+          return;
+        }
+        setRefreshToken(data.refreshToken);
         const cookies = new Cookies({}, {path : '/'})
-        cookies.set("accessToken", accessToken)
-        cookies.set("refreshToken", refreshToken)
+        cookies.set("accessToken", data.accessToken)
+        cookies.set("refreshToken", data.refreshToken)
         authContext.fetchProfile();
         navigate("/brand");
       } catch (err: any){

@@ -8,11 +8,11 @@ interface GPS {
 
 export const brandApi = {
     login: async (email: string, password: string) => {
-      return axios.post(`${BACKEND_URL}/api/brand/auth/login`, { email, password });
+      return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { email, password });
     },
     register: async (email: string, password: string, name: string, field: string,
         address: string, gps: GPS, status: string) => {
-        return axios.post(`${BACKEND_URL}/api/brand/auth/register`, {
+        return axios.post(`${BACKEND_URL}/api/brands/auth/register`, {
             email,
             password,
             name,

@@ -1,6 +1,4 @@
 import BrandRegisterForm from './components/BrandRegisterForm';
-// import AdminRegisterForm from './components/AdminRegisterForm';
-// import BrandRegisterForm from './components/BrandRegisterForm';
 
 const RegisterPage = () => {
 
