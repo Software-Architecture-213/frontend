@@ -6,9 +6,12 @@ import { setAccessToken, setRefreshToken } from "../../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/AuthContext";
 import Cookies from 'universal-cookie';
+import { useState } from "react";
+import Loading from "../../../components/Loading";
 
 
 const AdminLoginForm = () => {
+  const [isLoading, setIsLoading] = useState(false); // Loading state
   const authContext = useAuth()
   const navigate = useNavigate(); // Initialize navigate
   // Formik hook with imported validation schema
@@ -19,10 +22,9 @@ const AdminLoginForm = () => {
     },
     validationSchema: loginFormValidator, // Use the imported schema
     onSubmit: async (values) => {
-      console.log("Form submitted with values: ", values);
+      setIsLoading(true)
       try {
         const response = await identityAuthApi.login(values.email, values.password)
-        console.log("Response when login as admin ", response)
         const data = await response.data
         if (!data.accessToken) {
           alert("Internal server error, please retry again"); 
@@ -41,6 +43,8 @@ const AdminLoginForm = () => {
         navigate("/admin");  // Redirect user to the /admin page
       } catch(err: any) {
         alert(err.response.data.message); 
+      } finally {
+        setIsLoading(false)
       }
     },
   });
@@ -86,11 +90,15 @@ const AdminLoginForm = () => {
           <p className="text-black text-sm mt-1">{formik.errors.password}</p>
         )}
       </div>
-
-      {/* Submit Button */}
-      <button className="w-full py-3 main-text bg-white  bg-f75f07 text-white rounded-md hover:bg-f75f07/90 focus:outline-none">
-          Login as Admin
-        </button>
+       <button
+        type="submit"
+        className={`w-full py-3 main-text bg-white  bg-f75f07 text-white rounded-md hover:bg-f75f07/90 focus:outline-none ${
+          isLoading ? "opacity-50 cursor-not-allowed" : ""
+        }`}
+        disabled={isLoading} // Disable button when loading
+      >
+        {isLoading ? <Loading message="Logging in..." /> : "Login as Admin"}
+      </button>
     </form>
   );
 };

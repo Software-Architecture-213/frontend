@@ -1,62 +1,99 @@
 // pages/admin/AdminDashboard.tsx
 import { Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
-const AdminMainLayout = () => {
-  const authContext = useAuth()
-  console.log("authContext ", authContext)
+
+const Header = () => {
+  const { profile } = useAuth();
+
   return (
-    <div className="flex h-screen">
-      {/* Sidebar */}
-      <div className="main-bg text-white w-64 space-y-6 py-7 px-2">
-        <h2 className="text-3xl font-semibold text-center text-white">Admin</h2>
-        <ul className="space-y-4">
-          <li>
-            <Link to="/admin/dashboard" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
-              Dashboard
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/accounts" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
-              Accounts
-            </Link>
-          </li>
-          <li>
-            <Link to="/admin/campaigns" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
-              Campaigns
-            </Link>
-          </li>
-        </ul>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <div className="bg-white shadow-md p-4 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <button className="relative">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 4a2 2 0 012-2h14a2 2 0 012 2v16a2 2 0 01-2 2H5a2 2 0 01-2-2V4z" />
-              </svg>
-            </button>
-            <div className="flex items-center space-x-2">
-              <span className="font-semibold text-gray-700">Admin Name</span>
+    <div className="bg-white shadow-md p-4 flex justify-between items-center">
+      {/* Profile Dropdown */}
+      <div className="ml-auto mr-3 flex items-center space-x-4">
+        <Menu as="div" className="relative inline-block text-left">
+          {/* Profile button */}
+          <div>
+            <MenuButton className="inline-flex w-full items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               <img
-                src="https://via.placeholder.com/40"
+                src={profile.photoUrl}
                 alt="Profile"
                 className="w-8 h-8 rounded-full"
               />
-            </div>
+              <span className="font-semibold text-gray-700">{profile.displayName}</span>
+              <ChevronDownIcon aria-hidden="true" className="-mr-1 size-5 text-gray-400" />
+            </MenuButton>
           </div>
-        </div>
 
-        {/* Content Area with Outlet for Nested Routes */}
-        <div className="flex-1 p-6">
-          <Outlet /> {/* This is where nested routes will be rendered */}
+          {/* Dropdown menu */}
+          <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+            <div className="py-1">
+              <MenuItem>
+                <Link
+                  to="/admin/profile"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  Profile
+                </Link>
+              </MenuItem>
+              <MenuItem>
+                <Link
+                  to="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                >
+                  Logout
+                </Link>
+              </MenuItem>
+            </div>
+          </MenuItems>
+        </Menu>
+      </div>
+    </div>
+  );
+};
+
+const Sidebar = () => {
+  return (
+    <div className="main-bg text-white w-64 space-y-6 py-7 px-2">
+      <h2 className="text-3xl font-semibold text-center text-white">Admin</h2>
+      <ul className="space-y-4">
+        <li>
+          <Link to="/admin/dashboard" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link to="/admin/accounts" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+            Accounts
+          </Link>
+        </li>
+        <li>
+          <Link to="/admin/campaigns" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+            Campaigns
+          </Link>
+        </li>
+      </ul>
+    </div>
+  )
+}
+
+
+const AdminMainLayout = () => {
+  return (
+    <div className="flex h-screen ">
+      {/* Sidebar - Fixed to the left */}
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        {/* Header - Stays at the top */}
+        <Header />
+        <div className="flex-1 overflow-y-auto p-6">
+          <Outlet /> {/* This is where nested routes like AdminProfilePage will be rendered */}
         </div>
       </div>
     </div>
   );
 };
+
 
 export default AdminMainLayout;

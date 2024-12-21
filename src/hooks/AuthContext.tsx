@@ -2,16 +2,17 @@ import { createContext, useState, ReactNode, useContext, useEffect } from 'react
 import Cookies from 'universal-cookie';
 import { setAccessToken, setRefreshToken } from '../api/axiosInstance';
 import { identityUserApi } from '../api/identityClient/identityUserApi';
-import { useNavigate } from 'react-router-dom';
 
 interface AuthContextType {
     profile: any | null;
     fetchProfile: () => Promise<void>;
+    isLoading: boolean;  // Track loading state for profile fetch
 }
 
 const initAuthContext: AuthContextType = {
     profile: null,
-    fetchProfile: async () => { },
+    fetchProfile: async () => {},
+    isLoading: true,  // Initially loading is true
 }
 
 const AuthContext = createContext<AuthContextType>(initAuthContext);
@@ -22,13 +23,12 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [profile, setProfile] = useState<any | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);  // Loading state for profile fetch
     const cookies = new Cookies();
     const accessToken = cookies.get('accessToken');
     const refreshToken = cookies.get('refreshToken');
-    const navigate = useNavigate();
 
-    // Ensure tokens are set only once the component mounts
+    // Set tokens on mount
     useEffect(() => {
         if (accessToken) {
             setAccessToken(accessToken);
@@ -36,36 +36,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (refreshToken) {
             setRefreshToken(refreshToken);
         }
-        setIsLoading(false);  // Mark loading as false after token initialization
     }, []);
 
-    // Method to fetch user data from the /profile API
+    // Fetch profile if tokens are set
     const fetchProfile = async () => {
-        if (!accessToken) {
-            navigate('/login');  // Redirect if no accessToken
-            return;
-        }
         try {
             const response = await identityUserApi.getMyProfile();
             setProfile(response.data);
         } catch (error) {
             console.error("Error fetching profile:", error);
-            setProfile(null);
-            navigate('/login');  // Redirect to login if fetching profile fails
+            setProfile(null);  // Optionally handle error cases more gracefully
+        } finally {
+            setIsLoading(false);  // Mark loading as false after profile is fetched
         }
     };
 
-    // Fetch profile once the component has mounted and the tokens are set
+    // Once tokens are set, fetch profile
     useEffect(() => {
-        if (!isLoading) {
-            fetchProfile();
+        if (accessToken && refreshToken) {
+            fetchProfile();  // Fetch profile only after tokens are available
+        } else {
+            setIsLoading(false);  // If no tokens are found, stop loading
         }
-    }, [isLoading]);
-
-
+    }, [accessToken, refreshToken]);
 
     return (
-        <AuthContext.Provider value={{ profile, fetchProfile }}>
+        <AuthContext.Provider value={{ profile, fetchProfile, isLoading }}>
             {children}
         </AuthContext.Provider>
     );
