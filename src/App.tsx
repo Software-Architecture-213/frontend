@@ -2,15 +2,17 @@ import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/auth/LoginPage';
 import AdminMainLayout from './pages/admin/AdminMainLayout';
-import AdminDashboardTab from './pages/admin/AdminDashboardTab';
-import AdminAccountsTab from './pages/admin/AdminAccountsTab';
+import AdminDashboardTab from './pages/admin/dashboardTab/AdminDashboardTab';
+import AdminAccountsTab from './pages/admin/accountTab/AdminAccountsTab';
 import { AuthProvider } from './hooks/AuthContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
-import NotFoundPage from './pages/NoutFoundPage';
+import NotFoundPage from './pages/NotFoundPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import BrandMainLayout from './pages/brand/BrandMainLayout';
 import BrandDashboardTab from './pages/brand/BrandDashBoard';
-import BrandCampaign from './pages/brand/BrandCampain';
+import RedirectPage from './pages/RedirectPage';
+import BrandCampaign from './pages/brand/BrandCampaign';
+import AdminProfilePage from './pages/admin/profile/AdminProfilePage';
 
 
 
@@ -27,6 +29,7 @@ function App() {
                 <Route path='' element={<AdminDashboardTab />} />
                 <Route path="dashboard" element={<AdminDashboardTab />} />
                 <Route path="accounts" element={<AdminAccountsTab />} />
+                <Route path="profile" element={<AdminProfilePage />} />
               </Route>
               {/* Brand route */}
               <Route path="brand" element={<BrandMainLayout/>}>
@@ -34,6 +37,7 @@ function App() {
                 <Route path="dashboard" element={<BrandDashboardTab />} />
                 <Route path="campaign" element={<BrandCampaign />} />
               </Route>
+              <Route path='' element={<RedirectPage/>}/>
             </Route>
             <Route path="login" element={<LoginPage />} />
             <Route path="register" element={<RegisterPage />} />
