@@ -3,6 +3,9 @@ import { useState } from "react";
 import { useAuth } from "../../../hooks/AuthContext";
 import { updateUserProfileValidator } from "../../../utils/formValidator";
 import { PencilIcon } from "@heroicons/react/16/solid";
+import ProfilePhotoUpload from "./ProfilePhotoUpload";
+import { UpdateUserRequest } from "../../../types/user";
+import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 
 const AdminProfilePage = () => {
   const { profile, fetchProfile } = useAuth();
@@ -23,7 +26,16 @@ const AdminProfilePage = () => {
       setIsLoading(true);
       try {
         // Simulate API call
-        fetchProfile(); // Fetch updated profile from context
+        const updateUserRequest: UpdateUserRequest = {
+          displayName: values.displayName,
+          email: values.email,
+          phoneNumber: values.phoneNumber,
+          dateOfBirth: values.dateOfBirth,
+          gender: values.gender,
+        }
+        await identityUserApi.updateMyProfile(updateUserRequest);
+        fetchProfile()
+        // fetchProfile(); // Fetch updated profile from context
       } catch (error) {
         console.error("Error updating profile: ", error);
       } finally {
@@ -42,11 +54,16 @@ const AdminProfilePage = () => {
           className="w-32 h-32 rounded-full border-2 border-gray-300 "
         />
         <button
+          onClick={() => setIsDialogOpen(true)}
           className="text-sm flex text-black bg-transparent border-none hover:border-none focus:border-none"
         >
           Edit Photo 
           <PencilIcon className="w-5 h-5 ml-1 text-gray-600" /> {/* Pen icon */}
         </button>
+        <ProfilePhotoUpload
+        open={isDialogOpen}
+        setOpen={setIsDialogOpen}
+      />
       </div>
 
       {/* Form Section */}
@@ -148,7 +165,7 @@ const AdminProfilePage = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className={`w-full py-3 bg-f75f07 text-white rounded-md hover:bg-f75f07/90 focus:outline-none ${
+          className={`w-full py-3 bg-f75f07 text-white main-bg rounded-md border-2 hover:bg-f75f07/90 focus:outline-none ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={isLoading}
