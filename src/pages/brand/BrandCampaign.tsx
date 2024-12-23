@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { brandApi } from '../../api/brandClient/brandAuthApi';
+import { brandApi } from '../../api/brandClient/brandApi';
 
 const BrandCampaign = () => {
   const navigate = useNavigate();
@@ -79,15 +79,15 @@ const BrandCampaign = () => {
               <tr key={campaign.id} className="border-b">
                 <td className="p-2"><input type="checkbox" /></td>
                 <td className="p-2">{campaign.name}</td>
-                <td className="p-2">{campaign.startDate}</td>
-                <td className="p-2">{campaign.endDate}</td>
+                <td className="p-2">{new Date(campaign.startDate).toLocaleDateString()}</td>
+                <td className="p-2">{new Date(campaign.endDate).toLocaleDateString()}</td>
                 <td className="p-2">
                   <span className={`px-2 py-1 rounded ${campaign.status === 'ENDED' ? 'bg-gray-500 text-white' : campaign.status === 'NOT_ACCEPTED' ? 'bg-pink-500 text-white' : 'bg-yellow-500 text-white'}`}>
                     {campaign.status}
                   </span>
                 </td>
                 <td className="p-2">{campaign.numOfVouchers}</td>
-                <td className="p-2">{campaign.remaining}</td>
+                <td className="p-2">{campaign.remainingVouchers}</td>
                 <td className="p-2">
                   <i className="fas fa-check text-green-500"></i>
                 </td>

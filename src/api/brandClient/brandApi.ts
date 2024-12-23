@@ -28,5 +28,21 @@ export const brandApi = {
     },
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/my-promotions`)
-    }
+    },
+    createCampaignPromotions: async (data: { [key: string]: any }) => {
+      try {
+          // Make the POST request with JSON data (no multipart)
+          const response = await axiosInstance.post(`${BACKEND_URL}/api/brands/promotions`, data, {
+              headers: {
+                  'Content-Type': 'application/json',  // Send as JSON
+              },
+          });
+          return response;
+      } catch (error) {
+          console.error("Error creating campaign:", error);
+          throw error;  // Re-throw the error so it can be caught in the component
+      }
+    },
+
+    
 };
