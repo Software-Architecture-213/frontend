@@ -21,9 +21,9 @@ const BrandMainLayout = () => {
               </Link>
             </li>
             <li>
-              <Link to="/brand/campaigns" className="flex items-center space-x-2 text-gray-700">
+              <Link to="/brand/campaign" className="flex items-center space-x-2 text-gray-700">
                 <i className="fas fa-bullhorn"></i>
-                <span>Campaigns</span>
+                <span>Campaign Promotions</span>
               </Link>
             </li>
             <li>

@@ -11,6 +11,7 @@ import RegisterPage from './pages/auth/RegisterPage';
 import BrandMainLayout from './pages/brand/BrandMainLayout';
 import BrandDashboardTab from './pages/brand/BrandDashBoard';
 import BrandCampaign from './pages/brand/BrandCampain';
+import BrandCreateCampaign from './pages/brand/BrandCreateCampain';
 
 
 
@@ -32,7 +33,8 @@ function App() {
               <Route path="brand" element={<BrandMainLayout/>}>
                 <Route path='' element={<BrandDashboardTab />} />
                 <Route path="dashboard" element={<BrandDashboardTab />} />
-                <Route path="campaign" element={<BrandCampaign />} />
+                <Route path="campaign" element={<BrandCampaign />}/>
+                <Route path="campaign/create" element={<BrandCreateCampaign />} />
               </Route>
             </Route>
             <Route path="login" element={<LoginPage />} />

@@ -3,16 +3,19 @@ import Cookies from 'universal-cookie';
 import { setAccessToken, setRefreshToken } from '../api/axiosInstance';
 import { identityUserApi } from '../api/identityClient/identityUserApi';
 import { useNavigate } from 'react-router-dom';
+import { brandApi } from '../api/brandClient/brandAuthApi';
 
 interface AuthContextType {
     profile: any | null;
+    isFetchingProfile: boolean;
     fetchProfile: () => Promise<void>;
 }
 
 const initAuthContext: AuthContextType = {
     profile: null,
+    isFetchingProfile: true, // Initial state while tokens and profile are loading
     fetchProfile: async () => { },
-}
+};
 
 const AuthContext = createContext<AuthContextType>(initAuthContext);
 
@@ -22,13 +25,13 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [profile, setProfile] = useState<any | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isFetchingProfile, setIsFetchingProfile] = useState(true); // Tracks the loading state of profile fetching
     const cookies = new Cookies();
     const accessToken = cookies.get('accessToken');
     const refreshToken = cookies.get('refreshToken');
     const navigate = useNavigate();
 
-    // Ensure tokens are set only once the component mounts
+    // Ensure tokens are set once the component mounts
     useEffect(() => {
         if (accessToken) {
             setAccessToken(accessToken);
@@ -36,36 +39,55 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (refreshToken) {
             setRefreshToken(refreshToken);
         }
-        setIsLoading(false);  // Mark loading as false after token initialization
     }, []);
 
     // Method to fetch user data from the /profile API
     const fetchProfile = async () => {
         if (!accessToken) {
-            navigate('/login');  // Redirect if no accessToken
+            setIsFetchingProfile(false); // Mark loading as false since we can't fetch without tokens
+            navigate('/login'); // Redirect if no accessToken
             return;
         }
+
+        setIsFetchingProfile(true); // Start loading state
+        let shouldNavigate = true;
+
         try {
+            // Try to fetch the profile from Identity
             const response = await identityUserApi.getMyProfile();
             setProfile(response.data);
-        } catch (error) {
-            console.error("Error fetching profile:", error);
+            shouldNavigate = false; // Do not navigate if identity validation succeeds
+        } catch (identityError) {
+            console.warn("Identity validation failed, falling back to brand validation.");
+
+            try {
+                // Fallback: Try to fetch the profile from Brand
+                const responseBrand = await brandApi.getMyProfile();
+                if (responseBrand.data) {
+                    setProfile(responseBrand.data); // Set the brand profile if valid
+                    shouldNavigate = false; // Do not navigate if brand validation succeeds
+                }
+            } catch (brandError) {
+                console.error("Brand validation failed:", brandError);
+            }
+        }
+
+        setIsFetchingProfile(false); // Mark loading as complete
+
+        // Navigate only if all validation attempts fail
+        if (shouldNavigate) {
             setProfile(null);
-            navigate('/login');  // Redirect to login if fetching profile fails
+            navigate('/login');
         }
     };
 
     // Fetch profile once the component has mounted and the tokens are set
     useEffect(() => {
-        if (!isLoading) {
-            fetchProfile();
-        }
-    }, [isLoading]);
-
-
+        fetchProfile();
+    }, []);
 
     return (
-        <AuthContext.Provider value={{ profile, fetchProfile }}>
+        <AuthContext.Provider value={{ profile, isFetchingProfile, fetchProfile }}>
             {children}
         </AuthContext.Provider>
     );

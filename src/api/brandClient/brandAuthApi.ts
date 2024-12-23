@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BACKEND_URL } from "../../constants/backend";
+import axiosInstance from "../axiosInstance";
 
 interface GPS {
     lat: number; // Latitude
@@ -21,5 +22,11 @@ export const brandApi = {
             gps,
             status,
       });
+    }, 
+    getMyProfile:  async () => {
+      return axiosInstance.get("api/brands/auth/me");
+    },
+    getCampaignPromotions: async () => {
+      return axiosInstance.get(`api/brands/promotions/my-promotions`)
     }
 };

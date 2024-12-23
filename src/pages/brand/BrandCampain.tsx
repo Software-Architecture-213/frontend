@@ -1,13 +1,52 @@
-// pages/brand/BrandCampaign.tsx
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { brandApi } from '../../api/brandClient/brandAuthApi';
 
 const BrandCampaign = () => {
+  const navigate = useNavigate();
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch campaigns from the backend
+  useEffect(() => {
+    const fetchCampaigns = async () => {
+      try {
+        const response = await brandApi.getCampaignPromotions(); // Assuming campaignApi.getCampaigns() fetches the list
+        setCampaigns(response.data);
+      } catch (error) {
+        console.error('Failed to fetch campaigns:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCampaigns();
+  }, []);
+
+  const handleCreateCampaign = () => {
+    navigate('/brand/campaign/create');
+  };
+
+  if (loading) {
+    return <div>Loading campaigns...</div>;
+  }
+
   return (
     <section className="p-6">
-      {/* Campaigns Table */}
+      {/* Header and Create Campaign Button */}
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-lg font-semibold">Campaign Promotions</h2>
+        <button
+          onClick={handleCreateCampaign}
+          className="px-4 py-2 bg-blue-600 text-white rounded shadow-md hover:bg-blue-700"
+        >
+          Create Campaign
+        </button>
+      </div>
+
+      {/* Campaign Table */}
       <div className="bg-white rounded shadow-md p-4">
-        {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-semibold">Campaigns</h2>
           <div className="flex items-center space-x-2">
             <input
               type="text"
@@ -37,54 +76,30 @@ const BrandCampaign = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="border-b">
-              <td className="p-2"><input type="checkbox" /></td>
-              <td className="p-2">124bc</td>
-              <td className="p-2">AEON MALL! Back to School!</td>
-              <td className="p-2">09/01/2023 08:40PM</td>
-              <td className="p-2">16/01/2023 08:39PM</td>
-              <td className="p-2"><span className="px-2 py-1 bg-gray-500 text-white rounded">ENDED</span></td>
-              <td className="p-2">1000</td>
-              <td className="p-2">996</td>
-              <td className="p-2"><i className="fas fa-check text-green-500"></i></td>
-              <td className="p-2">
-                <button className="text-red-600 hover:text-red-800">
-                  <i className="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr className="border-b">
-              <td className="p-2"><input type="checkbox" /></td>
-              <td className="p-2">e45a9</td>
-              <td className="p-2">Sale 8/8</td>
-              <td className="p-2">08/03/2023 01:04AM</td>
-              <td className="p-2">15/03/2023 01:05AM</td>
-              <td className="p-2"><span className="px-2 py-1 bg-pink-500 text-white rounded">NOT_ACCEPTED</span></td>
-              <td className="p-2">100</td>
-              <td className="p-2">100</td>
-              <td className="p-2"><i className="fas fa-check text-green-500"></i></td>
-              <td className="p-2">
-                <button className="text-red-600 hover:text-red-800">
-                  <i className="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
-            <tr className="border-b">
-              <td className="p-2"><input type="checkbox" /></td>
-              <td className="p-2">27c4f</td>
-              <td className="p-2">Sale 22/2</td>
-              <td className="p-2">13/03/2023 09:47AM</td>
-              <td className="p-2">21/03/2023 08:39AM</td>
-              <td className="p-2"><span className="px-2 py-1 bg-yellow-500 text-white rounded">PENDING</span></td>
-              <td className="p-2">1000</td>
-              <td className="p-2">1000</td>
-              <td className="p-2"><i className="fas fa-check text-green-500"></i></td>
-              <td className="p-2">
-                <button className="text-red-600 hover:text-red-800">
-                  <i className="fas fa-trash"></i>
-                </button>
-              </td>
-            </tr>
+            {campaigns.map((campaign) => (
+              <tr key={campaign.id} className="border-b">
+                <td className="p-2"><input type="checkbox" /></td>
+                <td className="p-2">{campaign.id}</td>
+                <td className="p-2">{campaign.name}</td>
+                <td className="p-2">{campaign.startDate}</td>
+                <td className="p-2">{campaign.endDate}</td>
+                <td className="p-2">
+                  <span className={`px-2 py-1 rounded ${campaign.status === 'ENDED' ? 'bg-gray-500 text-white' : campaign.status === 'NOT_ACCEPTED' ? 'bg-pink-500 text-white' : 'bg-yellow-500 text-white'}`}>
+                    {campaign.status}
+                  </span>
+                </td>
+                <td className="p-2">{campaign.initial}</td>
+                <td className="p-2">{campaign.remaining}</td>
+                <td className="p-2">
+                  <i className="fas fa-check text-green-500"></i>
+                </td>
+                <td className="p-2">
+                  <button className="text-red-600 hover:text-red-800">
+                    <i className="fas fa-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
 
