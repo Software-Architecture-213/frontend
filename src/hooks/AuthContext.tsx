@@ -2,7 +2,7 @@ import { createContext, useState, ReactNode, useContext, useEffect } from 'react
 import Cookies from 'universal-cookie';
 import { setAccessToken, setRefreshToken } from '../api/axiosInstance';
 import { identityUserApi } from '../api/identityClient/identityUserApi';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { brandApi } from '../api/brandClient/brandAuthApi';
 
 interface AuthContextType {
@@ -14,7 +14,7 @@ interface AuthContextType {
 const initAuthContext: AuthContextType = {
     profile: null,
     isFetchingProfile: true, // Initial state while tokens and profile are loading
-    fetchProfile: async () => { },
+    fetchProfile: async () => {},
 };
 
 const AuthContext = createContext<AuthContextType>(initAuthContext);
@@ -25,6 +25,7 @@ interface AuthProviderProps {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [profile, setProfile] = useState<any | null>(null);
     const [isFetchingProfile, setIsFetchingProfile] = useState(true); // Tracks the loading state of profile fetching
     const cookies = new Cookies();
@@ -45,7 +46,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const fetchProfile = async () => {
         if (!accessToken) {
             setIsFetchingProfile(false); // Mark loading as false since we can't fetch without tokens
-            navigate('/login'); // Redirect if no accessToken
+            // Redirect to login if not on the register page
+            if (location.pathname !== '/register') {
+                navigate('/login');
+            }
             return;
         }
 
@@ -58,7 +62,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setProfile(response.data);
             shouldNavigate = false; // Do not navigate if identity validation succeeds
         } catch (identityError) {
-            console.warn("Identity validation failed, falling back to brand validation.");
+            console.warn('Identity validation failed, falling back to brand validation.');
 
             try {
                 // Fallback: Try to fetch the profile from Brand
@@ -68,7 +72,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     shouldNavigate = false; // Do not navigate if brand validation succeeds
                 }
             } catch (brandError) {
-                console.error("Brand validation failed:", brandError);
+                console.error('Brand validation failed:', brandError);
             }
         }
 
@@ -77,16 +81,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Navigate only if all validation attempts fail
         if (shouldNavigate) {
             setProfile(null);
-            navigate('/login');
+            if (location.pathname !== '/register') {
+                navigate('/login');
+            }
         }
     };
 
     // Once tokens are set, fetch profile
     useEffect(() => {
         if (accessToken && refreshToken) {
-            fetchProfile();  // Fetch profile only after tokens are available
+            fetchProfile(); // Fetch profile only after tokens are available
         } else {
-            setIsFetchingProfile(false);  // If no tokens are found, stop loading
+            setIsFetchingProfile(false); // If no tokens are found, stop loading
         }
     }, [accessToken, refreshToken]);
 

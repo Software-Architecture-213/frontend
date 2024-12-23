@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { brandApi } from '../../api/brandClient/brandAuthApi';
 
@@ -11,7 +11,7 @@ const BrandCampaign = () => {
   useEffect(() => {
     const fetchCampaigns = async () => {
       try {
-        const response = await brandApi.getCampaignPromotions(); // Assuming campaignApi.getCampaigns() fetches the list
+        const response = await brandApi.getCampaignPromotions();
         setCampaigns(response.data);
       } catch (error) {
         console.error('Failed to fetch campaigns:', error);
@@ -64,7 +64,6 @@ const BrandCampaign = () => {
           <thead>
             <tr className="border-b">
               <th className="p-2"><input type="checkbox" /></th>
-              <th className="p-2">ID</th>
               <th className="p-2">Name</th>
               <th className="p-2">Start Date</th>
               <th className="p-2">End Date</th>
@@ -79,7 +78,6 @@ const BrandCampaign = () => {
             {campaigns.map((campaign) => (
               <tr key={campaign.id} className="border-b">
                 <td className="p-2"><input type="checkbox" /></td>
-                <td className="p-2">{campaign.id}</td>
                 <td className="p-2">{campaign.name}</td>
                 <td className="p-2">{campaign.startDate}</td>
                 <td className="p-2">{campaign.endDate}</td>
@@ -88,7 +86,7 @@ const BrandCampaign = () => {
                     {campaign.status}
                   </span>
                 </td>
-                <td className="p-2">{campaign.initial}</td>
+                <td className="p-2">{campaign.numOfVouchers}</td>
                 <td className="p-2">{campaign.remaining}</td>
                 <td className="p-2">
                   <i className="fas fa-check text-green-500"></i>

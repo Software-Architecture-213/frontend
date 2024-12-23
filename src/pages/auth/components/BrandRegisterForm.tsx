@@ -1,13 +1,10 @@
 import { useFormik } from "formik";
 import { brandFormValidator } from "../../../utils/formValidator";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../../hooks/AuthContext";
-import Cookies from "universal-cookie";
 import { brandApi } from "../../../api/brandClient/brandAuthApi";
 
 const BrandRegisterForm = () => {
   const navigate = useNavigate();
-  const authContext = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -35,23 +32,9 @@ const BrandRegisterForm = () => {
           values.status
         );
         console.log("Registration Response: ", response);
-
-        const data = response.data;
-        const accessToken = data.accessToken;
-        const refreshToken = data.refreshToken;
-
-        if (!accessToken || !refreshToken) {
-          alert("Error during registration. Please try again.");
-          return;
+        if (response.status == 201){
+          navigate("/login");
         }
-
-        // Store tokens
-        const cookies = new Cookies({}, { path: "/" });
-        cookies.set("accessToken", accessToken);
-        cookies.set("refreshToken", refreshToken);
-
-        authContext.fetchProfile();
-        navigate("/brand");
       } catch (err: any) {
         console.error("Error: ", err.response?.data?.message || "Registration failed");
         alert(err.response?.data?.message || "Registration failed");
