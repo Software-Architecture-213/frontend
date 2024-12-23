@@ -9,7 +9,6 @@ interface AuthContextType {
     profile: any | null;
     isFetchingProfile: boolean;
     fetchProfile: () => Promise<void>;
-    isLoading: boolean;  // Track loading state for profile fetch
 }
 
 const initAuthContext: AuthContextType = {
@@ -25,6 +24,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+    const navigate = useNavigate();
     const [profile, setProfile] = useState<any | null>(null);
     const [isFetchingProfile, setIsFetchingProfile] = useState(true); // Tracks the loading state of profile fetching
     const cookies = new Cookies();
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (accessToken && refreshToken) {
             fetchProfile();  // Fetch profile only after tokens are available
         } else {
-            setIsLoading(false);  // If no tokens are found, stop loading
+            setIsFetchingProfile(false);  // If no tokens are found, stop loading
         }
     }, [accessToken, refreshToken]);
 
