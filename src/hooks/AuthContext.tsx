@@ -9,6 +9,7 @@ interface AuthContextType {
     profile: any | null;
     isFetchingProfile: boolean;
     fetchProfile: () => Promise<void>;
+    isLoading: boolean;  // Track loading state for profile fetch
 }
 
 const initAuthContext: AuthContextType = {
@@ -29,7 +30,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const cookies = new Cookies();
     const accessToken = cookies.get('accessToken');
     const refreshToken = cookies.get('refreshToken');
-    const navigate = useNavigate();
 
     // Ensure tokens are set once the component mounts
     useEffect(() => {
@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     }, []);
 
-    // Method to fetch user data from the /profile API
+    // Fetch profile if tokens are set
     const fetchProfile = async () => {
         if (!accessToken) {
             setIsFetchingProfile(false); // Mark loading as false since we can't fetch without tokens
@@ -81,10 +81,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
     };
 
-    // Fetch profile once the component has mounted and the tokens are set
+    // Once tokens are set, fetch profile
     useEffect(() => {
-        fetchProfile();
-    }, []);
+        if (accessToken && refreshToken) {
+            fetchProfile();  // Fetch profile only after tokens are available
+        } else {
+            setIsLoading(false);  // If no tokens are found, stop loading
+        }
+    }, [accessToken, refreshToken]);
 
     return (
         <AuthContext.Provider value={{ profile, isFetchingProfile, fetchProfile }}>
