@@ -10,10 +10,12 @@ import NotFoundPage from './pages/NotFoundPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import BrandMainLayout from './pages/brand/BrandMainLayout';
 import BrandDashboardTab from './pages/brand/BrandDashBoard';
-import BrandCampaign from './pages/brand/BrandCampaign';
-import BrandCreateCampaign from './pages/brand/BrandCreateCampain';
+import BrandCampaign from './pages/brand/Campaign Promotions/BrandCampaign';
+import BrandCreateCampaign from './pages/brand/Campaign Promotions/BrandCreateCampain';
 import AdminProfilePage from './pages/admin/profile/AdminProfilePage';
 import RedirectPage from './pages/RedirectPage';
+import BrandVoucher from './pages/brand/Voucher/BrandVoucher';
+import BrandCreateVoucher from './pages/brand/Voucher/BrandCreateVoucher';
 
 
 
@@ -38,6 +40,8 @@ function App() {
                 <Route path="dashboard" element={<BrandDashboardTab />} />
                 <Route path="campaign" element={<BrandCampaign />}/>
                 <Route path="campaign/create" element={<BrandCreateCampaign />} />
+                <Route path="voucher" element={<BrandVoucher />} />
+                <Route path="voucher/create/:promotionId" element={<BrandCreateVoucher />} />
               </Route>
               <Route path='' element={<RedirectPage/>}/>
             </Route>

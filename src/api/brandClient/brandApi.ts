@@ -44,5 +44,15 @@ export const brandApi = {
       }
     },
 
+    createVoucher: async (data: {
+      promotionId: string | undefined;
+      voucherCode: string;
+      value: number;
+      expirationDate: string;
+      status: string;
+    }) => {
+      return axiosInstance.post(`${BACKEND_URL}/api/brands/vouchers`, data);
+    },
+
     
 };

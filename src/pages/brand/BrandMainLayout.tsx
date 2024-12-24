@@ -27,6 +27,12 @@ const BrandMainLayout = () => {
               </Link>
             </li>
             <li>
+              <Link to="/brand/voucher" className="flex items-center space-x-2 text-gray-700">
+                <i className="fas fa-bullhorn"></i>
+                <span>Voucher</span>
+              </Link>
+            </li>
+            <li>
               <Link to="/brand/stores" className="flex items-center space-x-2 text-gray-700">
                 <i className="fas fa-store"></i>
                 <span>Stores</span>

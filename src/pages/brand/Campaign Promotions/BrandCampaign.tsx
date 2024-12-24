@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { brandApi } from '../../api/brandClient/brandApi';
+import { brandApi } from '../../../api/brandClient/brandApi';
 
 const BrandCampaign = () => {
   const navigate = useNavigate();
