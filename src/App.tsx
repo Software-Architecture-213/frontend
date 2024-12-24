@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/auth/LoginPage';
 import AdminMainLayout from './pages/admin/AdminMainLayout';
 import AdminDashboardTab from './pages/admin/dashboardTab/AdminDashboardTab';
-import AdminAccountsTab from './pages/admin/accountTab/AdminAccountsTab';
 import { AuthProvider } from './hooks/AuthContext';
 import ProtectedRoutes from './components/ProtectedRoutes';
 import NotFoundPage from './pages/NotFoundPage';
@@ -14,6 +13,7 @@ import BrandCampaign from './pages/brand/BrandCampaign';
 import BrandCreateCampaign from './pages/brand/BrandCreateCampain';
 import AdminProfilePage from './pages/admin/profile/AdminProfilePage';
 import RedirectPage from './pages/RedirectPage';
+import AdminUsersTab from './pages/admin/usersTab/AdminUsersTab';
 
 
 
@@ -29,7 +29,7 @@ function App() {
               <Route path="admin" element={<AdminMainLayout />}>
                 <Route path='' element={<AdminDashboardTab />} />
                 <Route path="dashboard" element={<AdminDashboardTab />} />
-                <Route path="accounts" element={<AdminAccountsTab />} />
+                <Route path="users" element={<AdminUsersTab />} />
                 <Route path="profile" element={<AdminProfilePage />} />
               </Route>
               {/* Brand route */}

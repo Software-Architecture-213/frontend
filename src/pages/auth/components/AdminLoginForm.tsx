@@ -97,7 +97,7 @@ const AdminLoginForm = () => {
         }`}
         disabled={isLoading} // Disable button when loading
       >
-        {isLoading ? <Loading message="Logging in..." /> : "Login as Admin"}
+        {isLoading ? "Logging in..." : "Login as Admin"}
       </button>
     </form>
   );
