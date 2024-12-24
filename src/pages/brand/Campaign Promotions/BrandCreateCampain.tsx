@@ -155,7 +155,7 @@ const BrandCreateCampaign = () => {
                             <div className="w-1/2">
                                 <label htmlFor="startDate" className="block text-md font-semibold text-gray-800 mb-2">Start Date *</label>
                                 <input
-                                    type="text"
+                                    type="date"
                                     id="startDate"
                                     name="startDate"
                                     className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4"
@@ -166,7 +166,7 @@ const BrandCreateCampaign = () => {
                             <div className="w-1/2">
                                 <label htmlFor="endDate" className="block text-md font-semibold text-gray-800 mb-2">End Date *</label>
                                 <input
-                                    type="text"
+                                    type="date"
                                     id="endDate"
                                     name="endDate"
                                     className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 px-4"

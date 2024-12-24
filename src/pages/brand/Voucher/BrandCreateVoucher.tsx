@@ -24,14 +24,14 @@ const BrandCreateVoucher = () => {
       });
 
       console.log('Voucher created successfully:', response.data);
-      navigate('/brand/vouchers'); // Redirect to voucher dashboard after successful creation
+      navigate('/brand/voucher'); // Redirect to voucher dashboard after successful creation
     } catch (error) {
       console.error('Error creating voucher:', error);
     }
   };
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-xl mx-auto">
       <h2 className="text-xl font-semibold text-gray-800 mb-6">Create Voucher</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6">
