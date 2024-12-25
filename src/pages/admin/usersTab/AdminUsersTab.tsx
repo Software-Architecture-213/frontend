@@ -3,7 +3,8 @@ import { UserRow, UsersRequest } from "../../../types/user";
 import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 import AdminUserRow from "./AdminUserRow";
 
-const TableHeaders = [,
+const TableHeaders = [
+  "Avatar",
   "Display Name",
   "Email",
   "Date of Birth",
@@ -11,33 +12,36 @@ const TableHeaders = [,
   "Phone",
   "Enable",
   "Actions",
-]
+];
 
-
-
-// pages/admin/AccountsTab.tsx
 const AdminUsersTab = () => {
+  const [users, setUsers] = useState<UserRow[]>([]);
+  const [usersRequest, setUsersRequest] = useState<UsersRequest>({ maxResults: 8, pageToken: null });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false); // New state for pagination loading
+  const tableRef = useRef<HTMLDivElement | null>(null);
 
-  const [users, setUsers] = useState<UserRow[]>([])
-  const [usersRequest, setUsersRequest] = useState<UsersRequest>({ maxResults: 8, pageToken: null })
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Add Isloading state
-  const tableRef = useRef<HTMLTableSectionElement | null>(null)
-  const fetchData = async () => {
-    setIsLoading(true); // Set Isloading to true when starting the request
+  const fetchData = async (isPagination = false) => {
+    if (usersRequest.pageToken === "" || (isPagination && isFetchingMore)) {
+      return; // Prevent fetching if there's no token or fetch is in progress
+    }
+
+    isPagination ? setIsFetchingMore(true) : setIsLoading(true);
+
     try {
       const response = await identityUserApi.getMany(usersRequest);
       const data = await response.data;
-      const users = data.data;
-      console.log(data)
-      setUsers((prevUsers) => [...prevUsers, ...users]); 
+      const newUsers = data.data;
+
+      setUsers((prevUsers) => [...prevUsers, ...newUsers]); // Append new users
       setUsersRequest((prevState) => ({
         ...prevState,
-        pageToken: data.nextPageToken, // Update pageToken for pagination
+        pageToken: data.nextPageToken || "", // Update or clear token
       }));
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     } finally {
-      setIsLoading(false); // Set Isloading to false when the request is complete
+      isPagination ? setIsFetchingMore(false) : setIsLoading(false);
     }
   };
 
@@ -46,29 +50,25 @@ const AdminUsersTab = () => {
   }, []);
 
   useEffect(() => {
-    // Detect scroll and fetch data when reaching the bottom
     const handleScroll = () => {
       if (!tableRef.current) return;
       const tableElement = tableRef.current;
       const isAtBottom =
-        tableElement.scrollHeight  ==
-        tableElement.clientHeight + tableElement.scrollTop + 1;
-      console.log(tableElement.scrollHeight);
-      console.log(tableElement.scrollTop +  tableElement.clientHeight);
-      if (isAtBottom) {
-        fetchData();
+        tableElement.scrollHeight <= tableElement.clientHeight + tableElement.scrollTop + 1;
+
+      if (isAtBottom && usersRequest.pageToken) {
+        fetchData(true); // Trigger fetch for next page
       }
     };
-    const tbodyElement = tableRef.current;
-    if (tbodyElement) {
-      tbodyElement.addEventListener("scroll", handleScroll);
+
+    const tableElement = tableRef.current;
+    if (tableElement) {
+      tableElement.addEventListener("scroll", handleScroll);
       return () => {
-        tbodyElement.removeEventListener("scroll", handleScroll);
+        tableElement.removeEventListener("scroll", handleScroll);
       };
     }
-  }, []);
-
-  
+  }, [usersRequest.pageToken]);
 
   return (
     <>
@@ -77,40 +77,23 @@ const AdminUsersTab = () => {
           <h3 className="text-lg font-bold text-slate-800">Users</h3>
           <p className="text-slate-500">Overview of users.</p>
         </div>
-        <div className="ml-3">
-          <div className="w-full max-w-sm min-w-[200px] relative">
-            <div className="relative">
-              <input
-                className="bg-white w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                placeholder="Search for invoice..."
-              />
-              <button
-                className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded "
-                type="button"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" className="w-8 h-8 text-slate-600">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
       </div>
-      <div ref={tableRef} className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg bg-clip-border">
+      <div
+        ref={tableRef}
+        className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg bg-clip-border"
+      >
         <table className="w-full text-left table-auto min-w-max">
           <thead>
             <tr>
-              {TableHeaders.map((header, index) =>
+              {TableHeaders.map((header, index) => (
                 <th key={index} className="p-4 border-b border-slate-300 bg-slate-50 sticky top-0 z-10">
-                  <p className="block text-sm font-normal leading-none text-slate-500">
-                    {header}
-                  </p>
+                  <p className="block text-sm font-normal leading-none text-slate-500">{header}</p>
                 </th>
-              )}
+              ))}
             </tr>
           </thead>
-          <tbody  className="">
-            {isLoading ? (
+          <tbody>
+            {isLoading && !users.length ? (
               <tr>
                 <td colSpan={TableHeaders.length} className="h-full">
                   <div className="flex justify-center items-center h-full">
@@ -118,14 +101,23 @@ const AdminUsersTab = () => {
                   </div>
                 </td>
               </tr>
-            ) : users.map(user => <AdminUserRow key={user.userId} user={user} />)}
+            ) : (
+              users.map((user) => <AdminUserRow key={user.userId} user={user} />)
+            )}
+            {isFetchingMore && (
+              <tr>
+                <td colSpan={TableHeaders.length} className="h-full">
+                  <div className="flex justify-center items-center h-full">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-4 mt-3 border-gray-500 border-solid"></div>
+                  </div>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
-
-
     </>
-  )
+  );
 };
 
 export default AdminUsersTab;
