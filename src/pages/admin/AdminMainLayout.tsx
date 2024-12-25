@@ -64,8 +64,13 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/admin/accounts" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
-            Accounts
+          <Link to="/admin/users" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+            Users
+          </Link>
+        </li>
+        <li>
+          <Link to="/admin/brands" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+            Brands
           </Link>
         </li>
         <li>

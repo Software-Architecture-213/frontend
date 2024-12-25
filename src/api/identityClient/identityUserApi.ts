@@ -1,11 +1,16 @@
-import { UpdateUserRequest } from "../../types/user";
+import { UpdateUserRequest, UsersRequest } from "../../types/user";
 import axiosInstance from "../axiosInstance";
 
 export const identityUserApi = {
+    getMany: async (usersRequest: UsersRequest) => {
+        return axiosInstance.get("api/identity/users", {
+            params: usersRequest
+        })
+    },
     getMyProfile:  async () => {
         return axiosInstance.get("api/identity/users/me");
     },
-    updateMyProfile: async (updateRequest: UpdateUserRequest) => {
+    updateMyProfile: async (updateRequest?: UpdateUserRequest) => {
         return axiosInstance.put("api/identity/users", updateRequest)
     },
     uploadPhoto: async (file: File) => {
