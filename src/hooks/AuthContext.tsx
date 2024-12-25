@@ -3,7 +3,7 @@ import Cookies from 'universal-cookie';
 import { setAccessToken, setRefreshToken } from '../api/axiosInstance';
 import { identityUserApi } from '../api/identityClient/identityUserApi';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { brandApi } from '../api/brandClient/brandAuthApi';
+import { brandApi } from '../api/brandClient/brandApi';
 
 interface AuthContextType {
     profile: any | null;

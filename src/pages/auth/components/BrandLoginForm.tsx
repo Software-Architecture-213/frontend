@@ -4,7 +4,7 @@ import { setAccessToken, setRefreshToken } from "../../../api/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/AuthContext";
 import Cookies from 'universal-cookie';
-import { brandApi } from "../../../api/brandClient/brandAuthApi";
+import { brandApi } from "../../../api/brandClient/brandApi";
 
 
 const BrandLoginForm = () => {

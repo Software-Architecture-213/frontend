@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { brandFormValidator } from "../../../utils/formValidator";
 import { useNavigate } from "react-router-dom";
-import { brandApi } from "../../../api/brandClient/brandAuthApi";
+import { brandApi } from "../../../api/brandClient/brandApi";
 
 const BrandRegisterForm = () => {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ const BrandRegisterForm = () => {
       address: "",
       lat: "",
       lng: "",
-      status: "active",
+      status: "INACTIVE",
     },
     validationSchema: brandFormValidator, // Define your validator in formValidator
     onSubmit: async (values) => {
