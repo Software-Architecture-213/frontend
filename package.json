@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@paypal/react-paypal-js": "^8.6.0",
     "axios": "^1.7.9",
     "browser-image-compression": "^2.0.2",
     "date-fns": "^4.1.0",
