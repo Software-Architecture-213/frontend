@@ -8,17 +8,17 @@ interface GPS {
   }
 
 export const brandApi = {
-    login: async (email: string, password: string) => {
-      return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { email, password });
+    login: async (username: string, password: string) => {
+      return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { username, password });
     },
-    register: async (email: string, password: string, name: string, field: string,
-        address: string, gps: GPS, status: string) => {
+    register: async (username: string, password: string, dispalyName: string, imageUrl: string, field: string,
+        gps: GPS, status: string) => {
         return axios.post(`${BACKEND_URL}/api/brands/auth/register`, {
-            email,
+            username,
             password,
-            name,
+            dispalyName,
+            imageUrl,
             field,
-            address,
             gps,
             status,
       });
@@ -45,11 +45,17 @@ export const brandApi = {
     },
 
     createVoucher: async (data: {
-      promotionId: string | undefined;
-      voucherCode: string;
+      code: string;
+      type: string;
+      imageUrl: string;
+      valueType: string;
       value: number;
-      expirationDate: string;
+      description: string;
+      expiredAt: string;
       status: string;
+      promotionId: string | undefined;
+      maxCounts: number;
+      createCounts: number;
     }) => {
       return axiosInstance.post(`${BACKEND_URL}/api/brands/vouchers`, data);
     },

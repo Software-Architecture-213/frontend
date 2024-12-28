@@ -5,7 +5,6 @@ import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
 
 const paypalInitOptions = {
   clientId: 'AZzuAb3tlCCoHK_VNvLp0UAJZ7279cB4eXJcSFAfO1GiwzD_ZaHTa9w7i3t7l1HAtJj8kG9l6SuK2B50',
-  // "enable-funding": "venmo",
   components: "buttons",
   "disable-funding": ["credit", "card"],
   currency: "USD",
@@ -16,19 +15,15 @@ const BrandCreateCampaign = () => {
   const navigate = useNavigate();
 
   // Form state
-  const [campaignName, setCampaignName] = useState('Chào mùa hè mới cùng Phúc Long');
-  const [description, setDescription] = useState(''); // New description state
-  const [voucherNumber, setVoucherNumber] = useState('1000');
-  const [voucherExpirationDate, setVoucherExpirationDate] = useState('');
-  const [category, setCategory] = useState('');
+  const [campaignName, setCampaignName] = useState('Nhập tên chiến dịch khuyến mãi');
+  const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [image, setImage] = useState<File | null>(null);
-  const [totalCost, setTotalCost] = useState(0); // Total cost state
   const [message, setMessage] = useState("");
-
-  // Cost per voucher (example: $1 per voucher)
-  const costPerVoucher = 1;
+  const [status, setStatus] = useState("INACTIVE");
+  const [budget, setBudget] = useState(0);
+  const [remainingBudget, setRemainingBudget] = useState(0);
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -38,25 +33,18 @@ const BrandCreateCampaign = () => {
     if (target instanceof HTMLInputElement && target.type === 'file') {
       setImage(target.files ? target.files[0] : null);
     } else {
-      const setter = {
+      const setters: { [key: string]: React.Dispatch<React.SetStateAction<any>> } = {
         campaignName: setCampaignName,
         description: setDescription,
-        voucherNumber: setVoucherNumber,
-        voucherExpirationDate: setVoucherExpirationDate,
-        category: setCategory,
         startDate: setStartDate,
         endDate: setEndDate,
-      }[name];
-
+        budget: setBudget,
+        remainingBudget: setRemainingBudget,
+      };
+      const setter = setters[name];
       if (setter) {
         setter(value);
       }
-    }
-
-    // Update total cost if voucher number changes
-    if (name === 'voucherNumber') {
-      const voucherCount = parseInt(value) || 0;
-      setTotalCost(voucherCount * costPerVoucher);
     }
   };
 
@@ -70,19 +58,18 @@ const BrandCreateCampaign = () => {
     const data = {
       name: campaignName,
       description,
-      numOfVouchers: voucherNumber,
-      voucherExpirationDate,
+      imageUrl: image,
       startDate: formattedStartDate,
       endDate: formattedEndDate,
-      status: 'INACTIVE',
-      category,
-      imageUrl: image,
+      budget,
+      remainingBudget,
+      status,
     };
 
     try {
       const response = await brandApi.createCampaignPromotions(data);
       console.log('Campaign created successfully:', response.data);
-      navigate('/brand/campaigns');
+      navigate('/brand/campaign');
     } catch (error) {
       console.error('Error creating campaign:', error);
     }
@@ -142,43 +129,6 @@ const BrandCreateCampaign = () => {
                 onChange={handleInputChange}
               ></textarea>
             </div>
-            <div className="mb-6">
-              <label htmlFor="voucherNumber" className="block text-md font-semibold text-gray-800 mb-2">Number of Vouchers *</label>
-              <input
-                type="text"
-                id="voucherNumber"
-                name="voucherNumber"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
-                value={voucherNumber}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mb-6">
-              <label htmlFor="voucherExpirationDate" className="block text-md font-semibold text-gray-800 mb-2">Voucher Expiration Date *</label>
-              <input
-                type="date"
-                id="voucherExpirationDate"
-                name="voucherExpirationDate"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
-                value={voucherExpirationDate}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="mb-6">
-              <label htmlFor="category" className="block text-md font-semibold text-gray-800 mb-2">Category *</label>
-              <select
-                id="category"
-                name="category"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
-                value={category}
-                onChange={handleInputChange}
-              >
-                <option>Food</option>
-                <option>Drink</option>
-                <option>Ship</option>
-                <option>All</option>
-              </select>
-            </div>
             <div className="flex space-x-6 mb-6">
               <div className="w-1/2">
                 <label htmlFor="startDate" className="block text-md font-semibold text-gray-800 mb-2">Start Date *</label>
@@ -203,20 +153,40 @@ const BrandCreateCampaign = () => {
                 />
               </div>
             </div>
+            <div className="mb-6">
+              <label htmlFor="budget" className="block text-md font-semibold text-gray-800 mb-2">Budget *</label>
+              <input
+                type="number"
+                id="budget"
+                name="budget"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                value={budget}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="mb-6">
+              <label htmlFor="remainingBudget" className="block text-md font-semibold text-gray-800 mb-2">Remaining Budget *</label>
+              <input
+                type="number"
+                id="remainingBudget"
+                name="remainingBudget"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                value={remainingBudget}
+                onChange={handleInputChange}
+              />
+            </div>
 
-            {/* Total Cost */}
             <div className="mb-6 flex p-3">
-              <p className="justify-start text-md font-semibold text-gray-800">Total Cost: ${totalCost}</p>
+              <p className="justify-start text-md font-semibold text-gray-800">Message: {message}</p>
             </div>
 
             {/* PayPal Button */}
             <div className="flex space-x-6 mb-6">
               <div className="w-2/3 p-3 flex">
                 <label htmlFor="paypal" className="justify-start font-semibold text-gray-800 mb-2">Payment method</label>
-                <p className="text-red-500">{message}</p>
               </div>
               <div className="w-1/3">
-                <div id="paypal-button-container" >
+                <div id="paypal-button-container">
                   <PayPalScriptProvider options={paypalInitOptions}>
                     <PayPalButtons
                       style={{
@@ -271,25 +241,15 @@ const BrandCreateCampaign = () => {
                           );
 
                           const orderData = await response.json();
-                          // Three cases to handle:
-                          //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-                          //   (2) Other non-recoverable errors -> Show a failure message
-                          //   (3) Successful transaction -> Show confirmation or thank you message
-
                           const errorDetail = orderData?.details?.[0];
 
                           if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
-                            // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
-                            // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
                             return actions.restart();
                           } else if (errorDetail) {
-                            // (2) Other non-recoverable errors -> Show a failure message
                             throw new Error(
                               `${errorDetail.description} (${orderData.debug_id})`
                             );
                           } else {
-                            // (3) Successful transaction -> Show confirmation or thank you message
-                            // Or go to another URL:  actions.redirect('thank_you.html');
                             const transaction =
                               orderData.purchase_units[0].payments.captures[0];
                             setMessage(
@@ -300,6 +260,10 @@ const BrandCreateCampaign = () => {
                               orderData,
                               JSON.stringify(orderData, null, 2)
                             );
+                            if (orderData.status === "COMPLETED") {
+                              setMessage("Transaction completed by " + orderData.payer.name.given_name + orderData.payer.name.surname);
+                              setStatus("PAID");
+                            }
                           }
                         } catch (error) {
                           console.error(error);
@@ -308,9 +272,7 @@ const BrandCreateCampaign = () => {
                           );
                         }
                       }}
-                    >
-
-                    </PayPalButtons>
+                    />
                   </PayPalScriptProvider>
                 </div>
               </div>
