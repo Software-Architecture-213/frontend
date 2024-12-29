@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 const BrandCampaign = () => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
   // Fetch campaigns from the backend
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -26,6 +31,10 @@ const BrandCampaign = () => {
   const handleCreateCampaign = () => {
     navigate('/brand/campaign/create');
   };
+
+  const handleShowDetail = (campaignId: string) => {
+    navigate(`/brand/campaign/${campaignId}`);
+  }
 
   if (loading) {
     return <div>Loading campaigns...</div>;
@@ -68,9 +77,8 @@ const BrandCampaign = () => {
               <th className="p-2">Start Date</th>
               <th className="p-2">End Date</th>
               <th className="p-2">Status</th>
-              <th className="p-2">Initial</th>
-              <th className="p-2">Remaining</th>
-              <th className="p-2">Paid</th>
+              <th className="p-2">Budget</th>
+              <th className="p-2">Remaining Budget</th>
               <th className="p-2">Action</th>
             </tr>
           </thead>
@@ -82,19 +90,34 @@ const BrandCampaign = () => {
                 <td className="p-2">{new Date(campaign.startDate).toLocaleDateString()}</td>
                 <td className="p-2">{new Date(campaign.endDate).toLocaleDateString()}</td>
                 <td className="p-2">
-                  <span className={`px-2 py-1 rounded ${campaign.status === 'ENDED' ? 'bg-gray-500 text-white' : campaign.status === 'NOT_ACCEPTED' ? 'bg-pink-500 text-white' : 'bg-yellow-500 text-white'}`}>
+                  <span className={`px-2 py-1 rounded ${campaign.status === 'EXPIRED' ? 'bg-gray-500 text-white' : campaign.status === 'NOT_ACCEPTED' ? 'bg-pink-500 text-white' : campaign.status === 'INACTIVE' ? 'bg-red-500 text-white' : campaign.status === 'ACTIVE' ? 'bg-green-500 text-white' : campaign.status === 'PAID' ? 'bg-yellow-500 text-white' : 'bg-yellow-500 text-white'}`}>
                     {campaign.status}
                   </span>
                 </td>
-                <td className="p-2">{campaign.numOfVouchers}</td>
-                <td className="p-2">{campaign.remainingVouchers}</td>
-                <td className="p-2">
-                  <i className="fas fa-check text-green-500"></i>
-                </td>
-                <td className="p-2">
-                  <button className="text-red-600 hover:text-red-800">
-                    <i className="fas fa-trash"></i>
+                <td className="p-2">${campaign.budget}</td>
+                <td className="p-2">${campaign.remainingBudget}</td>
+                <td className="p-2 relative">
+                  <button className="text-blue-600 hover:text-blue-800" onClick={toggleDropdown}>
+                    <i className="fas fa-ellipsis-h"></i>
                   </button>
+                  {dropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
+                      <ul className="py-1">
+                        <li>
+                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => handleShowDetail(campaign.id)}>
+                            <i className="fas fa-info-circle mr-2"></i>
+                            Detail
+                          </button>
+                        </li>
+                        <li>
+                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                            <i className="fas fa-edit mr-2"></i>
+                            Update
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
                 </td>
               </tr>
             ))}

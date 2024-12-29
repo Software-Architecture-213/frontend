@@ -16,6 +16,8 @@ import RedirectPage from './pages/RedirectPage';
 import AdminUsersTab from './pages/admin/usersTab/AdminUsersTab';
 import BrandVoucher from './pages/brand/Voucher/BrandVoucher';
 import BrandCreateVoucher from './pages/brand/Voucher/BrandCreateVoucher';
+import BrandCampaignDetail from './pages/brand/Campaign Promotions/BrandCampaignDetail';
+import BrandVoucherDetail from './pages/brand/Voucher/BrandVoucherDetail';
 
 
 
@@ -40,8 +42,11 @@ function App() {
                 <Route path="dashboard" element={<BrandDashboardTab />} />
                 <Route path="campaign" element={<BrandCampaign />}/>
                 <Route path="campaign/create" element={<BrandCreateCampaign />} />
+                <Route path="campaign/:promotionId" element={<BrandCampaignDetail/>} />
                 <Route path="voucher" element={<BrandVoucher />} />
+                <Route path="voucher/:voucherId" element={<BrandVoucherDetail />} />
                 <Route path="voucher/create/:promotionId" element={<BrandCreateVoucher />} />
+                
               </Route>
               <Route path='' element={<RedirectPage/>}/>
             </Route>

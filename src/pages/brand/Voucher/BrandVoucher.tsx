@@ -6,10 +6,15 @@ import { FaPlus } from 'react-icons/fa';
 
 type Voucher = {
   id: string;
-  voucherCode: string;
+  code: string;
+  type: string;
+  valueType: string;
   value: number;
-  expirationDate: string;
+  description: string;
+  expiredAt: string;
   status: string;
+  maxCounts: number;
+  createCounts: number;
 };
 
 type Campaign = {
@@ -21,11 +26,18 @@ type Campaign = {
 const BrandVoucher = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const navigate = useNavigate();
+  const [dropdownState, setDropdownState] = useState<{ [key: string]: boolean }>({});
+
+  const toggleDropdown = (voucherId: string) => {
+    setDropdownState(prevState => ({
+      ...prevState,
+      [voucherId]: !prevState[voucherId],
+    }));
+  };
 
   useEffect(() => {
     const fetchCampaignsAndVouchers = async () => {
       try {
-        // Fetch the campaigns and vouchers from the backend
         const response = await brandApi.getCampaignPromotions(); // Adjust to your API endpoint
         setCampaigns(response.data);
       } catch (error) {
@@ -36,13 +48,11 @@ const BrandVoucher = () => {
     fetchCampaignsAndVouchers();
   }, []);
 
-  const handleUpdateVoucher = (voucherId: string) => {
-    // Navigate to the voucher update page with voucherId
-    navigate(`/brand/voucher/update/${voucherId}`);
-  };
+  const handleVoucherDetail = (voucherId: string) => {
+    navigate(`/brand/voucher/${voucherId}`);
+  }
 
   const handleAddVoucher = (campaignId: string) => {
-    // Navigate to the create voucher page with campaignId
     navigate(`/brand/voucher/create/${campaignId}`);
   };
 
@@ -58,7 +68,7 @@ const BrandVoucher = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-700">{campaign.name}</h3>
               <button
-                className="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
+                className="flex items-center bg-blue-600 text-white rounded shadow-md hover:bg-blue-700"
                 onClick={() => handleAddVoucher(campaign.id)}
               >
                 <FaPlus className="mr-2" />
@@ -66,36 +76,73 @@ const BrandVoucher = () => {
               </button>
             </div>
             {campaign.vouchers && campaign.vouchers.length !== 0 ? (
-              <table className="min-w-full table-auto border-collapse">
+              <table className="w-full table-auto border-collapse border border-gray-300">
                 <thead>
                   <tr>
-                    <th className="border p-2">Voucher Code</th>
-                    <th className="border p-2">Value</th>
-                    <th className="border p-2">Expiration Date</th>
-                    <th className="border p-2">Status</th>
-                    <th className="border p-2">Actions</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/6">Code</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/6">Type</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/6">Value Type</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/12">Value</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/6">Expired At</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/6">Status</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/12">Max Counts</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/12">Create Counts</th>
+                    <th className="py-2 px-4 border bg-gray-100 w-1/12">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {campaign.vouchers.map((voucher) => (
-                    <tr key={voucher.id}>
-                      <td className="border p-2">{voucher.voucherCode}</td>
-                      <td className="border p-2">{voucher.value}</td>
-                      <td className="border p-2">{format(new Date(voucher.expirationDate), 'MM/dd/yyyy')}</td>
-                      <td className="border p-2">{voucher.status}</td>
-                      <td className="border p-2">
-                        <button
-                          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                          onClick={() => handleUpdateVoucher(voucher.id)}
+                    <tr key={voucher.id} className="h-16">
+                      <td className="py-2 px-4 border w-32 overflow-hidden text-ellipsis whitespace-nowrap">{voucher.code}</td>
+                      <td className="py-2 px-4 border">{voucher.type}</td>
+                      <td className="py-2 px-4 border">{voucher.valueType}</td>
+                      <td className="py-2 px-4 border text-right">{voucher.value}</td>
+                      <td className="py-2 px-4 border">{format(new Date(voucher.expiredAt), 'yyyy-MM-dd')}</td>
+                      <td className="py-2 px-4 border">
+                        <span
+                          className={`px-2 py-1 rounded ${voucher.status === 'EXPIRED'
+                              ? 'bg-gray-500 text-white'
+                              : voucher.status === 'ACTIVE'
+                                ? 'bg-green-500 text-white'
+                                : 'bg-red-500 text-white'
+                            }`}
                         >
-                          Update
+                          {voucher.status}
+                        </span>
+                      </td>
+                      <td className="py-2 px-4 border text-right">{voucher.maxCounts}</td>
+                      <td className="py-2 px-4 border text-right">{voucher.createCounts}</td>
+                      <td className="py-2 px-4 border text-center relative">
+                        <button
+                          className="text-blue-600 hover:text-blue-800"
+                          onClick={() => toggleDropdown(voucher.id)}
+                        >
+                          <i className="fas fa-ellipsis-h"></i>
                         </button>
+                        {dropdownState[voucher.id] && (
+                          <div className="absolute right-0 top-8 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                            <ul className="py-1">
+                              <li>
+                                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => handleVoucherDetail(voucher.id)}>
+                                  <i className="fas fa-info-circle mr-2"></i>
+                                  Detail
+                                </button>
+                              </li>
+                              <li>
+                                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                                  <i className="fas fa-edit mr-2"></i>
+                                  Update
+                                </button>
+                              </li>
+                            </ul>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            ): (
+            ) : (
               <p>No vouchers found for this campaign.</p>
             )}
           </div>

@@ -10,24 +10,24 @@ const BrandRegisterForm = () => {
     initialValues: {
       email: "",
       password: "",
-      name: "",
+      displayName: "",
+      imageUrl: "",
       field: "",
-      address: "",
-      lat: "",
-      lng: "",
+      latitude: "",
+      longitude: "",
       status: "INACTIVE",
     },
     validationSchema: brandFormValidator, // Define your validator in formValidator
     onSubmit: async (values) => {
       console.log("Form submitted with values: ", values);
       try {
-        const gps = { lat: parseFloat(values.lat), lng: parseFloat(values.lng) };
+        const gps = { lat: parseFloat(values.latitude), lng: parseFloat(values.longitude) };
         const response = await brandApi.register(
           values.email,
           values.password,
-          values.name,
+          values.displayName,
+          values.imageUrl,
           values.field,
-          values.address,
           gps,
           values.status
         );
@@ -84,13 +84,13 @@ const BrandRegisterForm = () => {
         )}
       </div>
 
-      {/* Name Input */}
+      {/* Display Name Input */}
       <div>
         <input
           type="text"
           name="name"
           placeholder="Name"
-          value={formik.values.name}
+          value={formik.values.displayName}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
@@ -110,13 +110,13 @@ const BrandRegisterForm = () => {
         />
       </div>
 
-      {/* Address Input */}
+      {/* Image URL Input */}
       <div>
         <input
           type="text"
-          name="address"
-          placeholder="Address"
-          value={formik.values.address}
+          name="ImageURL"
+          placeholder="Image URL"
+          value={formik.values.imageUrl}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
@@ -129,7 +129,7 @@ const BrandRegisterForm = () => {
           type="text"
           name="lat"
           placeholder="Latitude"
-          value={formik.values.lat}
+          value={formik.values.latitude}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
@@ -142,7 +142,7 @@ const BrandRegisterForm = () => {
           type="text"
           name="lng"
           placeholder="Longitude"
-          value={formik.values.lng}
+          value={formik.values.longitude}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
