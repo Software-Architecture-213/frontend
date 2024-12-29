@@ -7,7 +7,7 @@ const BrandCreateVoucher = () => {
   const navigate = useNavigate();
 
   const [code, setCode] = useState('');
-  const [type, setType] = useState('DISCOUNT');
+  const [type, setType] = useState('ONLINE');
   const [image, setImage] = useState<File | null>(null);
   const [valueType, setValueType] = useState('PERCENTAGE');
   const [value, setValue] = useState<number>(0);

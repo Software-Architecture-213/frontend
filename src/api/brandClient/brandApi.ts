@@ -29,6 +29,12 @@ export const brandApi = {
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/my-promotions`)
     },
+    getCampaignPromotionDetail: async (promotionId: string) => {
+      return axiosInstance.get(`api/brands/promotions/${promotionId}`)
+    },
+    getVoucherDetail: async (voucherId: string) => {
+      return axiosInstance.get(`api/brands/vouchers/${voucherId}`)
+    },
     createCampaignPromotions: async (data: { [key: string]: any }) => {
       try {
           // Make the POST request with JSON data (no multipart)

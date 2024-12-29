@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { useAuth } from '../../../hooks/AuthContext';
 
 const paypalInitOptions = {
   clientId: 'AZzuAb3tlCCoHK_VNvLp0UAJZ7279cB4eXJcSFAfO1GiwzD_ZaHTa9w7i3t7l1HAtJj8kG9l6SuK2B50',
@@ -13,7 +14,7 @@ const paypalInitOptions = {
 
 const BrandCreateCampaign = () => {
   const navigate = useNavigate();
-
+  const auth = useAuth();
   // Form state
   const [campaignName, setCampaignName] = useState('Nhập tên chiến dịch khuyến mãi');
   const [description, setDescription] = useState('');
@@ -23,7 +24,8 @@ const BrandCreateCampaign = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("INACTIVE");
   const [budget, setBudget] = useState(0);
-  const [remainingBudget, setRemainingBudget] = useState(0);
+  const [cost, setCost] = useState(350);
+
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -39,13 +41,15 @@ const BrandCreateCampaign = () => {
         startDate: setStartDate,
         endDate: setEndDate,
         budget: setBudget,
-        remainingBudget: setRemainingBudget,
       };
       const setter = setters[name];
       if (setter) {
         setter(value);
       }
+
+      setCost(budget);
     }
+
   };
 
   // Handle form submission
@@ -62,7 +66,6 @@ const BrandCreateCampaign = () => {
       startDate: formattedStartDate,
       endDate: formattedEndDate,
       budget,
-      remainingBudget,
       status,
     };
 
@@ -164,18 +167,6 @@ const BrandCreateCampaign = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="mb-6">
-              <label htmlFor="remainingBudget" className="block text-md font-semibold text-gray-800 mb-2">Remaining Budget *</label>
-              <input
-                type="number"
-                id="remainingBudget"
-                name="remainingBudget"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
-                value={remainingBudget}
-                onChange={handleInputChange}
-              />
-            </div>
-
             <div className="mb-6 flex p-3">
               <p className="justify-start text-md font-semibold text-gray-800">Message: {message}</p>
             </div>
@@ -203,12 +194,8 @@ const BrandCreateCampaign = () => {
                               "Content-Type": "application/json",
                             },
                             body: JSON.stringify({
-                              cart: [
-                                {
-                                  id: "1",
-                                  quantity: "1",
-                                },
-                              ],
+                              id: auth.profile?.id,
+                              price: cost.toString(),
                             }),
                           });
                           const orderData = await response.json();

@@ -32,6 +32,10 @@ const BrandCampaign = () => {
     navigate('/brand/campaign/create');
   };
 
+  const handleShowDetail = (campaignId: string) => {
+    navigate(`/brand/campaign/${campaignId}`);
+  }
+
   if (loading) {
     return <div>Loading campaigns...</div>;
   }
@@ -100,7 +104,7 @@ const BrandCampaign = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
                       <ul className="py-1">
                         <li>
-                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => handleShowDetail(campaign.id)}>
                             <i className="fas fa-info-circle mr-2"></i>
                             Detail
                           </button>
