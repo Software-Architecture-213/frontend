@@ -3,7 +3,6 @@ import { Dialog } from "@headlessui/react";
 import { useAuth } from "../../../hooks/AuthContext";
 import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 import imageCompression from "browser-image-compression";
-import { setLocale } from "yup";
 
 interface ProfilePhotoUploadProps {
   open: boolean;
