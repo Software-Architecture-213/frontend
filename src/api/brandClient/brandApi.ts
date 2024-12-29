@@ -66,5 +66,25 @@ export const brandApi = {
       return axiosInstance.post(`${BACKEND_URL}/api/brands/vouchers`, data);
     },
 
-    
+    // New method for uploading image
+    uploadImage: async (promotionId: string, file: File) => {
+      const formData = new FormData();
+      formData.append("file", file);  // Appending the file to formData
+  
+      try {
+          const response = await axiosInstance.post(
+              `${BACKEND_URL}/api/brands/promotions/upload-image/${promotionId}`,
+              formData,  // Use formData here, not just the file
+              {
+                  headers: {
+                      "Content-Type": "multipart/form-data",  // This ensures the request is sent as multipart form data
+                  },
+              }
+          );
+          return response.data;  // Return the response data, typically including the image URL or success message
+      } catch (error) {
+          console.error("Error uploading image:", error);
+          throw error;
+      }
+  },
 };

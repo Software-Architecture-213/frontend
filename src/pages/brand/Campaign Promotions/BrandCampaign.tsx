@@ -7,11 +7,15 @@ const BrandCampaign = () => {
   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownState, setDropdownState] = useState<{ [key: string]: boolean }>({});
 
-  const toggleDropdown = () => {
-    setDropdownOpen(!dropdownOpen);
+  const toggleDropdown = (campaignId: string) => {
+    setDropdownState(prevState => ({
+      ...prevState,
+      [campaignId]: !prevState[campaignId],
+    }));
   };
+
   // Fetch campaigns from the backend
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -97,11 +101,11 @@ const BrandCampaign = () => {
                 <td className="p-2">${campaign.budget}</td>
                 <td className="p-2">${campaign.remainingBudget}</td>
                 <td className="p-2 relative">
-                  <button className="text-blue-600 hover:text-blue-800" onClick={toggleDropdown}>
+                  <button className="text-blue-600 hover:text-blue-800" onClick={() => toggleDropdown(campaign.id)}>
                     <i className="fas fa-ellipsis-h"></i>
                   </button>
-                  {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg">
+                  {dropdownState[campaign.id] && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
                       <ul className="py-1">
                         <li>
                           <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => handleShowDetail(campaign.id)}>
