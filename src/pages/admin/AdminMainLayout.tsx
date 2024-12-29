@@ -27,7 +27,7 @@ const Header = () => {
           </div>
 
           {/* Dropdown menu */}
-          <MenuItems className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+          <MenuItems style={{zIndex: 10}} className="absolute right-0 z-1 mt-2 w-56 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
             <div className="py-1">
               <MenuItem>
                 <Link
@@ -56,7 +56,7 @@ const Header = () => {
 const Sidebar = () => {
   return (
     <div className="main-bg text-white w-64 space-y-6 py-7 px-2">
-      <h2 className="text-3xl font-semibold text-center text-white">Admin</h2>
+      <h2 className="text-3xl font-semibold text-white">Admin</h2>
       <ul className="space-y-4">
         <li>
           <Link to="/admin/dashboard" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
