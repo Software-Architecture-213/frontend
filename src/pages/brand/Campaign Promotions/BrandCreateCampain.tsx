@@ -123,7 +123,7 @@ const BrandCreateCampaign = () => {
     setIsLoading(true);
 
     try {
-      const response = await brandApi.uploadImage(promotionId, image!);
+      const response = await brandApi.uploadImage(image!, promotionId, 'promotions');
       console.log('Image uploaded successfully:', response.data);
       // Handle the response after image upload
     } catch (error) {

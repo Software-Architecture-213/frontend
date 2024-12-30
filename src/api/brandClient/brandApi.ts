@@ -67,24 +67,30 @@ export const brandApi = {
     },
 
     // New method for uploading image
-    uploadImage: async (promotionId: string, file: File) => {
+    uploadImage: async (file: File ,id: String, type: String) => {
+      let endpoint = '';
       const formData = new FormData();
-      formData.append("file", file);  // Appending the file to formData
+      formData.append("file", file);
+      if (type === 'brands') {
+        endpoint = `${BACKEND_URL}/api/brands/upload-image/${id}`;
+      } else if (type === 'vouchers') {
+        endpoint = `${BACKEND_URL}/api/brands/vouchers/upload-image/${id}`;
+      } else if (type === 'promotions') {
+        endpoint = `${BACKEND_URL}/api/brands/promotions/upload-image/${id}`;
+      } else {
+        throw new Error('Invalid image type. Supported types are: brands, vouchers, promotions.');
+      }
   
       try {
-          const response = await axiosInstance.post(
-              `${BACKEND_URL}/api/brands/promotions/upload-image/${promotionId}`,
-              formData,  // Use formData here, not just the file
-              {
-                  headers: {
-                      "Content-Type": "multipart/form-data",  // This ensures the request is sent as multipart form data
-                  },
-              }
-          );
-          return response.data;  // Return the response data, typically including the image URL or success message
+        const response = await axiosInstance.post(endpoint, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        return response.data;
       } catch (error) {
-          console.error("Error uploading image:", error);
-          throw error;
+        console.error(`Error uploading ${type} image:`, error);
+        throw error;
       }
-  },
+    },
 };

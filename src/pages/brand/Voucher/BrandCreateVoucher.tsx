@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
+import imageCompression from 'browser-image-compression';
 
 const BrandCreateVoucher = () => {
   const { promotionId } = useParams<{ promotionId: string }>();
@@ -9,6 +10,7 @@ const BrandCreateVoucher = () => {
   const [code, setCode] = useState('');
   const [type, setType] = useState('ONLINE');
   const [image, setImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [valueType, setValueType] = useState('PERCENTAGE');
   const [value, setValue] = useState<number>(0);
   const [description, setDescription] = useState('');
@@ -17,13 +19,14 @@ const BrandCreateVoucher = () => {
   const [maxCounts, setMaxCounts] = useState<number>(0);
   const [createCounts, setCreateCounts] = useState<number>(0);
   const [message, setMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const target = e.target;
     const { name, value } = target;
 
     if (target instanceof HTMLInputElement && target.type === 'file') {
-      setImage(target.files ? target.files[0] : null);
+      handleFileChange(e);
     } else {
       const setters: { [key: string]: React.Dispatch<React.SetStateAction<any>> } = {
         code: setCode,
@@ -43,13 +46,42 @@ const BrandCreateVoucher = () => {
     }
   };
 
+  // Handle file change for image preview and compression
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const selectedFile = (event.target as HTMLInputElement).files?.[0];
+    if (selectedFile) {
+      try {
+        // Compression options
+        const options = {
+          maxSizeMB: 1, // Maximum size in MB
+          maxWidthOrHeight: 1024, // Resize to max width or height
+          useWebWorker: true, // Use web worker for better performance
+        };
+
+        // Compress the file
+        const compressedFile = await imageCompression(selectedFile, options);
+
+        setImage(compressedFile);
+        setImagePreview(URL.createObjectURL(compressedFile));
+        console.log(
+          `Original file size: ${(selectedFile.size / 1024 / 1024).toFixed(2)} MB`
+        );
+        console.log(
+          `Compressed file size: ${(compressedFile.size / 1024 / 1024).toFixed(2)} MB`
+        );
+      } catch (error) {
+        console.error('Error during image compression:', error);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const data = {
       code,
       type,
-      imageUrl: image ? URL.createObjectURL(image) : '',
+      imageUrl: '',
       valueType,
       value,
       description,
@@ -62,12 +94,48 @@ const BrandCreateVoucher = () => {
 
     try {
       const response = await brandApi.createVoucher(data);
-      console.log('Voucher created successfully:', response.data);
+
+      if (image) {
+        const formData = new FormData();
+        formData.append('file', image);
+
+        try {
+          await uploadImage(response.data.id);
+          setMessage("Voucher and image uploaded successfully.");
+        } catch (uploadError) {
+          setMessage("Voucher created, but failed to upload image.");
+        }
+      } else {
+        setMessage("Voucher created successfully without an image.");
+      }
+
       navigate('/brand/voucher'); // Redirect to voucher dashboard after successful creation
     } catch (error) {
       console.error('Error creating voucher:', error);
+      setMessage("Failed to create voucher. Please try again.");
+    } finally {
+      setIsUploading(false);
     }
   };
+
+  const uploadImage = async (voucherId: string) => {
+    const formData = new FormData();
+    formData.append('image', image!);  // Assuming image is never null when uploading
+
+    setIsUploading(true);
+
+    try {
+      const response = await brandApi.uploadImage(image!, voucherId, 'vouchers');
+      console.log('Image uploaded successfully:', response.data);
+      // Handle the response after image upload
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    } finally {
+      setIsUploading(false); // Stop loading
+    }
+  };
+
+
 
   return (
     <div className="p-3 max-w-6xl mx-auto">
@@ -82,18 +150,21 @@ const BrandCreateVoucher = () => {
             onChange={handleInputChange}
             className="mb-4"
           />
-          {image && (
+          {imagePreview && (
             <div className="flex items-center justify-between bg-gray-100 p-2 rounded-lg shadow">
               <div className="flex items-center">
                 <div className="w-10 h-10 bg-purple-500 text-white flex items-center justify-center rounded-md mr-2">IMG</div>
                 <div className="text-sm">
-                  <p>{image.name}</p>
-                  <p className="text-xs text-gray-500">{(image.size / 1024).toFixed(2)} KB</p>
+                  <p>{image?.name}</p>
+                  <p className="text-xs text-gray-500">{(image!.size / 1024).toFixed(2)} KB</p>
                 </div>
               </div>
               <button
                 className="text-red-500"
-                onClick={() => setImage(null)}
+                onClick={() => {
+                  setImage(null);
+                  setImagePreview(null);
+                }}
               >
                 <i className="fas fa-trash-alt"></i>
               </button>
@@ -102,6 +173,7 @@ const BrandCreateVoucher = () => {
         </div>
         <div className="w-2/3 p-4">
           <form onSubmit={handleSubmit}>
+            {/* Other form fields remain the same */}
             <div className="mb-6">
               <label htmlFor="code" className="block text-md font-semibold text-gray-800 mb-2">Code *</label>
               <input
@@ -218,8 +290,9 @@ const BrandCreateVoucher = () => {
             <button
               type="submit"
               className="w-full h-12 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-indigo-700"
+              disabled={isUploading}
             >
-              Create Voucher
+              {isUploading ? 'Uploading...' : 'Create Voucher'}
             </button>
           </form>
         </div>
