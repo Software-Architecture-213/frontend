@@ -13,6 +13,13 @@ const paypalInitOptions = {
   "buyer-country": "US",
 };
 
+// Games selection state
+type Games = {
+  SHAKE: boolean;
+  QUIZ: boolean;
+  [key: string]: boolean;
+};
+
 const BrandCreateCampaign = () => {
   const navigate = useNavigate();
   const auth = useAuth();
@@ -30,6 +37,10 @@ const BrandCreateCampaign = () => {
   // const [promotionId, setPromotionId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [games, setGames] = useState<Games>({
+    SHAKE: false,
+    QUIZ: false,
+  });
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const target = e.target;
@@ -37,6 +48,12 @@ const BrandCreateCampaign = () => {
 
     if (target instanceof HTMLInputElement && target.type === 'file') {
       handleFileChange(e);  // Call handleFileChange for file input
+    } else if (target instanceof HTMLInputElement && target.type === 'checkbox') {
+      const { checked } = target;
+      setGames(prevState => ({
+        ...prevState,
+        [name]: checked,
+      }));
     } else {
       const setters: { [key: string]: React.Dispatch<React.SetStateAction<any>> } = {
         campaignName: setCampaignName,
@@ -88,6 +105,7 @@ const BrandCreateCampaign = () => {
 
     const formattedStartDate = new Date(startDate).toISOString();
     const formattedEndDate = new Date(endDate).toISOString();
+    const selectedGames = Object.keys(games).filter((game) => games[game]);
 
     const data = {
       name: campaignName,
@@ -96,6 +114,7 @@ const BrandCreateCampaign = () => {
       endDate: formattedEndDate,
       budget,
       status,
+      games: selectedGames,
     };
 
     try {
@@ -216,6 +235,23 @@ const BrandCreateCampaign = () => {
                       value={endDate}
                       onChange={handleInputChange}
                     />
+                  </div>
+                </div>
+                <div className="mb-6">
+                  <p className="text-md font-semibold text-gray-800 mb-2">Choose games *</p>
+                  <div className="flex items-center space-x-6">
+                    {['SHAKE', 'QUIZ'].map((game) => (
+                      <label key={game} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          name={game}
+                          className="form-checkbox text-indigo-600 h-6 w-6"
+                          checked={games[game as keyof Games]}
+                          onChange={handleInputChange}
+                        />
+                        <span className="ml-2 text-lg">{game.slice(0,1) + game.slice(1).toLowerCase()}</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
                 <div className="mb-6">
@@ -342,4 +378,4 @@ const BrandCreateCampaign = () => {
     </div>
   )
 };
-  export default BrandCreateCampaign;
+export default BrandCreateCampaign;

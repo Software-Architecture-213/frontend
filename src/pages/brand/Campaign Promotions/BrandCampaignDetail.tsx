@@ -15,7 +15,8 @@ interface Promotion {
     createAt: string;
     updateAt: string;
     vouchers?: { code: string; value: number; description: string }[];
-  }
+    games?: string[];
+}
 
 
 const BrandCampaignDetail = () => {
@@ -67,12 +68,13 @@ const BrandCampaignDetail = () => {
                 {/* Details */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                     <div className="text-left rounded-lg shadow-lg p-4 bg-gray-100">
-                        <h3 className="text-3xl m-3 font-semibold text-gray-700">Campaign Info</h3>
+                        <h3 className="text-3xl m-3 font-semibold text-gray-700">Details</h3>
                         <p><strong>Brand ID:</strong> {promotion.brandId}</p>
                         <p><strong>Start Date:</strong> {new Date(promotion.startDate).toLocaleDateString()}</p>
                         <p><strong>End Date:</strong> {new Date(promotion.endDate).toLocaleDateString()}</p>
                         <p><strong>Budget:</strong> ${promotion.budget}</p>
                         <p><strong>Remaining Budget:</strong> ${promotion.remainingBudget}</p>
+                        <p><strong>Games:</strong> {promotion.games ? promotion.games.join(', ') : 'No games selected'}</p>
                     </div>
                     <div className='text-left rounded-lg shadow-lg p-4 bg-gray-100'>
                         <h3 className="text-3xl m-3 font-semibold text-gray-700">Timestamps</h3>
@@ -82,7 +84,7 @@ const BrandCampaignDetail = () => {
                 </div>
 
                 {/* Vouchers */}
-                {promotion.vouchers && promotion.vouchers.length > 0 && (
+                {promotion.vouchers && promotion.vouchers.length > 0 ? (
                     <div>
                         <h3 className="text-3xl font-semibold text-gray-700 mb-4">Vouchers</h3>
                         <div className="space-y-4">
@@ -95,7 +97,12 @@ const BrandCampaignDetail = () => {
                             ))}
                         </div>
                     </div>
+                ) : (
+                    <div className="text-center text-gray-600">
+                        <p>No vouchers available</p>
+                    </div>
                 )}
+
             </div>
         </section>
     );

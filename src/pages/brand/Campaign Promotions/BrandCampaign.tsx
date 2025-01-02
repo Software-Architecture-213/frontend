@@ -81,6 +81,7 @@ const BrandCampaign = () => {
               <th className="p-2">Start Date</th>
               <th className="p-2">End Date</th>
               <th className="p-2">Status</th>
+              <th className="p-2">Games</th>
               <th className="p-2">Budget</th>
               <th className="p-2">Remaining Budget</th>
               <th className="p-2">Action</th>
@@ -97,6 +98,9 @@ const BrandCampaign = () => {
                   <span className={`px-2 py-1 rounded ${campaign.status === 'EXPIRED' ? 'bg-gray-500 text-white' : campaign.status === 'NOT_ACCEPTED' ? 'bg-pink-500 text-white' : campaign.status === 'INACTIVE' ? 'bg-red-500 text-white' : campaign.status === 'ACTIVE' ? 'bg-green-500 text-white' : campaign.status === 'PAID' ? 'bg-yellow-500 text-white' : 'bg-yellow-500 text-white'}`}>
                     {campaign.status}
                   </span>
+                </td>
+                <td className="p-2">
+                    {campaign.games ? campaign.games.join(', ') : 'No games selected'}
                 </td>
                 <td className="p-2">${campaign.budget}</td>
                 <td className="p-2">${campaign.remainingBudget}</td>
