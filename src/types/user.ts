@@ -32,5 +32,6 @@ export interface UserRow {
     gender: "MALE" | "FEMALE"; // User's gender, restricted to specific values
     photoUrl: string | null; // User's gender, restricted to specific values
     disabled: boolean;
+    lastSignIn: string | null;
 }
   
