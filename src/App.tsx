@@ -18,6 +18,9 @@ import BrandVoucher from './pages/brand/Voucher/BrandVoucher';
 import BrandCreateVoucher from './pages/brand/Voucher/BrandCreateVoucher';
 import BrandCampaignDetail from './pages/brand/Campaign Promotions/BrandCampaignDetail';
 import BrandVoucherDetail from './pages/brand/Voucher/BrandVoucherDetail';
+import BrandBranchStore from './pages/brand/Store/BrandBranchStore';
+import BrandUpdateCampaign from './pages/brand/Campaign Promotions/BrandUpdateCampaign';
+import BrandUpdateVoucher from './pages/brand/Voucher/BrandUpdateVoucher';
 
 
 
@@ -42,11 +45,13 @@ function App() {
                 <Route path="dashboard" element={<BrandDashboardTab />} />
                 <Route path="campaign" element={<BrandCampaign />}/>
                 <Route path="campaign/create" element={<BrandCreateCampaign />} />
+                <Route path="campaign/update/:campaignId" element={<BrandUpdateCampaign />} />
                 <Route path="campaign/:promotionId" element={<BrandCampaignDetail/>} />
                 <Route path="voucher" element={<BrandVoucher />} />
                 <Route path="voucher/:voucherId" element={<BrandVoucherDetail />} />
                 <Route path="voucher/create/:promotionId" element={<BrandCreateVoucher />} />
-                
+                <Route path="voucher/update/:voucherId" element={<BrandUpdateVoucher />} />
+                <Route path="store" element={<BrandBranchStore/>}/>
               </Route>
               <Route path='' element={<RedirectPage/>}/>
             </Route>
