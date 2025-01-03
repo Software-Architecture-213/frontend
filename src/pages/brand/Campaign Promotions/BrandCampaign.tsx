@@ -51,7 +51,7 @@ const BrandCampaign = () => {
         <h2 className="text-lg font-semibold">Campaign Promotions</h2>
         <button
           onClick={handleCreateCampaign}
-          className="px-4 py-2 bg-blue-600 text-white rounded shadow-md hover:bg-blue-700"
+          className="px-4 py-2 bg-orange-400 text-white rounded shadow-md hover:bg-orange-600"
         >
           Create Campaign
         </button>
@@ -118,7 +118,7 @@ const BrandCampaign = () => {
                           </button>
                         </li>
                         <li>
-                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => navigate(`/brand/campaign/update/${campaign.id}`)}>
                             <i className="fas fa-edit mr-2"></i>
                             Update
                           </button>

@@ -129,7 +129,7 @@ const BrandVoucher = () => {
                                 </button>
                               </li>
                               <li>
-                                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center">
+                                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => navigate(`/brand/voucher/update/${voucher.id}`)}>
                                   <i className="fas fa-edit mr-2"></i>
                                   Update
                                 </button>

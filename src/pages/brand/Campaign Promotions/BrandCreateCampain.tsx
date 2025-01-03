@@ -365,7 +365,7 @@ const BrandCreateCampaign = () => {
 
                 <button
                   type="submit"
-                  className="w-full h-12 bg-indigo-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-indigo-700"
+                  className="w-full h-12 bg-orange-300 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-orange-600"
                 >
                   Create Campaign
                 </button>

@@ -29,11 +29,17 @@ export const brandApi = {
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/my-promotions`)
     },
+    updateCampaignPromotions: async (promotionId: string, data: { [key: string]: any }) => {
+      return axiosInstance.put(`api/brands/promotions/${promotionId}`, data)
+    },
     getCampaignPromotionDetail: async (promotionId: string) => {
       return axiosInstance.get(`api/brands/promotions/${promotionId}`)
     },
     getVoucherDetail: async (voucherId: string) => {
       return axiosInstance.get(`api/brands/vouchers/${voucherId}`)
+    },
+    updateVoucher: async (voucherId: string, data: { [key: string]: any }) => {
+      return axiosInstance.put(`api/brands/vouchers/${voucherId}`, data)
     },
     createCampaignPromotions: async (data: { [key: string]: any }) => {
       try {
@@ -92,5 +98,16 @@ export const brandApi = {
         console.error(`Error uploading ${type} image:`, error);
         throw error;
       }
+    },
+    getBranches: async () => {
+      return axiosInstance.get("/api/brands/branches");
+    },
+  
+    createBranch: async (data: {
+      name: string;
+      address: string;
+      gps: GPS;
+    }) => {
+      return axiosInstance.post("/api/brands/branches", data);
     },
 };
