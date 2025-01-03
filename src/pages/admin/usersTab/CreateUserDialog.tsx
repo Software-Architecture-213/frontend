@@ -39,6 +39,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ open, setOpen }) =>
           gender: values.gender === "MALE" ? "MALE" : "FEMALE",
         };
         await identityAuthApi.register(createUserRequest);
+        toast.info("User created.")
       } catch (error: any) {
         console.error("Error updating profile: ", error);
         toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)

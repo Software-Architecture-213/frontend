@@ -6,14 +6,16 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 import CreateUserDialog from "./CreateUserDialog";
 
 const TableHeaders = [
+  // "ID",
   "Avatar",
   "Display Name",
   "Email",
   "Date of Birth",
   "Gender",
   "Phone",
-  "Enable",
-  "Actions",
+  "Last Sign In",
+  "Disabled",
+  // "Actions",
 ];
 
 const AdminUsersTab = () => {
@@ -27,6 +29,7 @@ const AdminUsersTab = () => {
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false); // Mod
   const tableRef = useRef<HTMLDivElement | null>(null);
+  
 
   const fetchData = useCallback(
     async (isPagination = false) => {
@@ -93,7 +96,7 @@ const AdminUsersTab = () => {
       </div>
       <div
         ref={tableRef}
-        className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg bg-clip-border"
+        className="relative flex flex-col h-full w-full overflow-y-auto custom-scrollbar text-gray-700 bg-white shadow-md rounded-lg bg-clip-border"
       >
         <table style={{ zIndex: 0 }} className="w-full text-left table-auto min-w-max">
           <thead className="">

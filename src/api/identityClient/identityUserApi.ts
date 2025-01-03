@@ -11,18 +11,18 @@ export const identityUserApi = {
         return axiosInstance.get("api/identity/users/me");
     },
     updateMyProfile: async (updateRequest?: UpdateUserRequest) => {
-        return axiosInstance.put("api/identity/users", updateRequest)
+        return axiosInstance.put("api/identity/users/me", updateRequest)
     },
     uploadPhoto: async (file: File) => {
         const formData = new FormData();
         formData.append("file", file); // Key "file" matches the backend's expected field name
-        return axiosInstance.post("api/identity/users/upload-image", formData, {
+        return axiosInstance.post("api/identity/users/me/upload-image", formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
         });
     },
-    enableUser: async (userId: string, enable: boolean) => {
-        return axiosInstance.post(`api/identity/users/${userId}/enable`, {enable: enable})
+    disableUser: async (email: string, disabled: boolean, message: string,) => {
+        return axiosInstance.post(`api/identity/users/${email}/disable`, {email: email, disabled: disabled, message: message})
     }
 }

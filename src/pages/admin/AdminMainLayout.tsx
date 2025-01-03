@@ -2,7 +2,7 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { BriefcaseIcon, ChevronDownIcon, HomeIcon, PaperClipIcon, UserIcon } from '@heroicons/react/20/solid';
 
 
 const Header = () => {
@@ -55,33 +55,37 @@ const Header = () => {
 
 const Sidebar = () => {
   return (
-    <div className="main-bg text-white w-64 space-y-6 py-7 px-2">
-      <h2 className="text-3xl font-semibold text-white">Admin</h2>
-      <ul className="space-y-4">
+    <div className="main-bg text-white w-50 space-y-6 py-7 px-3 ">
+      <h2 className="text-3xl font-semibold text-white mb-8">Admin</h2>
+      <ul className="text-left space-y-4">
         <li>
-          <Link to="/admin/dashboard" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/admin/dashboard" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <HomeIcon className="w-5 h-5 text-gray-300 mr-3" />
             Dashboard
           </Link>
         </li>
         <li>
-          <Link to="/admin/users" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/admin/users" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <UserIcon className="w-5 h-5 text-gray-300 mr-3" />
             Users
           </Link>
         </li>
         <li>
-          <Link to="/admin/brands" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/admin/brands" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <BriefcaseIcon className="w-5 h-5 text-gray-300 mr-3" />
             Brands
           </Link>
         </li>
         <li>
-          <Link to="/admin/campaigns" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/admin/campaigns" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <PaperClipIcon className="w-5 h-5 text-gray-300 mr-3" />
             Campaigns
           </Link>
         </li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
 
 const AdminMainLayout = () => {
