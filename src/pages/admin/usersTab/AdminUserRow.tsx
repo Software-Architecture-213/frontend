@@ -1,12 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UserRow } from '../../../types/user';
 import { DEFAULT_AVATAR_URL } from '../../../constants/app';
+import Toggle from '../../../components/Toggle';
+import { identityUserApi } from '../../../api/identityClient/identityUserApi';
 
 interface AdminUserRowProps {
   user: UserRow;
 }
 
 const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
+  const [isEnabled, setIsEnabled] = useState<boolean>(!user.disabled)
+
+  const handleEnableUser = async () => {
+    try {
+       const response = await identityUserApi.enableUser(user.userId!, !isEnabled)
+       const data = response.data
+       console.log(data)
+       setIsEnabled(!isEnabled)
+    } catch (error) {
+      console.error("Error updating profile: ", error);
+    } 
+  }
+
   return (
     <tr className="hover:bg-slate-50 border-b border-slate-200">
       <td className="p-4 py-5">
@@ -32,11 +47,12 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
         <p className="block text-sm text-slate-800">{user.phoneNumber}</p>
       </td>
       <td className="p-4 py-5">
-      {user.disabled ? (
+      {/* {user.disabled ? (
           <span className="text-red-500 font-bold text-lg">✘</span>
         ) : (
           <span className="text-green-500 font-bold text-lg">✔</span>
-        )}
+        )} */}
+        <Toggle checked={isEnabled} onClick={handleEnableUser} />
       </td>
       <td className="p-4 py-5 flex justify-content-center space-x-4">
         <div

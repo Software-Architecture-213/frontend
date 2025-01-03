@@ -4,6 +4,27 @@
   background-color: #FBF6F4; /* Light cream background */
 }
 
+/* Custom scrollbar for the dialog */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #b6afaf;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #b6afafdc;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+
 /* Background gradient */
 .main-bg-gradient {
   background: linear-gradient(135deg, #f75f07, #FBF6F4);

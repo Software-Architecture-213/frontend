@@ -6,6 +6,16 @@ export interface UpdateUserRequest {
     gender: "MALE" | "FEMALE"; // User's gender, restricted to specific values
 }
 
+export interface CreateUserRequest {
+    displayName: string; // User's full name
+    email: string; // User's email address
+    password: string;
+    phoneNumber: string; // User's phone number
+    dateOfBirth: string; // User's date of birth in YYYY-MM-DD format
+    role: "USER",
+    gender: "MALE" | "FEMALE"; // User's gender, restricted to specific values
+}
+
 export interface UsersRequest {
     pageToken: string | null;
     maxResults: number | null;

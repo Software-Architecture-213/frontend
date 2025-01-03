@@ -22,4 +22,7 @@ export const identityUserApi = {
             },
         });
     },
+    enableUser: async (userId: string, enable: boolean) => {
+        return axiosInstance.post(`api/identity/users/${userId}/enable`, {enable: enable})
+    }
 }

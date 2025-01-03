@@ -59,3 +59,37 @@ export const updateUserProfileValidator = Yup.object({
     .oneOf(["MALE", "FEMALE"], "Invalid gender")
     .required("Gender is required"),
 });
+
+
+
+export const createUserProfileValidator = Yup.object({
+  displayName: Yup.string()
+    .min(3, "Display Name must be at least 3 characters long")
+    .required("Display Name is required"),
+  email: Yup.string()
+    .email("Invalid email format")
+    .required("Email is required"),
+  password: Yup.string()
+    .min(6)
+    .required("Password length must be at least 6 characters long"),
+  phoneNumber: Yup.string()
+    .matches(
+      /^\+[1-9][0-9]{9,14}$/,
+      "Phone number must be between 10 to 15 digits"
+    )
+    .required("Phone Number is required"),
+  dateOfBirth: Yup.string()
+    .matches(
+      /^\d{4}-\d{2}-\d{2}$/, // Regex to check for YYYY-MM-DD format
+      "Date of Birth must be in YYYY-MM-DD format"
+    )
+    .test(
+      "is-valid-date",
+      "Date of Birth is invalid",
+      (value) => !value || !isNaN(Date.parse(value)) // Check if the date is valid
+    )
+    .required("Date of Birth is required"),
+  gender: Yup.string()
+    .oneOf(["MALE", "FEMALE"], "Invalid gender")
+    .required("Gender is required"),
+});

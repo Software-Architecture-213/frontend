@@ -1,11 +1,11 @@
 import { useFormik } from "formik";
 import { useState } from "react";
 import { useAuth } from "../../../hooks/AuthContext";
-import { updateUserProfileValidator } from "../../../utils/formValidator";
 import { PencilIcon } from "@heroicons/react/16/solid";
 import ProfilePhotoUpload from "./ProfilePhotoUpload";
 import { UpdateUserRequest } from "../../../types/user";
 import { identityUserApi } from "../../../api/identityClient/identityUserApi";
+import { updateUserProfileValidator } from "../../../utils/formValidator";
 
 const AdminProfilePage = () => {
   const { profile, fetchProfile } = useAuth();
