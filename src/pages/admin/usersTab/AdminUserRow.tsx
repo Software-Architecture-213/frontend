@@ -2,28 +2,33 @@ import React, { useState } from 'react';
 import { UserRow } from '../../../types/user';
 import { DEFAULT_AVATAR_URL } from '../../../constants/app';
 import Toggle from '../../../components/Toggle';
-import { identityUserApi } from '../../../api/identityClient/identityUserApi';
+import DisableUserDialog from './DisableUserDialog';
 
 interface AdminUserRowProps {
   user: UserRow;
 }
 
 const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
-  const [isEnabled, setIsEnabled] = useState<boolean>(!user.disabled)
+  const [isDisabled, setIsDisabled] = useState<boolean>(user.disabled)
+  const [openDisableUserDialog, setOpenDisableUserDialog] = useState(false); // Mod
 
-  const handleEnableUser = async () => {
-    try {
-       const response = await identityUserApi.enableUser(user.userId!, !isEnabled)
-       const data = response.data
-       console.log(data)
-       setIsEnabled(!isEnabled)
-    } catch (error) {
-      console.error("Error updating profile: ", error);
-    } 
-  }
+
+  // const handleEnableUser = async () => {
+  //   try {
+  //      const response = await identityUserApi.enableUser(user.email!, !isEnabled)
+  //      const data = response.data
+  //      console.log(data)
+  //      setIsEnabled(!isEnabled)
+  //   } catch (error) {
+  //     console.error("Error updating profile: ", error);
+  //   } 
+  // }
 
   return (
     <tr className="hover:bg-slate-50 border-b border-slate-200">
+       {/* <td className="p-4 py-5 overflow-x-clip">
+        <p className="block font-semibold text-sm text-slate-800">{user.userId}</p>
+      </td> */}
       <td className="p-4 py-5">
         <img
           src={user.photoUrl != null ? user.photoUrl : DEFAULT_AVATAR_URL}
@@ -47,28 +52,16 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
         <p className="block text-sm text-slate-800">{user.phoneNumber}</p>
       </td>
       <td className="p-4 py-5">
+        <p className="block text-sm text-slate-800">{user.lastSignIn}</p>
+      </td>
+      <td className="p-4 py-5">
       {/* {user.disabled ? (
           <span className="text-red-500 font-bold text-lg">✘</span>
         ) : (
           <span className="text-green-500 font-bold text-lg">✔</span>
         )} */}
-        <Toggle checked={isEnabled} onClick={handleEnableUser} />
-      </td>
-      <td className="p-4 py-5 flex justify-content-center space-x-4">
-        <div
-          className="main-text bg-transparent cursor-pointer"
-          title="Edit"
-          onClick={() => console.log('Edit user', user.userId)}
-        >
-          🖉
-        </div>
-        <div
-          className="text-red bg-transparent cursor-pointer"
-          title="Delete"
-          onClick={() => console.log('Delete user', user.userId)}
-        >
-          🗑️
-        </div>
+        <Toggle checked={isDisabled} onClick={() => setOpenDisableUserDialog(true)} />
+        <DisableUserDialog open={openDisableUserDialog} setOpen={setOpenDisableUserDialog} onChange={setIsDisabled} user={user} />
       </td>
     </tr>
   );
