@@ -1,6 +1,8 @@
 import axios from "axios";
 import { BACKEND_URL } from "../../constants/backend";
 import axiosInstance from "../axiosInstance";
+import { BrandsRequest } from "../../types/brand";
+import { useParams } from "react-router-dom";
 
 interface GPS {
     lat: number; // Latitude
@@ -101,6 +103,13 @@ export const brandApi = {
     },
     getBranches: async () => {
       return axiosInstance.get("/api/brands/branches");
+    },
+    getBrands: async (request: BrandsRequest) => {
+      console.log("asd")
+      return axiosInstance.get("/api/brands/collection", {
+        params: request
+      }
+      );
     },
   
     createBranch: async (data: {
