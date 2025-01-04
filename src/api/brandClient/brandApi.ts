@@ -26,6 +26,9 @@ export const brandApi = {
     getMyProfile:  async () => {
       return axiosInstance.get("api/brands/auth/me");
     },
+    updateMyProfile: async (data: { [key: string]: any }) => {
+      return axiosInstance.put(`api/brands/collection`, data);
+    },
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/my-promotions`)
     },
@@ -78,7 +81,7 @@ export const brandApi = {
       const formData = new FormData();
       formData.append("file", file);
       if (type === 'brands') {
-        endpoint = `${BACKEND_URL}/api/brands/upload-image/${id}`;
+        endpoint = `${BACKEND_URL}/api/brands/collection/upload-image`;
       } else if (type === 'vouchers') {
         endpoint = `${BACKEND_URL}/api/brands/vouchers/upload-image/${id}`;
       } else if (type === 'promotions') {

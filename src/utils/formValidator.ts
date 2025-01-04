@@ -60,7 +60,27 @@ export const updateUserProfileValidator = Yup.object({
     .required("Gender is required"),
 });
 
-
+export const updateBrandProfileValidator = Yup.object({
+  displayName: Yup.string()
+    .min(3, "Display Name must be at least 3 characters long")
+    .required("Display Name is required"),
+  field: Yup.string()
+    .min(2, "Field must be at least 2 characters long")
+    .required("Field is required"),
+  mainBranch: Yup.object().shape({
+    latitude: Yup.number()
+      .min(-90, "Latitude must be between -90 and 90")
+      .max(90, "Latitude must be between -90 and 90")
+      .required("Latitude is required"),
+    longitude: Yup.number()
+      .min(-180, "Longitude must be between -180 and 180")
+      .max(180, "Longitude must be between -180 and 180")
+      .required("Longitude is required"),
+  }),
+  status: Yup.string()
+    .oneOf(["ACTIVE", "INACTIVE"], "Invalid status")
+    .required("Status is required"),
+});
 
 export const createUserProfileValidator = Yup.object({
   displayName: Yup.string()

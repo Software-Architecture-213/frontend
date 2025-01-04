@@ -21,6 +21,7 @@ import BrandVoucherDetail from './pages/brand/Voucher/BrandVoucherDetail';
 import BrandBranchStore from './pages/brand/Store/BrandBranchStore';
 import BrandUpdateCampaign from './pages/brand/Campaign Promotions/BrandUpdateCampaign';
 import BrandUpdateVoucher from './pages/brand/Voucher/BrandUpdateVoucher';
+import BrandProfilePage from './pages/brand/Profile/BrandProfilePage';
 
 
 
@@ -41,6 +42,7 @@ function App() {
               </Route>
               {/* Brand route */}
               <Route path="brand" element={<BrandMainLayout/>}>
+                <Route path='profile' element={<BrandProfilePage />} />
                 <Route path='' element={<BrandDashboardTab />} />
                 <Route path="dashboard" element={<BrandDashboardTab />} />
                 <Route path="campaign" element={<BrandCampaign />}/>

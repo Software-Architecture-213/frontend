@@ -77,16 +77,6 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/brand/employee" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
-            Employees
-          </Link>
-        </li>
-        <li>
-          <Link to="/brand/quizze" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
-            Quizzes
-          </Link>
-        </li>
-        <li>
           <Link to="/brand/payment" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
             Payments
           </Link>
