@@ -7,19 +7,21 @@ import { useParams } from "react-router-dom";
 interface GPS {
     lat: number; // Latitude
     lng: number; // Longitude
-  }
-
+}
+interface GPS2 {
+  latitude: number; // Latitude
+  longitude: number; // Longitude
+}
 export const brandApi = {
     login: async (username: string, password: string) => {
       return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { username, password });
     },
-    register: async (username: string, password: string, dispalyName: string, imageUrl: string, field: string,
-        gps: GPS, status: string) => {
-        return axios.post(`${BACKEND_URL}/api/brands/auth/register`, {
+    register: async (username: string, password: string, displayName: string, field: string,
+        gps: GPS2, status: string) => {
+        return axios.post(`${BACKEND_URL}/api/brands/collection`, {
             username,
             password,
-            dispalyName,
-            imageUrl,
+            displayName,
             field,
             gps,
             status,
@@ -27,6 +29,9 @@ export const brandApi = {
     }, 
     getMyProfile:  async () => {
       return axiosInstance.get("api/brands/auth/me");
+    },
+    updateMyProfile: async (data: { [key: string]: any }) => {
+      return axiosInstance.put(`api/brands/collection`, data);
     },
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/my-promotions`)
@@ -80,7 +85,7 @@ export const brandApi = {
       const formData = new FormData();
       formData.append("file", file);
       if (type === 'brands') {
-        endpoint = `${BACKEND_URL}/api/brands/upload-image/${id}`;
+        endpoint = `${BACKEND_URL}/api/brands/collection/upload-image`;
       } else if (type === 'vouchers') {
         endpoint = `${BACKEND_URL}/api/brands/vouchers/upload-image/${id}`;
       } else if (type === 'promotions') {
@@ -119,4 +124,7 @@ export const brandApi = {
     }) => {
       return axiosInstance.post("/api/brands/branches", data);
     },
-};
+    getPayment: async () => {
+      return axiosInstance.get("/api/brands/checkout");
+    }
+  };
