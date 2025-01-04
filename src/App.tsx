@@ -22,6 +22,7 @@ import BrandBranchStore from './pages/brand/Store/BrandBranchStore';
 import BrandUpdateCampaign from './pages/brand/Campaign Promotions/BrandUpdateCampaign';
 import BrandUpdateVoucher from './pages/brand/Voucher/BrandUpdateVoucher';
 import BrandProfilePage from './pages/brand/Profile/BrandProfilePage';
+import BrandPayment from './pages/brand/BrandPayment';
 
 
 
@@ -54,6 +55,7 @@ function App() {
                 <Route path="voucher/create/:promotionId" element={<BrandCreateVoucher />} />
                 <Route path="voucher/update/:voucherId" element={<BrandUpdateVoucher />} />
                 <Route path="store" element={<BrandBranchStore/>}/>
+                <Route path="payment" element={<BrandPayment/>}/>
               </Route>
               <Route path='' element={<RedirectPage/>}/>
             </Route>

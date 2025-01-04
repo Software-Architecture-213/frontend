@@ -5,19 +5,21 @@ import axiosInstance from "../axiosInstance";
 interface GPS {
     lat: number; // Latitude
     lng: number; // Longitude
-  }
-
+}
+interface GPS2 {
+  latitude: number; // Latitude
+  longitude: number; // Longitude
+}
 export const brandApi = {
     login: async (username: string, password: string) => {
       return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { username, password });
     },
-    register: async (username: string, password: string, dispalyName: string, imageUrl: string, field: string,
-        gps: GPS, status: string) => {
-        return axios.post(`${BACKEND_URL}/api/brands/auth/register`, {
+    register: async (username: string, password: string, displayName: string, field: string,
+        gps: GPS2, status: string) => {
+        return axios.post(`${BACKEND_URL}/api/brands/collection`, {
             username,
             password,
-            dispalyName,
-            imageUrl,
+            displayName,
             field,
             gps,
             status,
@@ -113,4 +115,7 @@ export const brandApi = {
     }) => {
       return axiosInstance.post("/api/brands/branches", data);
     },
-};
+    getPayment: async () => {
+      return axiosInstance.get("/api/brands/checkout");
+    }
+  };

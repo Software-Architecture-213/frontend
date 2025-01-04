@@ -6,12 +6,17 @@ import { brandApi } from "../../../api/brandClient/brandApi";
 const BrandRegisterForm = () => {
   const navigate = useNavigate();
 
+  // Define handleInputChange function
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    formik.setFieldValue(name, value); // Update Formik's field value
+  };
+
   const formik = useFormik({
     initialValues: {
-      email: "",
+      username: "",
       password: "",
       displayName: "",
-      imageUrl: "",
       field: "",
       latitude: "",
       longitude: "",
@@ -21,46 +26,44 @@ const BrandRegisterForm = () => {
     onSubmit: async (values) => {
       console.log("Form submitted with values: ", values);
       try {
-        const gps = { lat: parseFloat(values.latitude), lng: parseFloat(values.longitude) };
+        const gps = { latitude: parseFloat(values.latitude), longitude: parseFloat(values.longitude) };
         const response = await brandApi.register(
-          values.email,
+          values.username,
           values.password,
           values.displayName,
-          values.imageUrl,
           values.field,
           gps,
           values.status
         );
         console.log("Registration Response: ", response);
-        if (response.status == 201){
+        if (response.status == 201) {
           navigate("/login");
         }
-      } catch (err: any) {
-        console.error("Error: ", err.response?.data?.message || "Registration failed");
-        alert(err.response?.data?.message || "Registration failed");
+      } catch (err) {
+          navigate("/register");
       }
     },
   });
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">
-      {/* Email Input */}
+      {/* Username Input */}
       <div>
         <input
           type="email"
-          name="email"
+          name="username"
           placeholder="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
+          value={formik.values.username}
+          onChange={handleInputChange}  // Call handleInputChange here
           onBlur={formik.handleBlur}
           className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${
-            formik.touched.email && formik.errors.email
+            formik.touched.username && formik.errors.username
               ? "border-red-500 focus:ring-red-500"
               : "border-gray-300 focus:ring-f75f07"
           }`}
         />
-        {formik.touched.email && formik.errors.email && (
-          <p className="text-black text-sm mt-1">{formik.errors.email}</p>
+        {formik.touched.username && formik.errors.username && (
+          <p className="text-black text-sm mt-1">{formik.errors.username}</p>
         )}
       </div>
 
@@ -71,7 +74,7 @@ const BrandRegisterForm = () => {
           name="password"
           placeholder="Password"
           value={formik.values.password}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}  // Call handleInputChange here
           onBlur={formik.handleBlur}
           className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${
             formik.touched.password && formik.errors.password
@@ -88,10 +91,10 @@ const BrandRegisterForm = () => {
       <div>
         <input
           type="text"
-          name="name"
+          name="displayName"
           placeholder="Name"
           value={formik.values.displayName}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}  // Call handleInputChange here
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
         />
@@ -104,20 +107,7 @@ const BrandRegisterForm = () => {
           name="field"
           placeholder="Field"
           value={formik.values.field}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
-        />
-      </div>
-
-      {/* Image URL Input */}
-      <div>
-        <input
-          type="text"
-          name="ImageURL"
-          placeholder="Image URL"
-          value={formik.values.imageUrl}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}  // Call handleInputChange here
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
         />
@@ -127,10 +117,10 @@ const BrandRegisterForm = () => {
       <div>
         <input
           type="text"
-          name="lat"
+          name="latitude"
           placeholder="Latitude"
           value={formik.values.latitude}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}  // Call handleInputChange here
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
         />
@@ -140,10 +130,10 @@ const BrandRegisterForm = () => {
       <div>
         <input
           type="text"
-          name="lng"
+          name="longitude"
           placeholder="Longitude"
           value={formik.values.longitude}
-          onChange={formik.handleChange}
+          onChange={handleInputChange}  // Call handleInputChange here
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
         />
