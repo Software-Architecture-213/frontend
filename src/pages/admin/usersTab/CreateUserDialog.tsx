@@ -40,6 +40,10 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ open, setOpen }) =>
         };
         await identityAuthApi.register(createUserRequest);
         toast.info("User created.")
+        // Reload after 3 seconds
+        setTimeout(() => {
+          window.location.reload(); // Reload the page
+        }, 500);
       } catch (error: any) {
         console.error("Error updating profile: ", error);
         toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
@@ -55,7 +59,7 @@ const CreateUserDialog: React.FC<CreateUserDialogProps> = ({ open, setOpen }) =>
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-10">
-      <ToastContainer limit={1} autoClose={2000}/>
+      <ToastContainer limit={1} autoClose={2000} />
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-lg max-w-md w-full">

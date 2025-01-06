@@ -23,6 +23,7 @@ import BrandUpdateCampaign from './pages/brand/Campaign Promotions/BrandUpdateCa
 import BrandUpdateVoucher from './pages/brand/Voucher/BrandUpdateVoucher';
 import BrandProfilePage from './pages/brand/Profile/BrandProfilePage';
 import BrandPayment from './pages/brand/BrandPayment';
+import AdminBrandsTab from './pages/admin/brandsTab/AdminBrandsTab';
 
 
 
@@ -40,6 +41,7 @@ function App() {
                 <Route path="dashboard" element={<AdminDashboardTab />} />
                 <Route path="users" element={<AdminUsersTab />} />
                 <Route path="profile" element={<AdminProfilePage />} />
+                <Route path='brands' element={<AdminBrandsTab/>} />
               </Route>
               {/* Brand route */}
               <Route path="brand" element={<BrandMainLayout/>}>
