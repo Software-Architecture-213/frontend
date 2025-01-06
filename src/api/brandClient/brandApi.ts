@@ -110,13 +110,16 @@ export const brandApi = {
       return axiosInstance.get("/api/brands/branches");
     },
     getBrands: async (request: BrandsRequest) => {
-      console.log("asd")
       return axiosInstance.get("/api/brands/collection", {
         params: request
       }
       );
     },
-  
+
+    changeBrandStatus: async (email: string, status: "ACTIVE" | "INACTIVE", message: string | null) => {
+      return axiosInstance.post(`/api/brands/collection/${email}/status`, {status: status, message: message})
+    },
+
     createBranch: async (data: {
       name: string;
       address: string;

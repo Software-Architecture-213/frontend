@@ -2,17 +2,17 @@ import { Dialog } from "@headlessui/react";
 import { useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Don't forget to import the CSS
-import { identityUserApi } from "../../../api/identityClient/identityUserApi";
-import { UserRow } from "../../../types/user";
+import { BrandRow } from "../../../types/brand";
+import { brandApi } from "../../../api/brandClient/brandApi";
 
-interface DisableUserDialogProps {
+interface ChangeBrandStatusDialogProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  onChange: (updatedUser: UserRow) => void;
-  user: any;
+  onChange: (brand: BrandRow) => void;
+  brand: BrandRow;
 }
 
-const DisableUserDialog: React.FC<DisableUserDialogProps> = ({ open, setOpen, onChange, user }) => {
+const ChangeBrandStatusDialog: React.FC<ChangeBrandStatusDialogProps> = ({ open, setOpen, onChange, brand }) => {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [message, setMessage] = useState(""); // Message state
 
@@ -27,23 +27,24 @@ const DisableUserDialog: React.FC<DisableUserDialogProps> = ({ open, setOpen, on
     console.log(message)
     try {
       setIsLoading(true)
-      console.log(user.disabled)
-      const response = await identityUserApi.disableUser(user.email, !user.disabled, message)
+      const status =  brand.status === "ACTIVE" ? "INACTIVE" : "ACTIVE"; 
+      const response = await brandApi.changeBrandStatus(brand.username!, status, message)
       const data = await response.data
       console.log(data)
-      const updatedUser = { ...user, disabled: !user.disabled };
+      const updatedBrand = { ...brand, status: status };
       setOpen(false)
-      onChange(updatedUser)
+      onChange(updatedBrand)
     } catch (error: any) {
-      console.error("Error enable user: ", error);
+      console.error("Error enable brand: ", error);
       toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
     } finally {
       setIsLoading(false);
     }
   }
 
-  const buttonText = user.disabled ?  `Enable` : `Disable`
-  const loadingButtonText = user.disabled ?  `Enabling...` : `Disabling...`
+  const buttonText = brand.status === "ACTIVE" ?  `Deactivate` : `Activate`
+  const loadingButtonText = brand.status === "ACTIVE" ?  `Deactivating...` : `Activating...`
+
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-10">
@@ -52,7 +53,7 @@ const DisableUserDialog: React.FC<DisableUserDialogProps> = ({ open, setOpen, on
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-lg max-w-md w-full">
           <div className="p-2 space-y-4">
-            <h3 className="text-lg px-2 font-medium text-gray-900">{buttonText} User</h3>
+            <h3 className="text-lg px-2 font-medium text-gray-900">{buttonText} Brand</h3>
 
             <div className="p-2 overflow-y-auto max-h-96 custom-scrollbar space-y-4">
               {/* Message Textarea */}
@@ -84,7 +85,7 @@ const DisableUserDialog: React.FC<DisableUserDialogProps> = ({ open, setOpen, on
                 disabled={isLoading}
                 onClick={handleChange}
               >
-                {isLoading ? loadingButtonText: buttonText}
+                {isLoading ? loadingButtonText  :  buttonText}
               </button>
             </div>
           </div>
@@ -94,4 +95,4 @@ const DisableUserDialog: React.FC<DisableUserDialogProps> = ({ open, setOpen, on
   );
 };
 
-export default DisableUserDialog;
+export default ChangeBrandStatusDialog;

@@ -23,6 +23,6 @@ export const identityUserApi = {
         });
     },
     disableUser: async (email: string, disabled: boolean, message: string,) => {
-        return axiosInstance.post(`api/identity/users/${email}/disable`, {email: email, disabled: disabled, message: message})
+        return axiosInstance.post(`api/identity/users/${email}/disable`, {disabled: disabled, message: message})
     }
 }

@@ -9,20 +9,8 @@ interface AdminUserRowProps {
 }
 
 const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
-  const [isDisabled, setIsDisabled] = useState<boolean>(user.disabled)
   const [openDisableUserDialog, setOpenDisableUserDialog] = useState(false); // Mod
-
-
-  // const handleEnableUser = async () => {
-  //   try {
-  //      const response = await identityUserApi.enableUser(user.email!, !isEnabled)
-  //      const data = response.data
-  //      console.log(data)
-  //      setIsEnabled(!isEnabled)
-  //   } catch (error) {
-  //     console.error("Error updating profile: ", error);
-  //   } 
-  // }
+  const [thisUser, setThisUser] = useState<UserRow>(user)
 
   return (
     <tr className="hover:bg-slate-50 border-b border-slate-200">
@@ -31,28 +19,28 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
       </td> */}
       <td className="p-4 py-5">
         <img
-          src={user.photoUrl != null ? user.photoUrl : DEFAULT_AVATAR_URL}
+          src={thisUser.photoUrl != null ? thisUser.photoUrl : DEFAULT_AVATAR_URL}
           alt="Profile"
           className="w-8 h-8 p-1 rounded-full"
         />
       </td>
       <td className="p-4 py-5">
-        <p className="block font-semibold text-sm text-slate-800">{user.displayName}</p>
+        <p className="block font-semibold text-sm text-slate-800">{thisUser.displayName}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{user.email}</p>
+        <p className="block text-sm text-slate-800">{thisUser.email}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{user.dateOfBirth}</p>
+        <p className="block text-sm text-slate-800">{thisUser.dateOfBirth}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{user.gender}</p>
+        <p className="block text-sm text-slate-800">{thisUser.gender}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{user.phoneNumber}</p>
+        <p className="block text-sm text-slate-800">{thisUser.phoneNumber}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{user.lastSignIn}</p>
+        <p className="block text-sm text-slate-800">{thisUser.lastSignIn}</p>
       </td>
       <td className="p-4 py-5">
       {/* {user.disabled ? (
@@ -60,8 +48,8 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
         ) : (
           <span className="text-green-500 font-bold text-lg">✔</span>
         )} */}
-        <Toggle checked={isDisabled} onClick={() => setOpenDisableUserDialog(true)} />
-        <DisableUserDialog open={openDisableUserDialog} setOpen={setOpenDisableUserDialog} onChange={setIsDisabled} user={user} />
+        <Toggle checked={thisUser.disabled} onClick={() => setOpenDisableUserDialog(true)} />
+        <DisableUserDialog open={openDisableUserDialog} setOpen={setOpenDisableUserDialog} onChange={setThisUser} user={thisUser} />
       </td>
     </tr>
   );

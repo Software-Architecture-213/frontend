@@ -10,6 +10,6 @@ export interface BrandRow {
     field: string | null; // User's phone number
     gps: any; // User's gender, restricted to specific values
     imageUrl: string | null; // User's gender, restricted to specific values
-    status: boolean;
+    status: string;
     createAt: string | null;
 }

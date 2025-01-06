@@ -26,7 +26,6 @@ const AdminBrandsTab = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false); // Mod
   const tableRef = useRef<HTMLDivElement | null>(null);
   
 
