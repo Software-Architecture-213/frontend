@@ -28,7 +28,6 @@ const AdminProfilePage = () => {
         // Simulate API call
         const updateUserRequest: UpdateUserRequest = {
           displayName: values.displayName,
-          email: values.email,
           phoneNumber: values.phoneNumber,
           dateOfBirth: values.dateOfBirth,
           gender: values.gender,

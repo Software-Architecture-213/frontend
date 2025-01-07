@@ -15,7 +15,7 @@ const TableHeaders = [
   "Phone",
   "Last Sign In",
   "Disabled",
-  // "Actions",
+  "Action",
 ];
 
 const AdminUsersTab = () => {
@@ -28,8 +28,9 @@ const AdminUsersTab = () => {
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false); // Mod
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const tableRef = useRef<HTMLDivElement | null>(null);
-  
+
 
   const fetchData = useCallback(
     async (isPagination = false) => {
@@ -81,18 +82,35 @@ const AdminUsersTab = () => {
     }
   }, [fetchData, isLoading, isFetchingMore, hasMoreData]);
 
+  const filteredUsers = users.filter(user =>
+    (user.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
+    (user.email?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
+    (user.phoneNumber?.toLowerCase().includes(searchQuery.toLowerCase()) || false)
+  );
+
   return (
     <>
       <div className="w-full flex items-center justify-between mb-3 mt-1 pl-3">
         <div className="text-left">
-          <h3 className="text-lg font-bold text-slate-800">Users</h3>
+          <div className="flex">
+            <h3 className="text-lg font-bold text-slate-800 mr-2">Users</h3>
+            <div onClick={() => setIsCreateDialogOpen(true)}>
+              <PlusIcon className="w-8 h-8 p-1 rounded-full main-bg hover:bg-slate-400 text-white cursor-pointer shadow-md" />
+            </div>
+          </div>
+          <CreateUserDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen} />
           <p className="text-slate-500">Overview of users.</p>
         </div>
-        <div onClick={() => setIsCreateDialogOpen(true)}>
-            <PlusIcon className="w-8 h-8 p-1 rounded-full main-bg hover:bg-slate-400 text-white cursor-pointer shadow-md" />
+        {/* Search Bar */}
+        <div className="flex items-center">
+          <input
+            type="text"
+            placeholder="Search by Display Name, Email, Phone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-64 p-2 bg-white border border-slate-300 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200"
+          />
         </div>
-
-        <CreateUserDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen} />
       </div>
       <div
         ref={tableRef}
@@ -121,7 +139,7 @@ const AdminUsersTab = () => {
                 </td>
               </tr>
             ) : (
-              users.map((user) => <AdminUserRow key={user.userId} user={user} />)
+              filteredUsers.map((user) => <AdminUserRow key={user.userId} user={user} />)
             )}
             {isFetchingMore && (
               <tr>

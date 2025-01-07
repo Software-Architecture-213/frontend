@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DEFAULT_AVATAR_URL } from '../../../constants/app';
 import { BrandRow } from '../../../types/brand';
 import ChangeBrandStatusDialog from './ChangeBrandStatusDialog';
+import { PencilIcon } from '@heroicons/react/16/solid';
 
 interface AdminBrandRowProps {
   brand: BrandRow;
@@ -49,6 +50,16 @@ const AdminBrandRow: React.FC<AdminBrandRowProps> = ({ brand }) => {
         {/* <Toggle checked={isDisabled} onClick={() => setOpenDisablebrandDialog(true)} /> */}
         {/* <DisablebrandDialog open={openDisablebrandDialog} setOpen={setOpenDisablebrandDialog} onChange={setIsDisabled} brand={brand} />
       </td> */}
+      <td className="p-4 py-5">
+        <button
+          className="p-2 rounded-full bg-transparent main-text focus:none hover:bg-gray-100"
+          aria-label="Edit User"
+          // onClick={() => setOpenUpdateUserDialog(true)}
+        >
+          <PencilIcon className="h-5 w-5 text-gray-600 hover:text-gray-800" />
+        </button>
+
+      </td>
     </tr>
   );
 };
