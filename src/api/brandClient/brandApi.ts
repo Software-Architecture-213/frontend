@@ -34,7 +34,7 @@ export const brandApi = {
       return axiosInstance.put(`api/brands/collection`, data);
     },
     getCampaignPromotions: async () => {
-      return axiosInstance.get(`api/brands/promotions/my-promotions`)
+      return axiosInstance.get(`api/brands/promotions/me/get`)
     },
     updateCampaignPromotions: async (promotionId: string, data: { [key: string]: any }) => {
       return axiosInstance.put(`api/brands/promotions/${promotionId}`, data)

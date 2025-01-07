@@ -1,7 +1,7 @@
 import { Outlet, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import { ChevronDownIcon, CreditCardIcon, HomeIcon, PlayIcon, ShoppingBagIcon, TagIcon } from '@heroicons/react/20/solid';
 
 const Header = () => {
   const { profile } = useAuth();
@@ -53,31 +53,36 @@ const Header = () => {
 
 const Sidebar = () => {
   return (
-    <div className="main-bg text-white w-64 space-y-6 py-7 px-2">
-      <h2 className="text-3xl font-semibold text-center text-white">Brand</h2>
-      <ul className="space-y-4">
+    <div className="main-bg text-white w-64 space-y-6 py-7 px-3">
+      <h2 className="text-3xl font-semibold text-center text-white mb-8">Brand</h2>
+      <ul className="text-left space-y-4">
         <li>
-          <Link to="/brand/dashboard" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/brand/dashboard" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <HomeIcon className="w-5 h-5 text-gray-300 mr-3" />
             Dashboard
           </Link>
         </li>
         <li>
-          <Link to="/brand/campaign" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/brand/campaign" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <PlayIcon className="w-5 h-5 text-gray-300 mr-3" />
             Campaign Promotions
           </Link>
         </li>
         <li>
-          <Link to="/brand/voucher" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/brand/voucher" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <TagIcon className="w-5 h-5 text-gray-300 mr-3" />
             Voucher
           </Link>
         </li>
         <li>
-          <Link to="/brand/store" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/brand/store" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <ShoppingBagIcon className="w-5 h-5 text-gray-300 mr-3" />
             Stores
           </Link>
         </li>
         <li>
-          <Link to="/brand/payment" className="w-full py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-700">
+          <Link to="/brand/payment" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <CreditCardIcon className="w-5 h-5 text-gray-300 mr-3" />
             Payments
           </Link>
         </li>

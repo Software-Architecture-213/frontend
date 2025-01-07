@@ -33,7 +33,6 @@ const BrandCreateCampaign = () => {
   const [message, setMessage] = useState("");
   const [status, setStatus] = useState("INACTIVE");
   const [budget, setBudget] = useState(0);
-  const [cost, setCost] = useState(350);
   // const [promotionId, setPromotionId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -66,7 +65,6 @@ const BrandCreateCampaign = () => {
       if (setter) {
         setter(value);
       }
-      setCost(budget);
     }
   };
 
@@ -278,41 +276,44 @@ const BrandCreateCampaign = () => {
                     <div id="paypal-button-container">
                       <PayPalScriptProvider options={paypalInitOptions}>
                         <PayPalButtons
+                          forceReRender={[budget]}
                           style={{
                             layout: "vertical",
                             shape: "rect",
                             color: "gold",
                             label: "paypal",
                           }}
-                          createOrder={async () => {
-                            try {
-                              const response = await fetch("http://localhost:8082/brands/checkout", {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                },
-                                body: JSON.stringify({
-                                  id: auth.profile?.id,
-                                  price: cost.toString(),
-                                }),
-                              });
-                              const orderData = await response.json();
+                          createOrder={
+                            async () => {
+                              try {
+                                const response = await fetch("http://localhost:8082/brands/checkout", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                  },
+                                  body: JSON.stringify({
+                                    id: auth.profile?.id,
+                                    price: budget.toString(),
+                                  }),
+                                });
+                                const orderData = await response.json();
 
-                              if (orderData.id) {
-                                return orderData.id;
-                              } else {
-                                const errorDetail = orderData?.details?.[0];
-                                const errorMessage = errorDetail
-                                  ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
-                                  : JSON.stringify(orderData);
+                                if (orderData.id) {
+                                  return orderData.id;
+                                } else {
+                                  const errorDetail = orderData?.details?.[0];
+                                  const errorMessage = errorDetail
+                                    ? `${errorDetail.issue} ${errorDetail.description} (${orderData.debug_id})`
+                                    : JSON.stringify(orderData);
 
-                                throw new Error(errorMessage);
+                                  throw new Error(errorMessage);
+                                }
+                              } catch (error) {
+                                console.error(error);
+                                setMessage(`Could not initiate PayPal Checkout...${error}`);
                               }
-                            } catch (error) {
-                              console.error(error);
-                              setMessage(`Could not initiate PayPal Checkout...${error}`);
                             }
-                          }}
+                          }
                           onApprove={async (data, actions) => {
                             try {
                               const response = await fetch(
