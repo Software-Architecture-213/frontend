@@ -5,6 +5,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { BriefcaseIcon, ChevronDownIcon, HomeIcon, PaperClipIcon, UserIcon } from '@heroicons/react/20/solid';
 import axiosInstance from '../../api/axiosInstance';
 import { identityAuthApi } from '../../api/identityClient/identityAuthApi';
+import { PuzzlePieceIcon } from '@heroicons/react/16/solid';
 
 
 const Header = () => {
@@ -85,9 +86,9 @@ const Sidebar = () => {
           </Link>
         </li>
         <li>
-          <Link to="/admin/campaigns" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
-            <PaperClipIcon className="w-5 h-5 text-gray-300 mr-3" />
-            Campaigns
+          <Link to="/admin/games" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <PuzzlePieceIcon className="w-5 h-5 text-gray-300 mr-3" />
+            Games
           </Link>
         </li>
       </ul>

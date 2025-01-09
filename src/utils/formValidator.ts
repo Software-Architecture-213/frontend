@@ -127,3 +127,19 @@ export const createUserProfileValidator = Yup.object({
     .oneOf(["MALE", "FEMALE"], "Invalid gender")
     .required("Gender is required"),
 });
+
+
+export const updateGameValidator = Yup.object({
+  name: Yup.string()
+    .min(3, "Name must be at least 3 characters long")
+    .required("Name is required"),
+  description: Yup.string()
+    .max(500, "Description cannot exceed 500 characters")
+    .required("Description is required"),
+  type: Yup.string()
+    .oneOf(["puzzle", "shake"], "Game type: puzzle, shake")
+    .required("Type is required"),
+  difficulty: Yup.string()
+    .oneOf(["easy", "medium", "hard"], "Difficulty: easy, medium, hard")
+    .required("Difficulty is required"),
+});

@@ -4,6 +4,7 @@ import { BrandRow } from '../../../types/brand';
 import ChangeBrandStatusDialog from './ChangeBrandStatusDialog';
 import { PencilIcon } from '@heroicons/react/16/solid';
 import UpdateBrandDialog from './UpdateBrandDialog';
+import { toLocaleString } from '../../../utils/stringUtils';
 
 interface AdminBrandRowProps {
   brand: BrandRow;
@@ -38,7 +39,7 @@ const AdminBrandRow: React.FC<AdminBrandRowProps> = ({ brand }) => {
         <p className="block text-sm text-slate-800">{thisBrand.field}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{thisBrand.createAt} </p>
+        <p className="block text-sm text-slate-800">{toLocaleString(thisBrand.createAt!)} </p>
       </td>
       <td className="p-4 py-5">
         <p className="block text-sm main-text font-bold text-slate-800 cursor-pointer" onClick={() => setOpenChangeBrandStatusDialog(true)}>{thisBrand.status}</p>
