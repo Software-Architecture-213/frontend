@@ -13,6 +13,9 @@ export const identityUserApi = {
     updateMyProfile: async (updateRequest?: UpdateUserRequest) => {
         return axiosInstance.put("api/identity/users/me", updateRequest)
     },
+    updateUserProfile: async (userId: string, updateRequest: UpdateUserRequest) => {
+        return axiosInstance.patch(`api/identity/users/${userId}`, updateRequest)
+    },
     uploadPhoto: async (file: File) => {
         const formData = new FormData();
         formData.append("file", file); // Key "file" matches the backend's expected field name

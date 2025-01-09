@@ -4,7 +4,8 @@ import { useState } from "react";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Don't forget to import the CSS
 import { BrandRow, UpdateBrandRequest } from "../../../types/brand";
-import { brandFormValidator } from "../../../utils/formValidator";
+import { brandFormValidator, updateBrandValidator } from "../../../utils/formValidator";
+import { brandApi } from "../../../api/brandClient/brandApi";
 
 interface UpdateBrandDialogProps {
   open: boolean;
@@ -20,26 +21,22 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
       displayName: brand.displayName ? brand.displayName : "",
       username: brand.username ? brand.username : "",
       field: brand.field ? brand.field : "",
-      latitude: brand.gps.latitude,
-      longitude: brand.gps.longitude,
     },
-    validationSchema: brandFormValidator,
+    validationSchema: updateBrandValidator,
     onSubmit: async (values) => {
       console.log(values);
       setIsLoading(true);
       try {
         const UpdateBrandRequest: UpdateBrandRequest = {
           displayName: values.displayName,
-          username: values.username,
           field: values.field,
-          gps: { latitude: values.latitude, longitude: values.longitude}
         };
-        // await identityAuthApi.register(UpdateBrandRequest);
+        await brandApi.update(brand.id, UpdateBrandRequest);
         toast.info("Brand Updated.")
         // Reload after 3 seconds
-        // setTimeout(() => {
-        //   window.location.reload(); // Reload the page
-        // }, 500);
+        setTimeout(() => {
+          window.location.reload(); // Reload the page
+        }, 500);
       } catch (error: any) {
         console.error("Error updating profile: ", error);
         toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
@@ -61,7 +58,7 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
         <div className="bg-white rounded-lg shadow-lg max-w-md w-full">
           <form onSubmit={formik.handleSubmit} className="p-2 space-y-4">
             <h3 className="text-lg font-medium text-gray-900">Update Brand</h3>
-  
+
             <div className="p-2 overflow-y-auto max-h-96 custom-scrollbar space-y-4">
               {/* Display Name Input */}
               <div>
@@ -79,22 +76,16 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
                 )}
               </div>
 
-                  {/* Username Input */}
-                  <div>
-                <label className="block text-sm text-left font-medium text-black">Username</label>
+              {/* Username Input */}
+              <div>
+                <label className="block text-sm text-left font-medium text-gray-700">Username</label>
                 <input
-                  type="text"
-                  name="username"
-                  value={formik.values.username}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  className={`w-full p-3 text-gray-700 bg-white border rounded-md focus:outline-none ${formik.touched.username && formik.errors.username ? "border-red-500" : ""}`}
+                  type="email"
+                  value={formik.values.username!}
+                  disabled
+                  className="w-full p-3 text-black bg-gray-200 border rounded-md focus:outline-none"
                 />
-                {formik.touched.username && formik.errors.username && (
-                  <p className="text-red-500 text-left text-sm">{formik.errors.username}</p>
-                )}
               </div>
-  
               {/* Field Input */}
               <div>
                 <label className="block text-sm text-left font-medium text-black">Field</label>
@@ -110,9 +101,9 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
                   <p className="text-red-500 text-left text-sm">{formik.errors.field}</p>
                 )}
               </div>
-  
+
               {/* GPS Latitude Input */}
-              <div>
+              {/* <div>
                 <label className="block text-sm text-left font-medium text-black">GPS Latitude</label>
                 <input
                   type="number"
@@ -128,10 +119,10 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
                 {formik.touched.latitude && formik.errors.latitude && (
                   <p className="text-red-500 text-left text-sm">{formik.errors.latitude}</p>
                 )}
-              </div>
-  
+              </div> */}
+
               {/* GPS Longitude Input */}
-              <div>
+              {/* <div>
                 <label className="block text-sm text-left font-medium text-black">GPS Longitude</label>
                 <input
                   type="number"
@@ -147,9 +138,9 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
                 {formik.touched.longitude && formik.errors.longitude && (
                   <p className="text-red-500 text-left text-sm">{formik.errors.longitude}</p>
                 )}
-              </div>
+              </div> */}
             </div>
-  
+
             <div className="flex justify-end p-4 border-t">
               <button
                 type="button"
@@ -158,14 +149,14 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
               >
                 Cancel
               </button>
-  
+
               {/* Submit Button */}
               <button
                 type="submit"
                 className="ml-2 px-4 py-2 main-bg text-sm text-white bg-blue-600 rounded hover:bg-blue-500"
                 disabled={isLoading}
               >
-                {isLoading ? "Creating..." : "Update"}
+                {isLoading ? "Updating..." : "Update"}
               </button>
             </div>
           </form>
@@ -173,7 +164,7 @@ const UpdateBrandDialog: React.FC<UpdateBrandDialogProps> = ({ open, setOpen, br
       </div>
     </Dialog>
   );
-  
+
 };
 
 export default UpdateBrandDialog;

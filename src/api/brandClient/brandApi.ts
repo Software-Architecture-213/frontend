@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BACKEND_URL } from "../../constants/backend";
 import axiosInstance from "../axiosInstance";
-import { BrandsRequest, GPS, GPS2 } from "../../types/brand";
+import { BrandsRequest, GPS, GPS2, UpdateBrandRequest } from "../../types/brand";
 import { useParams } from "react-router-dom";
 
 
@@ -10,14 +10,13 @@ export const brandApi = {
       return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { username, password });
     },
     register: async (username: string, password: string, displayName: string, field: string,
-        gps: GPS2, status: string) => {
+        gps: GPS2) => {
         return axios.post(`${BACKEND_URL}/api/brands/collection`, {
             username,
             password,
             displayName,
             field,
             gps,
-            status,
       });
     }, 
     getMyProfile:  async () => {
@@ -25,6 +24,9 @@ export const brandApi = {
     },
     updateMyProfile: async (data: { [key: string]: any }) => {
       return axiosInstance.put(`api/brands/collection`, data);
+    },
+    update: async (id: string, updateBrandRequest: UpdateBrandRequest) => {
+      return axiosInstance.patch(`api/brands/collection/${id}`, updateBrandRequest);
     },
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/my-promotions`)

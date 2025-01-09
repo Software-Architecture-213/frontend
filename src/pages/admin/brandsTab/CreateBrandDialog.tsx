@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Don't forget to import the CSS
 import { CreateBrandRequest } from "../../../types/brand";
 import { brandFormValidator } from "../../../utils/formValidator";
+import { brandApi } from "../../../api/brandClient/brandApi";
 
 interface CreateBrandDialogProps {
   open: boolean;
@@ -35,12 +36,18 @@ const CreateBrandDialog: React.FC<CreateBrandDialogProps> = ({ open, setOpen }) 
           field: values.field,
           gps: { latitude: values.latitude, longitude: values.longitude}
         };
-        // await identityAuthApi.register(createBrandRequest);
+        await brandApi.register(
+          createBrandRequest.username,
+          createBrandRequest.password,
+          createBrandRequest.displayName,
+          createBrandRequest.field,
+          createBrandRequest.gps,
+        );
         toast.info("Brand created.")
         // Reload after 3 seconds
-        // setTimeout(() => {
-        //   window.location.reload(); // Reload the page
-        // }, 500);
+        setTimeout(() => {
+          window.location.reload(); // Reload the page
+        }, 500);
       } catch (error: any) {
         console.error("Error updating profile: ", error);
         toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
@@ -131,7 +138,7 @@ const CreateBrandDialog: React.FC<CreateBrandDialogProps> = ({ open, setOpen }) 
               </div>
   
               {/* GPS Latitude Input */}
-              <div>
+              {/* <div>
                 <label className="block text-sm text-left font-medium text-black">GPS Latitude</label>
                 <input
                   type="number"
@@ -147,10 +154,10 @@ const CreateBrandDialog: React.FC<CreateBrandDialogProps> = ({ open, setOpen }) 
                 {formik.touched.latitude && formik.errors.latitude && (
                   <p className="text-red-500 text-left text-sm">{formik.errors.latitude}</p>
                 )}
-              </div>
+              </div> */}
   
               {/* GPS Longitude Input */}
-              <div>
+              {/* <div>
                 <label className="block text-sm text-left font-medium text-black">GPS Longitude</label>
                 <input
                   type="number"
@@ -166,7 +173,7 @@ const CreateBrandDialog: React.FC<CreateBrandDialogProps> = ({ open, setOpen }) 
                 {formik.touched.longitude && formik.errors.longitude && (
                   <p className="text-red-500 text-left text-sm">{formik.errors.longitude}</p>
                 )}
-              </div>
+              </div> */}
             </div>
   
             <div className="flex justify-end p-4 border-t">

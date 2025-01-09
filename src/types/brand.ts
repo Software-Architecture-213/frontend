@@ -4,9 +4,9 @@ export interface BrandsRequest {
 }
 
 export interface BrandRow {
-    id: string | null;
+    id: string;
     displayName: string | null;
-    username: string | null; // User's full name
+    username: string; // User's full name
     field: string | null; // User's phone number
     gps: GPS2; // User's gender, restricted to specific values
     imageUrl: string | null; // User's gender, restricted to specific values
@@ -23,10 +23,10 @@ export interface CreateBrandRequest {
 }
 
 export interface UpdateBrandRequest {
-    username: string | null;
+    // username: string | null;
     displayName: string | null,
     field: string | null,
-    gps: GPS2,
+    // gps: GPS2,
 }
 
 

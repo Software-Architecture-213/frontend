@@ -44,11 +44,11 @@ const Header = () => {
                 <Link
                   to="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" 
-                  onClick={() => {
-                    identityAuthApi.logout()
-                    console.log("logout")
-                    navigate("/login")
-                  } }
+                  onClick={async () => {
+                    await identityAuthApi.logout();
+                    console.log("logout");
+                    navigate("/login");
+                  }}
                 >
                   Logout
                 </Link>

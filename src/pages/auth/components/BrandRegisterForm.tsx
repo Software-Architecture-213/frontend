@@ -20,7 +20,6 @@ const BrandRegisterForm = () => {
       field: "",
       latitude: "",
       longitude: "",
-      status: "INACTIVE",
     },
     validationSchema: brandFormValidator, // Define your validator in formValidator
     onSubmit: async (values) => {
@@ -33,7 +32,6 @@ const BrandRegisterForm = () => {
           values.displayName,
           values.field,
           gps,
-          values.status
         );
         console.log("Registration Response: ", response);
         if (response.status == 201) {
