@@ -5,6 +5,7 @@ import Toggle from '../../../components/Toggle';
 import DisableUserDialog from './DisableUserDialog';
 import { PencilIcon } from '@heroicons/react/16/solid';
 import UpdateUserDialog from './UpdateUserDialog';
+import { mm_dd_yy, toLocaleString } from '../../../utils/stringUtils';
 
 interface AdminUserRowProps {
   user: UserRow;
@@ -14,6 +15,7 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
   const [openDisableUserDialog, setOpenDisableUserDialog] = useState(false); 
   const [openUpdateUserDialog, setOpenUpdateUserDialog] = useState(false); 
   const [thisUser, setThisUser] = useState<UserRow>(user)
+  console.log(user)
 
   return (
     <tr className="hover:bg-slate-50 border-b border-slate-200">
@@ -34,7 +36,7 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
         <p className="block text-sm text-slate-800">{thisUser.email}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{thisUser.dateOfBirth}</p>
+        <p className="block text-sm text-slate-800">{mm_dd_yy(thisUser.dateOfBirth!)}</p>
       </td>
       <td className="p-4 py-5">
         <p className="block text-sm text-slate-800">{thisUser.gender}</p>
@@ -43,7 +45,7 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
         <p className="block text-sm text-slate-800">{thisUser.phoneNumber}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{thisUser.lastSignIn}</p>
+        <p className="block text-sm text-slate-800">{toLocaleString(thisUser.lastSignIn!)}</p>
       </td>
       <td className="p-4 py-5">
         <Toggle checked={thisUser.disabled} onClick={() => setOpenDisableUserDialog(true)} />

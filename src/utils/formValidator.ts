@@ -20,14 +20,28 @@ export const brandFormValidator = Yup.object({
   displayName: Yup.string().required("Name is required"),
   field: Yup.string().required("Field is required"),
   latitude: Yup.number()
-    .required("Latitude is required")
-    .typeError("Latitude must be a valid number"),
+    .min(-90, "Latitude must be between -90 and 90")
+    .max(90, "Latitude must be between -90 and 90")
+    .required("Latitude is required"),
   longitude: Yup.number()
-    .required("Longitude is required")
-    .typeError("Longitude must be a valid number"),
-  status: Yup.string()
-    .oneOf(["ACTIVE", "INACTIVE"], "Status must be either 'ACTIVE' or 'INACTIVE'")
-    .required("Status is required"),
+    .min(-180, "Longitude must be between -180 and 180")
+    .max(180, "Longitude must be between -180 and 180")
+    .required("Longitude is required"),
+});
+
+export const updateBrandValidator = Yup.object({
+  username: Yup.string()
+    .email("Invalid email format"),
+  password: Yup.string()
+    .min(6, "Password must be at least 6 characters long"),
+  displayName: Yup.string().required("Name is required"),
+  field: Yup.string().required("Field is required"),
+  latitude: Yup.number()
+    .min(-90, "Latitude must be between -90 and 90")
+    .max(90, "Latitude must be between -90 and 90"),
+  longitude: Yup.number()
+    .min(-180, "Longitude must be between -180 and 180")
+    .max(180, "Longitude must be between -180 and 180"),
 });
 
 
@@ -112,4 +126,20 @@ export const createUserProfileValidator = Yup.object({
   gender: Yup.string()
     .oneOf(["MALE", "FEMALE"], "Invalid gender")
     .required("Gender is required"),
+});
+
+
+export const updateGameValidator = Yup.object({
+  name: Yup.string()
+    .min(3, "Name must be at least 3 characters long")
+    .required("Name is required"),
+  description: Yup.string()
+    .max(500, "Description cannot exceed 500 characters")
+    .required("Description is required"),
+  type: Yup.string()
+    .oneOf(["puzzle", "shake"], "Game type: puzzle, shake")
+    .required("Type is required"),
+  difficulty: Yup.string()
+    .oneOf(["easy", "medium", "hard"], "Difficulty: easy, medium, hard")
+    .required("Difficulty is required"),
 });

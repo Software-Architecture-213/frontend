@@ -5,6 +5,7 @@ import { useState } from "react";
 import { UpdateUserRequest, UserRow } from "../../../types/user";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Don't forget to import the CSS
+import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 
 interface UpdateUserDialogProps {
   open: boolean;
@@ -34,7 +35,7 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({ open, setOpen, user
           dateOfBirth: values.dateOfBirth,
           gender: values.gender === "MALE" ? "MALE" : "FEMALE",
         };
-        // await identityUserApi(updateUserRequest);
+        await identityUserApi.updateUserProfile(user.userId, updateUserRequest);
         toast.info("User Updated.")
         // Reload after 3 seconds
         setTimeout(() => {
@@ -42,7 +43,7 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({ open, setOpen, user
         }, 500);
       } catch (error: any) {
         console.error("Error updating profile: ", error);
-        toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
+        toast.error(`${error.response?.data?.message || "An unknown error occurred, please try again"}`)
       } finally {
         setIsLoading(false);
       }
