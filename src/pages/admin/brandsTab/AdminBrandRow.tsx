@@ -3,6 +3,7 @@ import { DEFAULT_AVATAR_URL } from '../../../constants/app';
 import { BrandRow } from '../../../types/brand';
 import ChangeBrandStatusDialog from './ChangeBrandStatusDialog';
 import { PencilIcon } from '@heroicons/react/16/solid';
+import UpdateBrandDialog from './UpdateBrandDialog';
 
 interface AdminBrandRowProps {
   brand: BrandRow;
@@ -11,6 +12,8 @@ interface AdminBrandRowProps {
 const AdminBrandRow: React.FC<AdminBrandRowProps> = ({ brand }) => {
   // const [isDisabled, setIsDisabled] = useState<boolean>(brand.disabled)
   const [openChangeBrandStatusDialog, setOpenChangeBrandStatusDialog] = useState(false); // Mod
+    const [openUpdateDialog, setOpenUpdateDialog] = useState(false); 
+  
   const [thisBrand, setThisBrand] = useState(brand)
 
   return (
@@ -41,23 +44,15 @@ const AdminBrandRow: React.FC<AdminBrandRowProps> = ({ brand }) => {
         <p className="block text-sm main-text font-bold text-slate-800 cursor-pointer" onClick={() => setOpenChangeBrandStatusDialog(true)}>{thisBrand.status}</p>
         <ChangeBrandStatusDialog onChange={setThisBrand} setOpen={setOpenChangeBrandStatusDialog} open={openChangeBrandStatusDialog} brand={thisBrand}/>
       </td>
-      {/* <td className="p-4 py-5">
-      {brand.disabled ? (
-          <span className="text-red-500 font-bold text-lg">✘</span>
-        ) : (
-          <span className="text-green-500 font-bold text-lg">✔</span>
-        )} */}
-        {/* <Toggle checked={isDisabled} onClick={() => setOpenDisablebrandDialog(true)} /> */}
-        {/* <DisablebrandDialog open={openDisablebrandDialog} setOpen={setOpenDisablebrandDialog} onChange={setIsDisabled} brand={brand} />
-      </td> */}
       <td className="p-4 py-5">
         <button
           className="p-2 rounded-full bg-transparent main-text focus:none hover:bg-gray-100"
           aria-label="Edit User"
-          // onClick={() => setOpenUpdateUserDialog(true)}
+          onClick={() => setOpenUpdateDialog(true)}
         >
           <PencilIcon className="h-5 w-5 text-gray-600 hover:text-gray-800" />
         </button>
+        <UpdateBrandDialog open={openUpdateDialog} setOpen={setOpenUpdateDialog} brand={thisBrand} />
 
       </td>
     </tr>

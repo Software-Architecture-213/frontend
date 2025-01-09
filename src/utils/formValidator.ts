@@ -20,14 +20,13 @@ export const brandFormValidator = Yup.object({
   displayName: Yup.string().required("Name is required"),
   field: Yup.string().required("Field is required"),
   latitude: Yup.number()
-    .required("Latitude is required")
-    .typeError("Latitude must be a valid number"),
+    .min(-90, "Latitude must be between -90 and 90")
+    .max(90, "Latitude must be between -90 and 90")
+    .required("Latitude is required"),
   longitude: Yup.number()
-    .required("Longitude is required")
-    .typeError("Longitude must be a valid number"),
-  status: Yup.string()
-    .oneOf(["ACTIVE", "INACTIVE"], "Status must be either 'ACTIVE' or 'INACTIVE'")
-    .required("Status is required"),
+    .min(-180, "Longitude must be between -180 and 180")
+    .max(180, "Longitude must be between -180 and 180")
+    .required("Longitude is required"),
 });
 
 

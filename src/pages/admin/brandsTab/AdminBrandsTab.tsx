@@ -4,6 +4,7 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 import { BrandRow, BrandsRequest } from "../../../types/brand";
 import { brandApi } from "../../../api/brandClient/brandApi";
 import AdminBrandRow from "./AdminBrandRow";
+import CreateBrandDialog from "./CreateBrandDialog";
 
 const TableHeaders = [
   // "ID",
@@ -26,6 +27,7 @@ const AdminBrandsTab = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
   const [hasMoreData, setHasMoreData] = useState<boolean>(true);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false); // Mod
   const [searchQuery, setSearchQuery] = useState<string>('');
   const tableRef = useRef<HTMLDivElement | null>(null);
 
@@ -97,11 +99,11 @@ const AdminBrandsTab = () => {
         <div className="text-left">
           <div className="flex">
             <h3 className="text-lg font-bold text-slate-800 mr-2">Brands</h3>
-            <div>
+            <div onClick={() => setIsCreateDialogOpen(true)}>
               <PlusIcon className="w-8 h-8 p-1 rounded-full main-bg hover:bg-slate-400 text-white cursor-pointer shadow-md" />
             </div>
           </div>
-          {/* <CreateUserDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen} /> */}
+          <CreateBrandDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen}/>
           <p className="text-slate-500">Overview of brands.</p>
         </div>
         <div className="flex items-center">

@@ -1,17 +1,10 @@
 import axios from "axios";
 import { BACKEND_URL } from "../../constants/backend";
 import axiosInstance from "../axiosInstance";
-import { BrandsRequest } from "../../types/brand";
+import { BrandsRequest, GPS, GPS2 } from "../../types/brand";
 import { useParams } from "react-router-dom";
 
-interface GPS {
-    lat: number; // Latitude
-    lng: number; // Longitude
-}
-interface GPS2 {
-  latitude: number; // Latitude
-  longitude: number; // Longitude
-}
+
 export const brandApi = {
     login: async (username: string, password: string) => {
       return axios.post(`${BACKEND_URL}/api/brands/auth/login`, { username, password });

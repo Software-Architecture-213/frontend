@@ -1,12 +1,15 @@
 // pages/admin/AdminDashboard.tsx
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { BriefcaseIcon, ChevronDownIcon, HomeIcon, PaperClipIcon, UserIcon } from '@heroicons/react/20/solid';
+import axiosInstance from '../../api/axiosInstance';
+import { identityAuthApi } from '../../api/identityClient/identityAuthApi';
 
 
 const Header = () => {
   const { profile } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <div className="bg-white shadow-md p-4 flex justify-between items-center">
@@ -37,10 +40,15 @@ const Header = () => {
                   Profile
                 </Link>
               </MenuItem>
-              <MenuItem>
+              <MenuItem >
                 <Link
                   to="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" 
+                  onClick={() => {
+                    identityAuthApi.logout()
+                    console.log("logout")
+                    navigate("/login")
+                  } }
                 >
                   Logout
                 </Link>

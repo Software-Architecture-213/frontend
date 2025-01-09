@@ -13,7 +13,7 @@ interface AuthContextType {
 
 const initAuthContext: AuthContextType = {
     profile: null,
-    isFetchingProfile: true, // Initial state while tokens and profile are loading
+    isFetchingProfile: true,
     fetchProfile: async () => {},
 };
 
@@ -27,74 +27,48 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
     const [profile, setProfile] = useState<any | null>(null);
-    const [isFetchingProfile, setIsFetchingProfile] = useState(true); // Tracks the loading state of profile fetching
-    const cookies = new Cookies();
-    const accessToken = cookies.get('accessToken');
-    const refreshToken = cookies.get('refreshToken');
+    const [isFetchingProfile, setIsFetchingProfile] = useState(true);
 
-    // Ensure tokens are set once the component mounts
     useEffect(() => {
-        if (accessToken) {
-            setAccessToken(accessToken);
-        }
-        if (refreshToken) {
-            setRefreshToken(refreshToken);
-        }
-    }, []);
+        const cookies = new Cookies();
+        const accessToken = cookies.get('accessToken');
+        const refreshToken = cookies.get('refreshToken');
 
-    // Fetch profile if tokens are set
+        // Ensure tokens are set globally in the axios instance
+        if (accessToken) setAccessToken(accessToken);
+        if (refreshToken) setRefreshToken(refreshToken);
+
+        // Fetch profile if tokens exist
+        if (accessToken && refreshToken) {
+            fetchProfile();
+        } else {
+            setIsFetchingProfile(false); // Mark loading as false if no tokens
+        }
+    }, []); // Runs only on component mount
+
     const fetchProfile = async () => {
-        if (!accessToken) {
-            setIsFetchingProfile(false); // Mark loading as false since we can't fetch without tokens
-            // Redirect to login if not on the register page
-            if (location.pathname !== '/register') {
-                navigate('/login');
-            }
-            return;
-        }
-
-        setIsFetchingProfile(true); // Start loading state
-        let shouldNavigate = true;
+        setIsFetchingProfile(true);
 
         try {
-            // Try to fetch the profile from Identity
-            const response = await identityUserApi.getMyProfile();
-            setProfile(response.data);
-            shouldNavigate = false; // Do not navigate if identity validation succeeds
+            // Attempt to fetch user profile from Identity API
+            const identityResponse = await identityUserApi.getMyProfile();
+            setProfile(identityResponse.data);
         } catch (identityError) {
-            console.warn('Identity validation failed, falling back to brand validation.');
+            console.warn('Identity validation failed, attempting Brand API...');
 
             try {
-                // Fallback: Try to fetch the profile from Brand
-                const responseBrand = await brandApi.getMyProfile();
-                if (responseBrand.data) {
-                    setProfile(responseBrand.data); // Set the brand profile if valid
-                    shouldNavigate = false; // Do not navigate if brand validation succeeds
-                }
+                // Fallback: Fetch profile from Brand API
+                const brandResponse = await brandApi.getMyProfile();
+                setProfile(brandResponse.data);
             } catch (brandError) {
-                console.error('Brand validation failed:', brandError);
+                console.error('Profile validation failed for both Identity and Brand APIs.');
+                setProfile(null);
+                if (location.pathname !== '/register') navigate('/login'); // Redirect to login
             }
-        }
-
-        setIsFetchingProfile(false); // Mark loading as complete
-
-        // Navigate only if all validation attempts fail
-        if (shouldNavigate) {
-            setProfile(null);
-            if (location.pathname !== '/register') {
-                navigate('/login');
-            }
+        } finally {
+            setIsFetchingProfile(false);
         }
     };
-
-    // Once tokens are set, fetch profile
-    useEffect(() => {
-        if (accessToken && refreshToken) {
-            fetchProfile(); // Fetch profile only after tokens are available
-        } else {
-            setIsFetchingProfile(false); // If no tokens are found, stop loading
-        }
-    }, [accessToken, refreshToken]);
 
     return (
         <AuthContext.Provider value={{ profile, isFetchingProfile, fetchProfile }}>
