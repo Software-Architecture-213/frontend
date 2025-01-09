@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { brandApi } from "../../../api/brandClient/brandApi";
+import { useAuth } from "../../../hooks/AuthContext";
 
 interface Branch {
   id: string;
+  brandId: string;
   name: string;
   address: string;
   gps: {
@@ -22,6 +24,8 @@ const BrandBranchStore = () => {
     address: "",
     gps: { lat: 10.8231, lng: 106.6297 }, // Default location
   });
+
+  const { profile } = useAuth(); // Assuming this returns the user profile
 
   useEffect(() => {
     brandApi.getBranches()
@@ -71,6 +75,9 @@ const BrandBranchStore = () => {
     return null;
   };
 
+  // Filter branches that match the profile's brandId
+  const filteredBranches = profile?.id ? branches.filter(branch => branch.brandId === profile.id) : branches;
+
   return (
     <div className="flex h-screen relative">
       {/* Map Section */}
@@ -82,7 +89,7 @@ const BrandBranchStore = () => {
           attributionControl
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {branches.map((branch) => (
+          {filteredBranches.map((branch) => (
             <Marker
               key={branch.id}
               position={[branch.gps.lat, branch.gps.lng]}
@@ -105,7 +112,7 @@ const BrandBranchStore = () => {
           Create Branch
         </button>
         <div className="space-y-4">
-          {branches.map((branch) => (
+          {filteredBranches.map((branch) => (
             <div
               key={branch.id}
               className={`p-4 bg-white shadow rounded-lg flex flex-col space-y-2 transition-transform duration-200 cursor-pointer ${
