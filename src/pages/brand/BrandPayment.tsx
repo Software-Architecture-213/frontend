@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { brandApi } from "../../api/brandClient/brandApi";
+import { parseISO } from "date-fns/parseISO";
+import { format } from "date-fns";
 
 
 interface Payment {
   id: string;
   amount: number;
-  date: string;
+  createAt: string;
   status: string;
-  method: string;
+  currency: string;
 }
 
 const BrandPayment: React.FC = () => {
@@ -42,7 +44,7 @@ const BrandPayment: React.FC = () => {
         <p>You have not made any payments yet.</p>
       )}
 
-      {/* {!isLoading && !error && payments.length > 0 && (
+      {!isLoading && !error && payments.length > 0 && (
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-gray-100">
@@ -50,22 +52,22 @@ const BrandPayment: React.FC = () => {
               <th className="border border-gray-200 p-3 text-left">Amount</th>
               <th className="border border-gray-200 p-3 text-left">Date</th>
               <th className="border border-gray-200 p-3 text-left">Status</th>
-              <th className="border border-gray-200 p-3 text-left">Method</th>
+              <th className="border border-gray-200 p-3 text-left">Currency</th>
             </tr>
           </thead>
           <tbody>
             {payments.map((payment) => (
               <tr key={payment.id}>
                 <td className="border border-gray-200 p-3">{payment.id}</td>
-                <td className="border border-gray-200 p-3">${payment.amount.toFixed(2)}</td>
-                <td className="border border-gray-200 p-3">{new Date(payment.date).toLocaleDateString()}</td>
+                <td className="border border-gray-200 p-3">{payment.amount.toFixed(2)}</td>
+                <td className="border border-gray-200 p-3">{payment.createAt ? new Date(payment.createAt).toLocaleDateString() : 'Invalid Date'}</td>
                 <td className="border border-gray-200 p-3">{payment.status}</td>
-                <td className="border border-gray-200 p-3">{payment.method}</td>
+                <td className="border border-gray-200 p-3">{payment.currency}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      )} */}
+      )}
     </div>
   );
 };

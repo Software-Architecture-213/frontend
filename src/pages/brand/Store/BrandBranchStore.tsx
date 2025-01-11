@@ -19,13 +19,13 @@ const BrandBranchStore = () => {
   const [selectedBranch, setSelectedBranch] = useState<Branch | null>(null);
   const [branches, setBranches] = useState<Branch[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false); // Controls the popup visibility
+  const { profile } = useAuth(); // Assuming this returns the user profile
   const [newBranch, setNewBranch] = useState({
+    brandId: profile?.id || "", // Default to an empty string
     name: "",
     address: "",
     gps: { lat: 10.8231, lng: 106.6297 }, // Default location
   });
-
-  const { profile } = useAuth(); // Assuming this returns the user profile
 
   useEffect(() => {
     brandApi.getBranches()

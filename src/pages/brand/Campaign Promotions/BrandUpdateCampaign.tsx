@@ -324,6 +324,7 @@ const BrandUpdateCampaign = () => {
                                                         color: "gold",
                                                         label: "paypal",
                                                     }}
+                                                    forceReRender={[budget]}
                                                     createOrder={async () => {
                                                         try {
                                                             const response = await fetch("http://localhost:8082/brands/checkout", {
@@ -333,7 +334,7 @@ const BrandUpdateCampaign = () => {
                                                                 },
                                                                 body: JSON.stringify({
                                                                     id: auth.profile?.id,
-                                                                    price: cost.toString(),
+                                                                    price: budget.toString(),
                                                                 }),
                                                             });
                                                             const orderData = await response.json();
