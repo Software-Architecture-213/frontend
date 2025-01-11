@@ -56,6 +56,14 @@
   color: #FBF6F4 !important;
 }
 
+td {
+  max-width: 150px;
+  white-space: normal;
+  word-wrap: break-word;
+  max-height: 100px; /* Or whatever height fits your design */
+  text-overflow: ellipsis;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

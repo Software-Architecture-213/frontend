@@ -30,6 +30,10 @@ export const setRefreshToken = (newRefreshToken: string) => {
   refreshToken = newRefreshToken;
 };
 
+export const logout = () => {
+  accessToken = null
+  refreshToken = null
+}
 // ** Request Interceptor: Attach access token to all requests **
 axiosInstance.interceptors.request.use(
   (config) => {

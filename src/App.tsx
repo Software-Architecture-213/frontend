@@ -24,6 +24,7 @@ import BrandUpdateVoucher from './pages/brand/Voucher/BrandUpdateVoucher';
 import BrandProfilePage from './pages/brand/Profile/BrandProfilePage';
 import BrandPayment from './pages/brand/BrandPayment';
 import AdminBrandsTab from './pages/admin/brandsTab/AdminBrandsTab';
+import AdminGamesTab from './pages/admin/gamesTab/AdminGamesTab';
 
 
 
@@ -42,6 +43,7 @@ function App() {
                 <Route path="users" element={<AdminUsersTab />} />
                 <Route path="profile" element={<AdminProfilePage />} />
                 <Route path='brands' element={<AdminBrandsTab/>} />
+                <Route path='games' element={<AdminGamesTab/>} />
               </Route>
               {/* Brand route */}
               <Route path="brand" element={<BrandMainLayout/>}>

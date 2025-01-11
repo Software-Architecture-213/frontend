@@ -1,28 +1,25 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { UserRow } from "../../../types/user";
-import { PlusIcon } from "@heroicons/react/20/solid";
-import { BrandRow, BrandsRequest } from "../../../types/brand";
-import { brandApi } from "../../../api/brandClient/brandApi";
-import AdminBrandRow from "./AdminBrandRow";
-import CreateBrandDialog from "./CreateBrandDialog";
+import { identityUserApi } from "../../../api/identityClient/identityUserApi";
+import { GameRow } from "../../../types/game";
+import AdminGamesRow from "./AdminGamesRow";
+import { gameApi } from "../../../api/gameClient/gameApi";
 
 const TableHeaders = [
   // "ID",
   "Photo",
   "Name",
-  "Email",
-  // "GPS",
-  "Field",
-  "Enrolled At",
-  "Status",
-  "Actions",
+  "Description",
+  "Type",
+  "Difficulty",
+  "Created At",
+  "Action",
 ];
 
-const AdminBrandsTab = () => {
-  const [brands, setBrands] = useState<BrandRow[]>([]);
-  const [brandsRequest, setBrandsRequest] = useState<BrandsRequest>({
-    page: 0,
+const AdminGamesTab = () => {
+  const [games, setGames] = useState<GameRow[]>([]);
+  const [gamesRequest, setGamesRequest] = useState<any>({
     pageSize: 8,
+    page: null,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
@@ -38,16 +35,12 @@ const AdminBrandsTab = () => {
 
       isPagination ? setIsFetchingMore(true) : setIsLoading(true);
       try {
-        const response = await brandApi.getBrands(brandsRequest);
+        const response = await gameApi.getMany();
         const data = await response.data;
-        console.log(data)
-        const newBrands = data;
+        const newGames = data.data;
+        console.log(newGames)
 
-        setBrands((prevBrands) => [...prevBrands, ...newBrands]);
-        // setBrandsRequest((prevState) => ({
-        //   ...prevState,
-        //   pageToken: data.nextPageToken || "",
-        // }));
+        setGames((prevGames) => [...prevGames, ...newGames]);
         setHasMoreData(!!data.nextPageToken); // Update hasMoreData based on nextPageToken
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -55,7 +48,7 @@ const AdminBrandsTab = () => {
         isPagination ? setIsFetchingMore(false) : setIsLoading(false);
       }
     },
-    [isLoading, isFetchingMore, hasMoreData, brandsRequest]
+    [isLoading, isFetchingMore, hasMoreData, gamesRequest]
   );
 
   useEffect(() => {
@@ -69,13 +62,13 @@ const AdminBrandsTab = () => {
       const isAtBottom =
         tableElement.scrollHeight <= tableElement.clientHeight + tableElement.scrollTop + 1;
 
-      if (isAtBottom) {
-        setBrandsRequest((prevState) => ({
-          ...prevState,
-          page: prevState.page! + 1,
-        }));
-        fetchData(true); // Trigger pagination fetch
-      }
+        if (isAtBottom) {
+          setGamesRequest((prevState: any) => ({
+            ...prevState,
+            page: prevState.page! + 1,
+          }));
+          fetchData(true); // Trigger pagination fetch
+        }
     };
 
     const tableElement = tableRef.current;
@@ -87,32 +80,33 @@ const AdminBrandsTab = () => {
     }
   }, [fetchData, isLoading, isFetchingMore, hasMoreData]);
 
-  const filteredBrands = brands.filter(brand =>
-    (brand.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
-    (brand.field?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
-    (brand.username?.toLowerCase().includes(searchQuery.toLowerCase()) || false)
-  );
+  const filteredGames = games.filter(game =>
+    (game.name?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
+    (game.difficulty?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
+    (game.description?.toLowerCase().includes(searchQuery.toLowerCase()) || false) || 
+    (game.type?.toLowerCase().includes(searchQuery.toLowerCase()) || false))
 
   return (
     <>
       <div className="w-full flex items-center justify-between mb-3 mt-1 pl-3">
         <div className="text-left">
           <div className="flex">
-            <h3 className="text-lg font-bold text-slate-800 mr-2">Brands</h3>
-            <div onClick={() => setIsCreateDialogOpen(true)}>
+            <h3 className="text-lg font-bold text-slate-800 mr-2">Games</h3>
+            {/* <div onClick={() => setIsCreateDialogOpen(true)}>
               <PlusIcon className="w-8 h-8 p-1 rounded-full main-bg hover:bg-slate-400 text-white cursor-pointer shadow-md" />
-            </div>
+            </div> */}
           </div>
-          <CreateBrandDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen}/>
-          <p className="text-slate-500">Overview of brands.</p>
+          {/* <CreateUserDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen} /> */}
+          <p className="text-slate-500">Overview of games.</p>
         </div>
+        {/* Search Bar */}
         <div className="flex items-center">
           <input
             type="text"
-            placeholder="Search by Name, Email, Field..."
+            placeholder="Search by Name, Description, Type, Difficulty..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-52 p-2 bg-white border border-slate-300 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200"
+            className="w-80 p-2 bg-white border border-slate-300 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200"
           />
         </div>
       </div>
@@ -134,7 +128,7 @@ const AdminBrandsTab = () => {
             </tr>
           </thead>
           <tbody>
-            {isLoading && !brands.length ? (
+            {isLoading && !games.length ? (
               <tr>
                 <td colSpan={TableHeaders.length} className="h-full">
                   <div className="flex justify-center items-center h-full">
@@ -143,7 +137,7 @@ const AdminBrandsTab = () => {
                 </td>
               </tr>
             ) : (
-              filteredBrands.map((brand) => <AdminBrandRow key={brand.id} brand={brand} />)
+              filteredGames.map((game) => <AdminGamesRow key={game._id} game={game} />)
             )}
             {isFetchingMore && (
               <tr>
@@ -161,4 +155,4 @@ const AdminBrandsTab = () => {
   );
 };
 
-export default AdminBrandsTab;
+export default AdminGamesTab;
