@@ -6,6 +6,7 @@ import ProfilePhotoUpload from "./ProfilePhotoUpload";
 import { UpdateUserRequest } from "../../../types/user";
 import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 import { updateUserProfileValidator } from "../../../utils/formValidator";
+import { toast, ToastContainer } from "react-toastify";
 
 const AdminProfilePage = () => {
   const { profile, fetchProfile } = useAuth();
@@ -17,7 +18,7 @@ const AdminProfilePage = () => {
       displayName: profile.displayName,
       email: profile.email,
       phoneNumber: profile.phoneNumber,
-      dateOfBirth: profile.dateOfBirth,
+      dateOfBirth: profile.dateOfBirth ? profile.dateOfBirth.split("T")[0] : "",
       gender: profile.gender,
     },
     validationSchema: updateUserProfileValidator,
@@ -34,9 +35,12 @@ const AdminProfilePage = () => {
         }
         await identityUserApi.updateMyProfile(updateUserRequest);
         fetchProfile()
+        toast.info("Profile updated")
         // fetchProfile(); // Fetch updated profile from context
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error updating profile: ", error);
+        toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
+
       } finally {
         setIsLoading(false);
       }
@@ -56,14 +60,15 @@ const AdminProfilePage = () => {
           onClick={() => setIsDialogOpen(true)}
           className="text-sm flex text-black bg-transparent border-none hover:border-none focus:border-none"
         >
-          Edit Photo 
+          Edit Photo
           <PencilIcon className="w-5 h-5 ml-1 text-gray-600" /> {/* Pen icon */}
         </button>
         <ProfilePhotoUpload
-        open={isDialogOpen}
-        setOpen={setIsDialogOpen}
-      />
+          open={isDialogOpen}
+          setOpen={setIsDialogOpen}
+        />
       </div>
+      <ToastContainer limit={1} autoClose={2000} />
 
       {/* Form Section */}
       <form onSubmit={formik.handleSubmit} className="w-full max-w-md space-y-6">
@@ -76,19 +81,18 @@ const AdminProfilePage = () => {
             value={formik.values.displayName}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${
-              formik.touched.displayName && formik.errors.displayName
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${formik.touched.displayName && formik.errors.displayName
                 ? "border-red-500"
                 : "border-gray-300"
-            }`}
+              }`}
           />
           {formik.touched.displayName && formik.errors.displayName && (
             <p className="text-red-500 text-left text-sm">{formik.errors.displayName.toString()}</p>
           )}
         </div>
 
-      {/* Email Input - Disabled */}
-      <div>
+        {/* Email Input - Disabled */}
+        <div>
           <label className="block text-sm text-left font-medium text-gray-700">Email</label>
           <input
             type="email"
@@ -107,11 +111,10 @@ const AdminProfilePage = () => {
             value={formik.values.phoneNumber}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${
-              formik.touched.phoneNumber && formik.errors.phoneNumber
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${formik.touched.phoneNumber && formik.errors.phoneNumber
                 ? "border-red-500"
                 : "border-gray-300"
-            }`}
+              }`}
           />
           {formik.touched.phoneNumber && formik.errors.phoneNumber && (
             <p className="text-red-500 text-left text-sm">{formik.errors.phoneNumber.toString()}</p>
@@ -120,21 +123,22 @@ const AdminProfilePage = () => {
 
         {/* Date of Birth Input */}
         <div>
-          <label className="block text-sm text-left font-medium text-gray-700">Date of Birth</label>
+          <label className="block text-sm text-left font-medium text-gray-700">
+            Date of Birth
+          </label>
           <input
             type="text"
             name="dateOfBirth"
-            value={formik.values.dateOfBirth}  // Use formatted date here
-            onChange={formik.handleChange}
+            value={formik.values.dateOfBirth.split("T")[0]} // Extract YYYY-MM-DD from the ISO string
+            onChange={(e) => formik.setFieldValue('dateOfBirth', e.target.value)}
             onBlur={formik.handleBlur}
-            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${
-              formik.touched.dateOfBirth && formik.errors.dateOfBirth
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${formik.touched.dateOfBirth && formik.errors.dateOfBirth
                 ? "border-red-500"
                 : "border-gray-300"
-            }`}
+              }`}
           />
           {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
-            <p className="text-red-500 text-left text-sm">Date of Birth must be a "YYYY-MM-DD"</p>
+            <p className="text-red-500 text-left text-sm">Date of Birth must be "YYYY-MM-DD"</p>
           )}
         </div>
 
@@ -146,11 +150,10 @@ const AdminProfilePage = () => {
             value={formik.values.gender}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${
-              formik.touched.gender && formik.errors.gender
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${formik.touched.gender && formik.errors.gender
                 ? "border-red-500"
                 : "border-gray-300"
-            }`}
+              }`}
           >
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
@@ -164,9 +167,8 @@ const AdminProfilePage = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className={`w-full py-3 bg-f75f07 text-white main-bg rounded-md border-2 hover:bg-f75f07/90 focus:outline-none ${
-            isLoading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
+          className={`w-full py-3 bg-f75f07 text-white main-bg rounded-md border-2 hover:bg-f75f07/90 focus:outline-none ${isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           disabled={isLoading}
         >
           {isLoading ? "Updating..." : "Update Profile"}

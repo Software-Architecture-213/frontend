@@ -3,8 +3,8 @@ import { DEFAULT_AVATAR_URL } from '../../../constants/app';
 import { PencilIcon } from '@heroicons/react/16/solid';
 
 import { GameRow } from '../../../types/game';
-import { toLocaleString } from '../../../utils/stringUtils';
 import UpdateGameDialog from './UpdateGameDialog';
+import { toLocaleString } from '../../../utils/dateUtils';
 interface GameRowProps {
   game: GameRow;
 }

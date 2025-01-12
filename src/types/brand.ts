@@ -11,6 +11,7 @@ export interface BrandRow {
     gps: GPS2; // User's gender, restricted to specific values
     imageUrl: string | null; // User's gender, restricted to specific values
     status: string;
+    headQuarter: string | null;
     createAt: string | null;
 }
 

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/AuthContext";
 import Cookies from 'universal-cookie';
 import { brandApi } from "../../../api/brandClient/brandApi";
+import { toast, ToastContainer } from "react-toastify";
 
 
 const BrandLoginForm = () => {
@@ -23,73 +24,77 @@ const BrandLoginForm = () => {
         console.log("Response when login as brand with identity ", response)
         const data = await response.data
         if (!data.accessToken) {
-          alert("Internal server error, please retry again"); 
+          alert("Internal server error, please retry again");
           return;
         }
         setAccessToken(data.accessToken);
-        if (!data.refreshToken){
-          alert("Internal server error, please retry again"); 
+        if (!data.refreshToken) {
+          alert("Internal server error, please retry again");
           return;
         }
         setRefreshToken(data.refreshToken);
-        const cookies = new Cookies({}, {path : '/'})
+        const cookies = new Cookies({}, { path: '/' })
         cookies.set("accessToken", data.accessToken)
         cookies.set("refreshToken", data.refreshToken)
         authContext.fetchProfile();
         navigate("/brand");
-      } catch (err: any){
-        alert(err.response.data.message);
+      } catch (error: any) {
+        // alert(err.response.data.message);    
+        toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
       }
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="space-y-4">
-      {/* Email Input */}
-      <div>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${
-            formik.touched.email && formik.errors.email
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-f75f07"
-          }`}
-        />
-        {formik.touched.email && formik.errors.email && (
-          <p className="text-black text-sm mt-1">{formik.errors.email}</p>
-        )}
-      </div>
+    <>
+      <ToastContainer limit={1} autoClose={2000} />
 
-      {/* Password Input */}
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${
-            formik.touched.password && formik.errors.password
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-f75f07"
-          }`}
-        />
-        {formik.touched.password && formik.errors.password && (
-          <p className="text-black text-sm mt-1">{formik.errors.password}</p>
-        )}
-      </div>
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
+        {/* Email Input */}
+        <div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${formik.touched.email && formik.errors.email
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:ring-f75f07"
+              }`}
+          />
+          {formik.touched.email && formik.errors.email && (
+            <p className="text-black font-bold text-left text-sm mt-1">{formik.errors.email}</p>
+          )}
+        </div>
 
-      {/* Submit Button */}
-      <button className="w-full py-3 main-text bg-white  bg-f75f07 text-white rounded-md hover:bg-f75f07/90 focus:outline-none">
+        {/* Password Input */}
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${formik.touched.password && formik.errors.password
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:ring-f75f07"
+              }`}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-black font-bold text-left text-sm mt-1">{formik.errors.password}</p>
+          )}
+        </div>
+
+        {/* Submit Button */}
+        <button className="w-full py-3 main-text bg-white  bg-f75f07 text-white rounded-md hover:bg-f75f07/90 focus:outline-none">
           Login as Brand
         </button>
-    </form>
+      </form>
+    </>
+
   );
 };
 export default BrandLoginForm
