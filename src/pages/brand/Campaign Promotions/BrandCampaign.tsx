@@ -100,7 +100,9 @@ const BrandCampaign = () => {
                   </span>
                 </td>
                 <td className="p-2">
-                    {campaign.games ? campaign.games.join(', ') : 'No games selected'}
+                  {campaign.games && campaign.games.length > 0
+                    ? campaign.games.map((game: any) => game.data.name).join(', ')
+                    : 'No games selected'}
                 </td>
                 <td className="p-2">${campaign.budget}</td>
                 <td className="p-2">${campaign.remainingBudget}</td>
