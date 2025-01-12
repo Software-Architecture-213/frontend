@@ -10,7 +10,6 @@ const BrandProfilePage = () => {
     const { profile, fetchProfile } = useAuth();
     const [isLoading, setIsLoading] = useState(false); // Loading state
     const [isDialogOpen, setIsDialogOpen] = useState(false); // Modal state
-
     const formik = useFormik({
         initialValues: {
             displayName: profile.displayName || "",
@@ -47,7 +46,7 @@ const BrandProfilePage = () => {
             {/* Profile Section */}
             <div className="text-center space-y-4 mb-2">
                 <img
-                    src={formik.values.imageUrl || "https://via.placeholder.com/150"}
+                    src={profile.imageUrl}
                     alt="Profile"
                     className="w-32 h-32 rounded-full border-2 border-gray-300"
                 />

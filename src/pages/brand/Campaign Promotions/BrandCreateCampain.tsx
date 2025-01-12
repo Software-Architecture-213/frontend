@@ -348,7 +348,7 @@ const BrandCreateCampaign = () => {
                                 );
                                 if (orderData.status === "COMPLETED") {
                                   setMessage("Transaction completed by " + orderData.payer.name.given_name + orderData.payer.name.surname);
-                                  setStatus("PAID");
+                                  setStatus("ACTIVE");
                                 }
                               }
                             } catch (error) {

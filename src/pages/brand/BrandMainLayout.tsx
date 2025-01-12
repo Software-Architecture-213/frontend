@@ -1,11 +1,12 @@
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon, CreditCardIcon, HomeIcon, PlayIcon, ShoppingBagIcon, TagIcon } from '@heroicons/react/20/solid';
+import { brandApi } from '../../api/brandClient/brandApi';
 
 const Header = () => {
   const { profile } = useAuth();
-
+  const navigate = useNavigate();
   return (
     <div className="bg-white shadow-md p-4 flex justify-between items-center">
       {/* Profile Dropdown */}
@@ -15,7 +16,7 @@ const Header = () => {
           <div>
             <MenuButton className="inline-flex w-full items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               <img
-                src={profile.photoUrl}
+                src={profile.imageUrl}
                 alt="Profile"
                 className="w-8 h-8 rounded-full"
               />
@@ -39,7 +40,11 @@ const Header = () => {
                 <Link
                   to="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                >
+                  onClick={async () => {
+                    await brandApi.logout();
+                    console.log("logout");
+                    navigate("/login");
+                  }}>
                   Logout
                 </Link>
               </MenuItem>

@@ -25,8 +25,10 @@ type Campaign = {
 
 const BrandVoucher = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
-  const navigate = useNavigate();
   const [dropdownState, setDropdownState] = useState<{ [key: string]: boolean }>({});
+  const [redeemDialog, setRedeemDialog] = useState<{ isOpen: boolean; voucherId: string | null }>({ isOpen: false, voucherId: null });
+  const [userIdInput, setUserIdInput] = useState('');
+  const navigate = useNavigate();
 
   const toggleDropdown = (voucherId: string) => {
     setDropdownState(prevState => ({
@@ -38,7 +40,7 @@ const BrandVoucher = () => {
   useEffect(() => {
     const fetchCampaignsAndVouchers = async () => {
       try {
-        const response = await brandApi.getCampaignPromotions(); // Adjust to your API endpoint
+        const response = await brandApi.getCampaignPromotions();
         setCampaigns(response.data);
       } catch (error) {
         console.error('Error fetching campaigns and vouchers:', error);
@@ -50,10 +52,30 @@ const BrandVoucher = () => {
 
   const handleVoucherDetail = (voucherId: string) => {
     navigate(`/brand/voucher/${voucherId}`);
-  }
+  };
 
   const handleAddVoucher = (campaignId: string) => {
     navigate(`/brand/voucher/create/${campaignId}`);
+  };
+
+  const handleRedeemSubmit = async () => {
+    if (!redeemDialog.voucherId || !userIdInput) return;
+
+    try {
+      const payload = {
+        voucherId: redeemDialog.voucherId,
+        userId: userIdInput,
+        status: 'REDEEMED',
+      };
+
+      await brandApi.updateVoucherUser(payload);
+      alert('Voucher redeemed successfully');
+      setRedeemDialog({ isOpen: false, voucherId: null });
+      setUserIdInput('');
+    } catch (error) {
+      console.error('Error redeeming voucher:', error);
+      alert('Failed to redeem voucher');
+    }
   };
 
   return (
@@ -68,7 +90,7 @@ const BrandVoucher = () => {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold text-gray-700">{campaign.name}</h3>
               <button
-                className="flex items-center bg-blue-600 text-white rounded shadow-md hover:bg-blue-700"
+                className="flex items-center bg-orange-400 text-white rounded shadow-md hover:bg-orange-600"
                 onClick={() => handleAddVoucher(campaign.id)}
               >
                 <FaPlus className="mr-2" />
@@ -129,6 +151,12 @@ const BrandVoucher = () => {
                                 </button>
                               </li>
                               <li>
+                                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => setRedeemDialog({ isOpen: true, voucherId: voucher.id })}>
+                                  <i className="fas fa-gift mr-2"></i>
+                                  Redeemed
+                                </button>
+                              </li>
+                              <li>
                                 <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => navigate(`/brand/voucher/update/${voucher.id}`)}>
                                   <i className="fas fa-edit mr-2"></i>
                                   Update
@@ -147,6 +175,36 @@ const BrandVoucher = () => {
             )}
           </div>
         ))
+      )}
+
+      {/* Redeem Dialog */}
+      {redeemDialog.isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
+          <div className="bg-white p-6 rounded shadow-md w-96">
+            <h3 className="text-lg font-semibold mb-4">Redeem Voucher</h3>
+            <input
+              type="text"
+              className="w-full p-2 border rounded mb-4"
+              placeholder="Enter User ID"
+              value={userIdInput}
+              onChange={(e) => setUserIdInput(e.target.value)}
+            />
+            <div className="flex justify-end">
+              <button
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
+                onClick={() => setRedeemDialog({ isOpen: false, voucherId: null })}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+                onClick={handleRedeemSubmit}
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
