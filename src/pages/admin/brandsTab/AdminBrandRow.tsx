@@ -4,7 +4,7 @@ import { BrandRow } from '../../../types/brand';
 import ChangeBrandStatusDialog from './ChangeBrandStatusDialog';
 import { PencilIcon } from '@heroicons/react/16/solid';
 import UpdateBrandDialog from './UpdateBrandDialog';
-import { toLocaleString } from '../../../utils/stringUtils';
+import { toLocaleString } from '../../../utils/dateUtils';
 
 interface AdminBrandRowProps {
   brand: BrandRow;
@@ -37,6 +37,9 @@ const AdminBrandRow: React.FC<AdminBrandRowProps> = ({ brand }) => {
       </td>
       <td className="p-4 py-5">
         <p className="block text-sm text-slate-800">{thisBrand.field}</p>
+      </td>
+      <td className="p-4 py-5">
+        <p className="block text-sm text-slate-800">{thisBrand.headQuarter}</p>
       </td>
       <td className="p-4 py-5">
         <p className="block text-sm text-slate-800">{toLocaleString(thisBrand.createAt!)} </p>

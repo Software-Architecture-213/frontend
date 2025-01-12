@@ -5,7 +5,7 @@ import Toggle from '../../../components/Toggle';
 import DisableUserDialog from './DisableUserDialog';
 import { PencilIcon } from '@heroicons/react/16/solid';
 import UpdateUserDialog from './UpdateUserDialog';
-import { mm_dd_yy, toLocaleString } from '../../../utils/stringUtils';
+import { mm_dd_yy, toLocaleString } from '../../../utils/dateUtils';
 
 interface AdminUserRowProps {
   user: UserRow;
@@ -15,7 +15,6 @@ const AdminUserRow: React.FC<AdminUserRowProps> = ({ user }) => {
   const [openDisableUserDialog, setOpenDisableUserDialog] = useState(false); 
   const [openUpdateUserDialog, setOpenUpdateUserDialog] = useState(false); 
   const [thisUser, setThisUser] = useState<UserRow>(user)
-  console.log(user)
 
   return (
     <tr className="hover:bg-slate-50 border-b border-slate-200">

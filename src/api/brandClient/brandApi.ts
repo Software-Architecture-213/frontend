@@ -28,6 +28,9 @@ export const brandApi = {
     update: async (id: string, updateBrandRequest: UpdateBrandRequest) => {
       return axiosInstance.patch(`api/brands/collection/${id}`, updateBrandRequest);
     },
+    getAllCampaignPromotions: async () => {
+      return axiosInstance.get(`api/brands/promotions`)
+    },
     getCampaignPromotions: async () => {
       return axiosInstance.get(`api/brands/promotions/me/get`)
     },

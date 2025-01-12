@@ -6,6 +6,7 @@ import { UpdateUserRequest, UserRow } from "../../../types/user";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';  // Don't forget to import the CSS
 import { identityUserApi } from "../../../api/identityClient/identityUserApi";
+import { yyyy_mm_dd } from "../../../utils/dateUtils";
 
 interface UpdateUserDialogProps {
   open: boolean;
@@ -21,7 +22,7 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({ open, setOpen, user
       displayName: user.displayName ? user.displayName : "",
       email: user.email ? user.email : "",
       phoneNumber: user.phoneNumber ? user.phoneNumber : "",
-      dateOfBirth: user.dateOfBirth ? user.dateOfBirth : "",
+      dateOfBirth: user.dateOfBirth ? user.dateOfBirth.split("T")[0] : "",
       gender: user.gender ? user.gender : "",
     },
     validationSchema: updateUserProfileValidator,
@@ -119,8 +120,8 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({ open, setOpen, user
                 <input
                   type="text"
                   name="dateOfBirth"
-                  value={formik.values.dateOfBirth}
-                  onChange={formik.handleChange}
+                  value={formik.values.dateOfBirth.split("T")[0]} // Extract YYYY-MM-DD from the ISO string
+                  onChange={(e) => formik.setFieldValue('dateOfBirth', e.target.value)}
                   onBlur={formik.handleBlur}
                   className={`w-full p-3 text-gray-700 bg-white border rounded-md focus:outline-none ${formik.touched.dateOfBirth && formik.errors.dateOfBirth
                     ? "border-red-500"

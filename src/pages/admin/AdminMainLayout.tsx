@@ -91,6 +91,12 @@ const Sidebar = () => {
             Games
           </Link>
         </li>
+        <li>
+          <Link to="/admin/campaigns" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <PaperClipIcon className="w-5 h-5 text-gray-300 mr-3" />
+            Campaigns
+          </Link>
+        </li>
       </ul>
     </div>
   );

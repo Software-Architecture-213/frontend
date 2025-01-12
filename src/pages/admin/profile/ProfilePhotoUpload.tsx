@@ -3,6 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { useAuth } from "../../../hooks/AuthContext";
 import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 import imageCompression from "browser-image-compression";
+import { toast, ToastContainer } from "react-toastify";
 
 interface ProfilePhotoUploadProps {
   open: boolean;
@@ -12,7 +13,7 @@ interface ProfilePhotoUploadProps {
 const ProfilePhotoUpload: React.FC<ProfilePhotoUploadProps> = ({ open, setOpen }) => {
   const [previewImage, setPreviewImage] = useState<string | null>(null); // For image previewImage
   const [file, setFile] = useState<File | null>(null); // For selected file
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const { profile, fetchProfile } = useAuth();
 
   const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -52,9 +53,13 @@ const ProfilePhotoUpload: React.FC<ProfilePhotoUploadProps> = ({ open, setOpen }
         const response = await identityUserApi.uploadPhoto(file)
         console.log(response)
         fetchProfile()
+        toast.info("Profile updated")
         handleClose(); // Close dialog after upload
-      } catch (e) {
-        console.log("Error when upload photo " + e)
+
+      } catch (error: any) {
+        console.log("Error when upload photo " + error)
+        toast.error(`${error.response?.data?.message || "An unknown error occurred."}`)
+
       } finally {
         setIsLoading(false); // Stop loading
       }
@@ -69,6 +74,8 @@ const ProfilePhotoUpload: React.FC<ProfilePhotoUploadProps> = ({ open, setOpen }
 
   return (
     <Dialog open={open} onClose={handleClose} className="relative z-10">
+      <ToastContainer limit={1} autoClose={2000} />
+
       <div className="fixed inset-0 bg-black/50" aria-hidden="true" />
       <div className="fixed inset-0 flex items-center justify-center p-4">
         <div className="bg-white rounded-lg shadow-lg max-w-md w-full">
@@ -105,7 +112,7 @@ const ProfilePhotoUpload: React.FC<ProfilePhotoUploadProps> = ({ open, setOpen }
               className="ml-2 px-4 main-bg py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-500"
               onClick={handleUpload}
             >
-              {isLoading ? "Uploading..." : "Upload"} 
+              {isLoading ? "Uploading..." : "Upload"}
             </button>
           </div>
         </div>

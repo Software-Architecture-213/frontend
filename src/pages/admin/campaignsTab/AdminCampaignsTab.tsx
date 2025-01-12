@@ -1,29 +1,27 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { UserRow } from "../../../types/user";
-import { PlusIcon } from "@heroicons/react/20/solid";
-import { BrandRow, BrandsRequest } from "../../../types/brand";
+import { identityUserApi } from "../../../api/identityClient/identityUserApi";
+import { GameRow } from "../../../types/game";
+import { gameApi } from "../../../api/gameClient/gameApi";
+import AdminCampaignsRow from "./AdminCampaignsRow";
+import { CampaignRow } from "../../../types/campaign";
 import { brandApi } from "../../../api/brandClient/brandApi";
-import AdminBrandRow from "./AdminBrandRow";
-import CreateBrandDialog from "./CreateBrandDialog";
 
 const TableHeaders = [
   // "ID",
   "Photo",
   "Name",
-  "Email",
-  "Field",
-  "Main Branch",
-  // "GPS",
-  "Enrolled At",
-  "Status",
-  "Actions",
+  "Description",
+  "Brand",
+  "Budget",
+  "Start Date",
+  "End Date",
 ];
 
-const AdminBrandsTab = () => {
-  const [brands, setBrands] = useState<BrandRow[]>([]);
-  const [brandsRequest, setBrandsRequest] = useState<BrandsRequest>({
-    page: 0,
+const AdminCampaignsTab = () => {
+  const [campaigns, setCampaigns] = useState<CampaignRow[]>([]);
+  const [campaignsRequest, setCampaignsRequest] = useState<any>({
     pageSize: 8,
+    page: null,
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFetchingMore, setIsFetchingMore] = useState<boolean>(false);
@@ -39,15 +37,12 @@ const AdminBrandsTab = () => {
 
       isPagination ? setIsFetchingMore(true) : setIsLoading(true);
       try {
-        const response = await brandApi.getBrands(brandsRequest);
+        const response = await brandApi.getAllCampaignPromotions();
         const data = await response.data;
-        const newBrands = data;
+        const newCampaigns = data;
+        console.log(newCampaigns)
 
-        setBrands((prevBrands) => [...prevBrands, ...newBrands]);
-        // setBrandsRequest((prevState) => ({
-        //   ...prevState,
-        //   pageToken: data.nextPageToken || "",
-        // }));
+        setCampaigns((prevCampaigns) => [...prevCampaigns, ...newCampaigns]);
         setHasMoreData(!!data.nextPageToken); // Update hasMoreData based on nextPageToken
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -55,7 +50,7 @@ const AdminBrandsTab = () => {
         isPagination ? setIsFetchingMore(false) : setIsLoading(false);
       }
     },
-    [isLoading, isFetchingMore, hasMoreData, brandsRequest]
+    [isLoading, isFetchingMore, hasMoreData, campaignsRequest]
   );
 
   useEffect(() => {
@@ -69,13 +64,13 @@ const AdminBrandsTab = () => {
       const isAtBottom =
         tableElement.scrollHeight <= tableElement.clientHeight + tableElement.scrollTop + 1;
 
-      if (isAtBottom) {
-        setBrandsRequest((prevState) => ({
-          ...prevState,
-          page: prevState.page! + 1,
-        }));
-        fetchData(true); // Trigger pagination fetch
-      }
+        if (isAtBottom) {
+          setCampaignsRequest((prevState: any) => ({
+            ...prevState,
+            page: prevState.page! + 1,
+          }));
+          fetchData(true); // Trigger pagination fetch
+        }
     };
 
     const tableElement = tableRef.current;
@@ -87,32 +82,33 @@ const AdminBrandsTab = () => {
     }
   }, [fetchData, isLoading, isFetchingMore, hasMoreData]);
 
-  const filteredBrands = brands.filter(brand =>
-    (brand.displayName?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
-    (brand.field?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
-    (brand.username?.toLowerCase().includes(searchQuery.toLowerCase()) || false)
-  );
+  const filteredCampaigns = campaigns.filter(campaign =>
+    (campaign.name?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
+    (campaign.brandName?.toLowerCase().includes(searchQuery.toLowerCase()) || false) ||
+    (campaign.description?.toLowerCase().includes(searchQuery.toLowerCase()) || false))
+    // (campaign.type?.toLowerCase().includes(searchQuery.toLowerCase()) || false))
 
   return (
     <>
       <div className="w-full flex items-center justify-between mb-3 mt-1 pl-3">
         <div className="text-left">
           <div className="flex">
-            <h3 className="text-lg font-bold text-slate-800 mr-2">Brands</h3>
-            <div onClick={() => setIsCreateDialogOpen(true)}>
+            <h3 className="text-lg font-bold text-slate-800 mr-2">Campaigns</h3>
+            {/* <div onClick={() => setIsCreateDialogOpen(true)}>
               <PlusIcon className="w-8 h-8 p-1 rounded-full main-bg hover:bg-slate-400 text-white cursor-pointer shadow-md" />
-            </div>
+            </div> */}
           </div>
-          <CreateBrandDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen}/>
-          <p className="text-slate-500">Overview of brands.</p>
+          {/* <CreateUserDialog open={isCreateDialogOpen} setOpen={setIsCreateDialogOpen} /> */}
+          <p className="text-slate-500">Overview of Campaigns.</p>
         </div>
+        {/* Search Bar */}
         <div className="flex items-center">
           <input
             type="text"
-            placeholder="Search by Name, Email, Field..."
+            placeholder="Search by Name, Description, Brand,..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-52 p-2 bg-white border border-slate-300 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200"
+            className="w-64 p-2 bg-white border border-slate-300 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200"
           />
         </div>
       </div>
@@ -134,7 +130,7 @@ const AdminBrandsTab = () => {
             </tr>
           </thead>
           <tbody>
-            {isLoading && !brands.length ? (
+            {isLoading && !campaigns.length ? (
               <tr>
                 <td colSpan={TableHeaders.length} className="h-full">
                   <div className="flex justify-center items-center h-full">
@@ -143,7 +139,7 @@ const AdminBrandsTab = () => {
                 </td>
               </tr>
             ) : (
-              filteredBrands.map((brand) => <AdminBrandRow key={brand.id} brand={brand} />)
+              filteredCampaigns.map((campaign) => <AdminCampaignsRow key={campaign.id} campaign={campaign} />)
             )}
             {isFetchingMore && (
               <tr>
@@ -161,4 +157,4 @@ const AdminBrandsTab = () => {
   );
 };
 
-export default AdminBrandsTab;
+export default AdminCampaignsTab;
