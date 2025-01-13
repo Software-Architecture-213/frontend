@@ -18,7 +18,7 @@ const paypalInitOptions = {
 
 // Games selection state
 type Games = {
-  [key: string]: { id: string | null; selected: boolean };
+  [key: string]: { id: string | null; selected: boolean; quizList?: any[]; item?: any[] };
 };
 
 const BrandCreateCampaign = () => {
@@ -39,8 +39,8 @@ const BrandCreateCampaign = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [games, setGames] = useState<Games>({
-    SHAKE: { id: null, selected: false },
-    QUIZ: { id: null, selected: false },
+    SHAKE: { id: null, selected: false, item: [] },
+    QUIZ: { id: null, selected: false, quizList: [], item: [] },
   });
   const [openDialogs, setOpenDialogs] = useState<{ [key: string]: boolean }>({});
   
@@ -172,26 +172,54 @@ const BrandCreateCampaign = () => {
     }
   };
 
-  const createGame = async (gameType: string, gameDetails: any) => {
+  const createGame = async (gameType: string, gameDetails: any, quizList: any, itemList: any) => {
     try {
-      const payload = {
+      gameDetails.type = gameType.toLowerCase();
+
+      const updatedItemList = itemList.map((item: any) => ({
+        ...item,
+        tradable: item.tradable === "on" ? true : item.tradable === "off" ? false : item.tradable,
+      }));
+
+      const game = {
         promotionId: promotionId,
         brandId: auth.profile?.id,
-        gameType,
         campaignName,
         ...gameDetails,
       };
 
-      const response = await gameApi.createGame(payload); // Call the API
-      console.log(`Game ${gameType} created successfully:`, response);
-      
-      setGames((prev) => ({
-        ...prev,
-        [gameType]: {
-          ...prev[gameType],
-          id: response.data.data.id,
-        },
-      }));
+      if (gameType === 'QUIZ' && quizList) {
+        const payload = {
+          game,
+          quizquestions: quizList,
+          items: updatedItemList,
+        }
+        const response = await gameApi.createGame(payload);
+        console.log(`Game ${gameType} created successfully:`, response);
+        setGames((prev) => ({
+          ...prev,
+          [gameType]: {
+            ...prev[gameType],
+            id: response.data.data.game.id,
+          },
+        }));
+        console.log("Quiz payload: ", payload)
+      } else {
+        const payload = {
+          game,
+          items: updatedItemList,
+        }
+        const response = await gameApi.createGame(payload); // Call the API
+        console.log(`Game ${gameType} created successfully:`, response);
+        setGames((prev) => ({
+          ...prev,
+          [gameType]: {
+            ...prev[gameType],
+            id: response.data.data.game.id,
+          },
+        }));
+        console.log("Shake payload: ", payload)
+      }
       
       // Close dialog after success
       closeDialog(gameType);
@@ -330,7 +358,7 @@ const BrandCreateCampaign = () => {
                         isOpen={openDialogs[gameType]}
                         initialGameType={gameType}
                         onClose={() => closeDialog(gameType)}
-                        onSave={(gameDetails: any) => createGame(gameType, gameDetails)}
+                        onSave={(gameDetails: any, quizList: any, itemList: any) => createGame(gameType, gameDetails, quizList, itemList)}
                       />
                     )
                 )}

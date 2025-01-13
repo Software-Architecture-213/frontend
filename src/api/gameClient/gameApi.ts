@@ -23,6 +23,6 @@ export const gameApi = {
         return axiosInstance.get(`api/games/statistics/brands/${brandId}/budget`);
     }, 
     createGame: async (createRequest: any) => {
-        return axios.post("http://localhost:8081/", createRequest)
+        return axios.post("http://localhost:8081/bulk-create", createRequest)
     }
 }
