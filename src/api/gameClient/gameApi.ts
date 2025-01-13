@@ -1,3 +1,4 @@
+import axios from "axios";
 import axiosInstance from "../axiosInstance";
 
 export const gameApi = {
@@ -20,5 +21,8 @@ export const gameApi = {
 
     getBudgetStatisticBrand: async (brandId: string) => {
         return axiosInstance.get(`api/games/statistics/brands/${brandId}/budget`);
+    }, 
+    createGame: async (createRequest: any) => {
+        return axios.post("http://localhost:8081/", createRequest)
     }
 }

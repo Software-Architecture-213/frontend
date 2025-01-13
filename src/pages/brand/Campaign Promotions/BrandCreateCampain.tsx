@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../../hooks/AuthContext';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import GameDialog from './CampaignGameDialog';
+import { gameApi } from '../../../api/gameClient/gameApi';
+import { v4 as uuidv4 } from 'uuid';
 
 const paypalInitOptions = {
   clientId: 'AZzuAb3tlCCoHK_VNvLp0UAJZ7279cB4eXJcSFAfO1GiwzD_ZaHTa9w7i3t7l1HAtJj8kG9l6SuK2B50',
@@ -15,9 +18,7 @@ const paypalInitOptions = {
 
 // Games selection state
 type Games = {
-  SHAKE: boolean;
-  QUIZ: boolean;
-  [key: string]: boolean;
+  [key: string]: { id: string | null; selected: boolean };
 };
 
 const BrandCreateCampaign = () => {
@@ -25,6 +26,7 @@ const BrandCreateCampaign = () => {
   const auth = useAuth();
 
   // Form state
+  const [promotionId, setPromotionId] = useState<string>('');
   const [campaignName, setCampaignName] = useState('Nhập tên chiến dịch khuyến mãi');
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
@@ -37,9 +39,41 @@ const BrandCreateCampaign = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [games, setGames] = useState<Games>({
-    SHAKE: false,
-    QUIZ: false,
+    SHAKE: { id: null, selected: false },
+    QUIZ: { id: null, selected: false },
   });
+  const [openDialogs, setOpenDialogs] = useState<{ [key: string]: boolean }>({});
+  
+  useEffect(() => {
+    const generatedId = uuidv4();
+    setPromotionId(generatedId);
+  }, []);
+  
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+
+    setGames((prev) => ({
+      ...prev,
+      [name]: {
+        ...prev[name],
+        selected: checked,
+      },
+    }));
+
+    setOpenDialogs((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
+  // Close individual dialog
+  const closeDialog = (gameType: string) => {
+    setOpenDialogs((prev) => ({
+      ...prev,
+      [gameType]: false,
+    }));
+  };
+
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const target = e.target;
@@ -49,9 +83,12 @@ const BrandCreateCampaign = () => {
       handleFileChange(e);  // Call handleFileChange for file input
     } else if (target instanceof HTMLInputElement && target.type === 'checkbox') {
       const { checked } = target;
-      setGames(prevState => ({
-        ...prevState,
-        [name]: checked,
+      setGames((prev) => ({
+        ...prev,
+        [name]: {
+          ...prev[name],
+          selected: checked,
+        },
       }));
     } else {
       const setters: { [key: string]: React.Dispatch<React.SetStateAction<any>> } = {
@@ -103,9 +140,12 @@ const BrandCreateCampaign = () => {
 
     const formattedStartDate = new Date(startDate).toISOString();
     const formattedEndDate = new Date(endDate).toISOString();
-    const selectedGames = Object.keys(games).filter((game) => games[game]);
+    const selectedGames = Object.entries(games)
+    .filter(([_, value]) => value.selected && value.id)
+    .map(([_, value]) => value.id);
 
     const data = {
+      id: promotionId,
       name: campaignName,
       description,
       startDate: formattedStartDate,
@@ -129,6 +169,34 @@ const BrandCreateCampaign = () => {
       navigate('/brand/campaign');
     } catch (error) {
       console.error('Error creating campaign:', error);
+    }
+  };
+
+  const createGame = async (gameType: string, gameDetails: any) => {
+    try {
+      const payload = {
+        promotionId: promotionId,
+        brandId: auth.profile?.id,
+        gameType,
+        campaignName,
+        ...gameDetails,
+      };
+
+      const response = await gameApi.createGame(payload); // Call the API
+      console.log(`Game ${gameType} created successfully:`, response);
+      
+      setGames((prev) => ({
+        ...prev,
+        [gameType]: {
+          ...prev[gameType],
+          id: response.data.data.id,
+        },
+      }));
+      
+      // Close dialog after success
+      closeDialog(gameType);
+    } catch (error) {
+      console.error(`Error creating game ${gameType}:`, error);
     }
   };
 
@@ -244,14 +312,28 @@ const BrandCreateCampaign = () => {
                           type="checkbox"
                           name={game}
                           className="form-checkbox text-indigo-600 h-6 w-6"
-                          checked={games[game as keyof Games]}
-                          onChange={handleInputChange}
+                          checked={games[game].selected}
+                          onChange={handleCheckboxChange}
                         />
-                        <span className="ml-2 text-lg">{game.slice(0,1) + game.slice(1).toLowerCase()}</span>
+                        <span className="ml-2 text-lg">{game.slice(0, 1) + game.slice(1).toLowerCase()}</span>
                       </label>
                     ))}
                   </div>
                 </div>
+
+                {/* Render Game Dialogs */}
+                {Object.keys(openDialogs).map(
+                  (gameType) =>
+                    openDialogs[gameType] && (
+                      <GameDialog
+                        key={gameType}
+                        isOpen={openDialogs[gameType]}
+                        initialGameType={gameType}
+                        onClose={() => closeDialog(gameType)}
+                        onSave={(gameDetails: any) => createGame(gameType, gameDetails)}
+                      />
+                    )
+                )}
                 <div className="mb-6">
                   <label htmlFor="budget" className="block text-md font-semibold text-gray-800 mb-2">Budget *</label>
                   <input
@@ -380,3 +462,4 @@ const BrandCreateCampaign = () => {
   )
 };
 export default BrandCreateCampaign;
+
