@@ -8,13 +8,14 @@ import {
     Title,
     Tooltip,
     Legend,
+    Colors
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Spinner, CustomDatePicker, Title as CustomTitle } from '../../../../components';
-import { getRandomColorArray } from '../../../../utils';
+import { Spinner, CustomDatePicker, Title as CustomTitle, Empty } from '../../../../components';
 import { brandApi } from '../../../../api/brandClient/brandApi';
 import { IChartData } from '../../../../types/brand';
 import { dateToYYYYMMdd } from '../../../../utils';
+import { toast, ToastContainer } from "react-toastify";
 
 ChartJS.register(
     CategoryScale,
@@ -23,7 +24,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Colors,
 );
 
 const currentDate = new Date();
@@ -40,8 +42,8 @@ export function BrandStatisticChart() {
         try {
             const response = await brandApi.getBrandStatisticAdmin(dateToYYYYMMdd(startDate!), dateToYYYYMMdd(endDate!));
             const fetchedData = response.data.data;
-            let brandLabels: string[] = [];
-            let brandDataset: number[] = [];
+            const brandLabels: string[] = [];
+            const brandDataset: number[] = [];
             for (let i = 0; i < fetchedData.length; i++) {
                 brandLabels.push(fetchedData[i].id);
                 brandDataset.push(fetchedData[i].brandCount);
@@ -52,7 +54,6 @@ export function BrandStatisticChart() {
                     {
                         label: 'Number of brands created',
                         data: brandDataset,
-                        backgroundColor: getRandomColorArray(1),
                         borderWidth: 1,
                     },
                 ],
@@ -60,6 +61,7 @@ export function BrandStatisticChart() {
         }
         catch (error) {
             console.error('--> Failed to fetch brand statistic: ', error);
+            toast.error(`Failed to fetch brand statistic: ${error}`);
         }
     }
 
@@ -85,6 +87,9 @@ export function BrandStatisticChart() {
                     },
                 }}
             />
+        }
+        else{
+            content = <Empty />
         }
         return content
     }
@@ -117,6 +122,7 @@ export function BrandStatisticChart() {
             <CustomTitle text='Brand statistic' />
             {renderDatePicker()}
             {loading ? <Spinner /> : renderChart()}
+            <ToastContainer />
         </div>
     );
 }

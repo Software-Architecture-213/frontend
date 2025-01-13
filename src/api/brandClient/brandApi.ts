@@ -34,9 +34,9 @@ export const brandApi = {
   update: async (id: string, updateBrandRequest: UpdateBrandRequest) => {
     return axiosInstance.patch(`api/brands/collection/${id}`, updateBrandRequest);
   },
-    getAllCampaignPromotions: async () => {
-      return axiosInstance.get(`api/brands/promotions`)
-    },
+  getAllCampaignPromotions: async () => {
+    return axiosInstance.get(`api/brands/promotions`)
+  },
   getCampaignPromotions: async () => {
     return axiosInstance.get(`api/brands/promotions/me/get`)
   },
@@ -140,5 +140,25 @@ export const brandApi = {
     status: string,
   }) => {
     return axiosInstance.put("/api/brands/vouchers/voucher/me", data);
+  },
+
+  getGameStatisticAdmin: async () => {
+    return axiosInstance.get("/api/brands/statistic/admin/games");
+  },
+
+  getBrandStatisticAdmin: async (startDate: string, endDate: string) => {
+    const queryParams = {
+      startDate: startDate,
+      endDate: endDate
+    };
+    return axiosInstance.get("/api/brands/statistic/admin/brands", { params: queryParams });
+  },
+
+  getVoucherStatisticBrand: async (brandId: string, startDate: string, endDate: string) => {
+    const queryParams = {
+      startDate: startDate,
+      endDate: endDate
+    };
+    return axiosInstance.get(`/api/brands/statistic/brands/${brandId}/vouchers`, { params: queryParams });
   }
 };

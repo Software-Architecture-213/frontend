@@ -8,13 +8,15 @@ import {
     Title,
     Tooltip,
     Legend,
+    Colors
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Spinner, CustomDatePicker, Title as CustomTitle, CustomSelect, ISelectItem } from '../../../../components';
-import { getRandomColorArray } from '../../../../utils';
+import { Spinner, CustomDatePicker, Title as CustomTitle, CustomSelect, ISelectItem, Empty } from '../../../../components';
 import { brandApi } from '../../../../api/brandClient/brandApi';
+import { gameApi } from '../../../../api/gameClient/gameApi';
 import { IChartData } from '../../../../types/brand';
 import { dateToYYYYMMdd } from '../../../../utils';
+import { toast, ToastContainer } from "react-toastify";
 
 ChartJS.register(
     CategoryScale,
@@ -23,7 +25,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Colors
 );
 
 const currentDate = new Date();
@@ -34,13 +37,11 @@ export function UserStatisticChart() {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState<IChartData | null>(
         {
-
             labels: [],
             datasets: [
                 {
                     label: 'Number of user joined',
                     data: [],
-                    backgroundColor: getRandomColorArray(1),
                     borderWidth: 1,
                 },
             ],
@@ -56,7 +57,7 @@ export function UserStatisticChart() {
         try {
             const response = await brandApi.getAllCampaignPromotions();
             const fetchedData = response.data;
-            let campaignPromotions: ISelectItem[] = [];
+            const campaignPromotions: ISelectItem[] = [];
             for (let i = 0; i < fetchedData.length; i++) {
                 campaignPromotions.push({
                     value: fetchedData[i].id,
@@ -67,19 +68,20 @@ export function UserStatisticChart() {
         }
         catch (error) {
             console.error('--> Failed to fetch brands: ', error);
+            toast.error(`Failed to fetch brands, error: ${error}`);
         }
     }
 
     const fetchChartData = async () => {
         if (selectedCampaignPromotion) {
             try {
-                const response = await brandApi.getUserStatisticAdmin(selectedCampaignPromotion?.value, dateToYYYYMMdd(startDate!), dateToYYYYMMdd(endDate!));
+                const response = await gameApi.getUserStatisticAdmin(selectedCampaignPromotion?.value, dateToYYYYMMdd(startDate!), dateToYYYYMMdd(endDate!));
                 const fetchedData = response.data.data;
-                let brandLabels: string[] = [];
-                let brandDataset: number[] = [];
+                const brandLabels: string[] = [];
+                const brandDataset: number[] = [];
                 for (let i = 0; i < fetchedData.length; i++) {
                     brandLabels.push(fetchedData[i].id);
-                    brandDataset.push(fetchedData[i].brandCount);
+                    brandDataset.push(fetchedData[i].userCount);
                 }
                 setData({
                     labels: brandLabels,
@@ -87,14 +89,14 @@ export function UserStatisticChart() {
                         {
                             label: 'Number of user joined',
                             data: brandDataset,
-                            backgroundColor: getRandomColorArray(1),
                             borderWidth: 1,
                         },
                     ],
                 });
             }
             catch (error) {
-                console.error('--> Failed to fetch brand statistic: ', error);
+                console.error('--> Failed to fetch user statistic: ', error);
+                toast.error(`Failed to fetch user statistic, error: ${error}`);
             }
         }
     }
@@ -112,24 +114,6 @@ export function UserStatisticChart() {
             setLoading(false);
         }
     }, [startDate, endDate, selectedCampaignPromotion]);
-
-    const renderChart = () => {
-        let content = null;
-        if (data) {
-            content = <Line
-                data={data}
-                className='w-full h-96'
-                options={{
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                }}
-            />
-        }
-        return content
-    }
 
     const renderSelector = () => {
         return (
@@ -160,11 +144,33 @@ export function UserStatisticChart() {
         );
     }
 
+    const renderChart = () => {
+        let content = null;
+        if (data) {
+            content = <Line
+                data={data}
+                className='w-full h-96'
+                options={{
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                }}
+            />
+        }
+        else {
+            content = <Empty />
+        }
+        return content
+    }
+
     return (
         <div className='w-full space-y-4'>
             <CustomTitle text='User statistic' />
             {renderSelector()}
             {loading ? <Spinner /> : renderChart()}
+            <ToastContainer />
         </div>
     );
 }

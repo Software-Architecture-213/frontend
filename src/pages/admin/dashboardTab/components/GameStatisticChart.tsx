@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, Colors } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-import { Spinner, Title } from '../../../../components';
-import { getRandomColorArray } from '../../../../utils';
+import { Spinner, Title, Empty } from '../../../../components';
 import { brandApi } from '../../../../api/brandClient/brandApi';
 import { IChartData } from '../../../../types/brand';
+import { toast, ToastContainer } from "react-toastify";
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, Colors);
 
 export function GameStatisticChart() {
     const [loading, setLoading] = useState(false);
@@ -16,8 +16,8 @@ export function GameStatisticChart() {
         try {
             const response = await brandApi.getGameStatisticAdmin();
             const fetchedData = response.data.data;
-            let gameLabels: string[] = [];
-            let gameDataset: number[] = [];
+            const gameLabels: string[] = [];
+            const gameDataset: number[] = [];
             for (let i = 0; i < fetchedData.length; i++) {
                 gameLabels.push(fetchedData[i].name);
                 gameDataset.push(fetchedData[i].playCount);
@@ -28,13 +28,13 @@ export function GameStatisticChart() {
                     {
                         label: 'Total turns',
                         data: gameDataset,
-                        backgroundColor: getRandomColorArray(fetchedData.length),
                         borderWidth: 1,
                     },
                 ],
             })
         } catch (error) {
             console.error('--> Failed to fetch game statistic: ', error);
+            toast.error(`Failed to fetch game statistic: ${error}`);
         }
     }
 
@@ -52,6 +52,9 @@ export function GameStatisticChart() {
                 className='w-full h-96'
             />
         }
+        else {
+            content = <Empty />
+        }
         return content;
     }
 
@@ -59,6 +62,7 @@ export function GameStatisticChart() {
         <div className='space-y-4'>
             <Title text='Game statistic' />
             {loading ? <Spinner /> : renderChart()}
+            <ToastContainer />
         </div>
 
     );

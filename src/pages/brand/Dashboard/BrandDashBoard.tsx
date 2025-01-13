@@ -1,5 +1,5 @@
 import { BaseBlock } from "../../../components";
-import { VoucherStatisticChart } from "./components/VoucherStatisticChart";
+import { VoucherStatisticChart, BudgetStatisticCharts } from "./components";
 
 const BrandDashboardTab = () => {
   return (
@@ -82,10 +82,10 @@ const BrandDashboardTab = () => {
     <div className="w-full justify-between my-1 px-3 space-y-4">
       <h3 className="text-left text-lg font-bold text-slate-800">Dashboard</h3>
       <BaseBlock className="justify-items-center">
-        <VoucherStatisticChart />
+        <BudgetStatisticCharts />
       </BaseBlock>
       <BaseBlock className="justify-items-center">
-        <div></div>
+        <VoucherStatisticChart />
       </BaseBlock>
     </div>
   );

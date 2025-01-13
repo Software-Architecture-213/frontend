@@ -8,4 +8,17 @@ export const gameApi = {
     update: async (id: string, updateRequest: any ) => {
         return axiosInstance.put(`api/games/${id}`, updateRequest)
     },
+
+    getUserStatisticAdmin: async (promotionId: string, startDate: string, endDate: string) => {
+        const queryParams = {
+            type: "interval",
+            startDate: startDate,
+            endDate: endDate
+        };
+        return axiosInstance.get(`api/games/statistics/admin/promotions/${promotionId}/users`, { params: queryParams });
+    },
+
+    getBudgetStatisticBrand: async (brandId: string) => {
+        return axiosInstance.get(`api/games/statistics/brands/${brandId}/budget`);
+    }
 }

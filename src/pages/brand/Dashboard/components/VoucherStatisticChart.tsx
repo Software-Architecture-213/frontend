@@ -8,14 +8,15 @@ import {
     Title,
     Tooltip,
     Legend,
+    Colors
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { Spinner, CustomDatePicker, Title as CustomTitle } from '../../../../components';
-import { getRandomColorArray } from '../../../../utils';
+import { Spinner, CustomDatePicker, Title as CustomTitle, Empty } from '../../../../components';
 import { brandApi } from '../../../../api/brandClient/brandApi';
 import { IChartData } from '../../../../types/brand';
 import { useAuth } from '../../../../hooks/AuthContext';
 import { dateToYYYYMMdd } from '../../../../utils';
+import { toast, ToastContainer } from "react-toastify";
 
 ChartJS.register(
     CategoryScale,
@@ -24,7 +25,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Colors,
 );
 
 const currentDate = new Date();
@@ -44,19 +46,18 @@ export function VoucherStatisticChart() {
         try {
             const response = await brandApi.getVoucherStatisticBrand(brandId, dateToYYYYMMdd(startDate!), dateToYYYYMMdd(endDate!));
             const fetchedData = response.data.data;
-            let voucherLabels: string[] = [];
-            let voucherDataset: number[] = [];
+            const voucherLabels: string[] = [];
+            const voucherDataset: number[] = [];
             for (let i = 0; i < fetchedData.length; i++) {
                 voucherLabels.push(fetchedData[i].id);
                 voucherDataset.push(fetchedData[i].voucherCount);
             }
             setData({
-            labels: voucherLabels,
+                labels: voucherLabels,
                 datasets: [
                     {
                         label: 'Number of voucher created',
                         data: voucherDataset,
-                        backgroundColor: getRandomColorArray(1),
                         borderWidth: 1,
                     },
                 ],
@@ -64,6 +65,7 @@ export function VoucherStatisticChart() {
         }
         catch (error) {
             console.error('--> Failed to fetch brand statistic: ', error);
+            toast.error(`Failed to fetch brand statistic: ${error}`);
         }
     }
 
@@ -74,24 +76,6 @@ export function VoucherStatisticChart() {
             setLoading(false);
         }
     }, [startDate, endDate]);
-
-    const renderChart = () => {
-        let content = null;
-        if (data) {
-            content = <Line
-                data={data}
-                className='w-full h-96'
-                options={{
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                        },
-                    },
-                }}
-            />
-        }
-        return content
-    }
 
     const renderDatePicker = () => {
         return (
@@ -116,11 +100,33 @@ export function VoucherStatisticChart() {
         );
     }
 
+    const renderChart = () => {
+        let content = null;
+        if (data) {
+            content = <Line
+                data={data}
+                className='w-full h-96'
+                options={{
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                        },
+                    },
+                }}
+            />
+        }
+        else{
+            content = <Empty />
+        }
+        return content
+    }
+
     return (
         <div className='w-full space-y-4'>
             <CustomTitle text='Voucher statistic' />
             {renderDatePicker()}
             {loading ? <Spinner /> : renderChart()}
+            <ToastContainer />
         </div>
     );
 }

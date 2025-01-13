@@ -39,3 +39,13 @@ export interface GPS2 {
   latitude: number; // Latitude
   longitude: number; // Longitude
 }
+
+export interface IChartData{
+    labels: string[];
+    datasets: {
+        label: string;
+        data: number[];
+        backgroundColor?: string[];
+        borderWidth: number;
+    }[];
+}

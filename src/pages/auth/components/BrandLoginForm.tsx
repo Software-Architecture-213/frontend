@@ -13,8 +13,8 @@ const BrandLoginForm = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: "brand@gmail.com",
+      password: "123456",
     },
     validationSchema: loginFormValidator,
     onSubmit: async (values) => {

@@ -8,7 +8,7 @@ import ProtectedRoutes from './components/ProtectedRoutes';
 import NotFoundPage from './pages/NotFoundPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import BrandMainLayout from './pages/brand/BrandMainLayout';
-import BrandDashboardTab from './pages/brand/BrandDashBoard';
+import BrandDashboardTab from './pages/brand/Dashboard/BrandDashBoard';
 import BrandCampaign from './pages/brand/Campaign Promotions/BrandCampaign';
 import BrandCreateCampaign from './pages/brand/Campaign Promotions/BrandCreateCampain';
 import AdminProfilePage from './pages/admin/profile/AdminProfilePage';
