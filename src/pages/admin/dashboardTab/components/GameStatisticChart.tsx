@@ -59,11 +59,14 @@ export function GameStatisticChart() {
     }
 
     return (
+        <>
         <div className='space-y-4'>
             <Title text='Game statistic' />
             {loading ? <Spinner /> : renderChart()}
-            <ToastContainer />
         </div>
+            <ToastContainer />
+        </>
+
 
     );
 }
