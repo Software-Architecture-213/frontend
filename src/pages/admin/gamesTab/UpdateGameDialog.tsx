@@ -30,8 +30,6 @@ const UpdateGameDialog: React.FC<UpdateGameDialogProps> = ({ open, setOpen, game
         const updateGameRequest: any = {
           name: values.name,
           description: values.description,
-          type: values.type,
-          difficulty: values.difficulty,
         };
         await gameApi.update(game._id, updateGameRequest);
         toast.info("Game Updated.");

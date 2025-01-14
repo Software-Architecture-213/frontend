@@ -64,7 +64,7 @@ const Header = () => {
 
 const Sidebar = () => {
   return (
-    <div className="main-bg text-white w-50 space-y-6 py-7 px-3 ">
+    <div className="main-bg text-white w-64 space-y-6 py-7 px-3 ">
       <h2 className="text-3xl font-semibold text-white mb-8">Admin</h2>
       <ul className="text-left space-y-4">
         <li>

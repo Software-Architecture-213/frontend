@@ -136,10 +136,4 @@ export const updateGameValidator = Yup.object({
   description: Yup.string()
     .max(500, "Description cannot exceed 500 characters")
     .required("Description is required"),
-  type: Yup.string()
-    .oneOf(["puzzle", "shake"], "Game type: puzzle, shake")
-    .required("Type is required"),
-  difficulty: Yup.string()
-    .oneOf(["easy", "medium", "hard"], "Difficulty: easy, medium, hard")
-    .required("Difficulty is required"),
 });
