@@ -43,6 +43,7 @@ export function VoucherStatisticChart() {
     const [endDate, setEndDate] = useState<Date | null>(currentDate);
 
     const fetchData = async () => {
+        console.log(profile)
         try {
             const response = await brandApi.getVoucherStatisticBrand(brandId, dateToYYYYMMdd(startDate!), dateToYYYYMMdd(endDate!));
             const fetchedData = response.data.data;

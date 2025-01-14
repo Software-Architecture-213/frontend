@@ -27,7 +27,7 @@ const BrandCreateCampaign = () => {
 
   // Form state
   const [promotionId, setPromotionId] = useState<string>('');
-  const [campaignName, setCampaignName] = useState('Nhập tên chiến dịch khuyến mãi');
+  const [campaignName, setCampaignName] = useState('');
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -290,6 +290,7 @@ const BrandCreateCampaign = () => {
                   <label htmlFor="campaignName" className="block text-md font-semibold text-black  mb-2">Name of Campaign *</label>
                   <input
                     type="text"
+                    placeholder='Enter name...'
                     id="campaignName"
                     name="campaignName"
                     className="bg-white text-black mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"

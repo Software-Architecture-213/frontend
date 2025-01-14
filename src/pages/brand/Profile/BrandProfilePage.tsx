@@ -6,6 +6,7 @@ import ProfilePhotoUpload from "./ProfilePhotoUpload";
 import { brandApi } from "../../../api/brandClient/brandApi";
 import { updateBrandProfileValidator } from "../../../utils/formValidator";
 import DEFAULT_AVATAR from "../../../assets/images/default_avatar.png";
+import { toast, ToastContainer } from "react-toastify";
 
 const BrandProfilePage = () => {
     const { profile, fetchProfile } = useAuth();
@@ -33,6 +34,7 @@ const BrandProfilePage = () => {
                     status: values.status,
                 };
                 await brandApi.updateMyProfile(updateUserRequest);
+                toast.info("Profile updated")
                 fetchProfile(); // Refresh profile data
             } catch (error) {
                 console.error("Error updating profile: ", error);
@@ -59,7 +61,10 @@ const BrandProfilePage = () => {
                     <PencilIcon className="w-5 h-5 ml-1 text-gray-600" />
                 </button>
                 <ProfilePhotoUpload open={isDialogOpen} setOpen={setIsDialogOpen} />
+
             </div>
+            <ToastContainer/>
+
 
             {/* Form Section */}
             <form onSubmit={formik.handleSubmit} className="w-full max-w-md space-y-6">
