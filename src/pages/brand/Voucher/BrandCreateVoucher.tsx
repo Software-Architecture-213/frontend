@@ -142,7 +142,7 @@ const BrandCreateVoucher = () => {
       <div className="text-gray-600 text-lg mb-6">
         <span>Vouchers</span> / <span className="font-bold">Create</span>
       </div>
-      <div className="flex">
+      <div className="flex text-black">
         <div className="w-1/3 p-4">
           <input
             type="file"
@@ -180,7 +180,7 @@ const BrandCreateVoucher = () => {
                 type="text"
                 id="code"
                 name="code"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={code}
                 onChange={handleInputChange}
               />
@@ -190,7 +190,7 @@ const BrandCreateVoucher = () => {
               <select
                 id="type"
                 name="type"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={type}
                 onChange={handleInputChange}
               >
@@ -203,7 +203,7 @@ const BrandCreateVoucher = () => {
               <select
                 id="valueType"
                 name="valueType"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={valueType}
                 onChange={handleInputChange}
               >
@@ -219,7 +219,7 @@ const BrandCreateVoucher = () => {
                 type="number"
                 id="value"
                 name="value"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={value}
                 onChange={handleInputChange}
               />
@@ -229,7 +229,7 @@ const BrandCreateVoucher = () => {
               <textarea
                 id="description"
                 name="description"
-                className="mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={description}
                 onChange={handleInputChange}
               ></textarea>
@@ -241,7 +241,7 @@ const BrandCreateVoucher = () => {
                   type="date"
                   id="expiredAt"
                   name="expiredAt"
-                  className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                  className="mt-1 block w-full h-12 text-lg border border-gray-300 text-white rounded-lg shadow-sm px-4"
                   value={expiredAt}
                   onChange={handleInputChange}
                 />
@@ -251,7 +251,7 @@ const BrandCreateVoucher = () => {
                 <select
                   id="status"
                   name="status"
-                  className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                  className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                   value={status}
                   onChange={handleInputChange}
                 >
@@ -266,7 +266,7 @@ const BrandCreateVoucher = () => {
                 type="number"
                 id="maxCounts"
                 name="maxCounts"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={maxCounts}
                 onChange={handleInputChange}
               />
@@ -277,7 +277,7 @@ const BrandCreateVoucher = () => {
                 type="number"
                 id="createCounts"
                 name="createCounts"
-                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                 value={createCounts}
                 onChange={handleInputChange}
               />
