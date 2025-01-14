@@ -13,8 +13,8 @@ const BrandLoginForm = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      email: "brand@gmail.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
     validationSchema: loginFormValidator,
     onSubmit: async (values) => {
@@ -60,8 +60,8 @@ const BrandLoginForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${formik.touched.email && formik.errors.email
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-f75f07"
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-f75f07"
               }`}
           />
           {formik.touched.email && formik.errors.email && (
@@ -79,8 +79,8 @@ const BrandLoginForm = () => {
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${formik.touched.password && formik.errors.password
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-f75f07"
+              ? "border-red-500 focus:ring-red-500"
+              : "border-gray-300 focus:ring-f75f07"
               }`}
           />
           {formik.touched.password && formik.errors.password && (
