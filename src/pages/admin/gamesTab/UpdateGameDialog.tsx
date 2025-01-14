@@ -107,15 +107,11 @@ const UpdateGameDialog: React.FC<UpdateGameDialogProps> = ({ open, setOpen, game
                   value={formik.values.type}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`w-full p-3 text-gray-700 bg-white border rounded-md focus:outline-none ${formik.touched.type && formik.errors.type
-                    ? "border-red-500"
-                    : ""
-                    }`}
+                  disabled={true}
+                  className="w-full p-3 text-black bg-gray-200 border rounded-md focus:outline-none"
                 />
-                {formik.touched.type && formik.errors.type && (
-                  <p className="text-red-500 text-left text-sm">{formik.errors.type}</p>
-                )}
               </div>
+              
 
               {/* Difficulty Input */}
               <div>
@@ -126,14 +122,9 @@ const UpdateGameDialog: React.FC<UpdateGameDialogProps> = ({ open, setOpen, game
                   value={formik.values.difficulty}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  className={`w-full p-3 text-gray-700 bg-white border rounded-md focus:outline-none ${formik.touched.difficulty && formik.errors.difficulty
-                    ? "border-red-500"
-                    : ""
-                    }`}
+                  disabled={true}
+                  className="w-full p-3 text-black bg-gray-200 border rounded-md focus:outline-none"
                 />
-                {formik.touched.difficulty && formik.errors.difficulty && (
-                  <p className="text-red-500 text-left text-sm">{formik.errors.difficulty}</p>
-                )}
               </div>
             </div>
 
