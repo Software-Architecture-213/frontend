@@ -13,8 +13,8 @@ export function Empty(props: IEmptyProps) {
         textClassName = '',
     } = props
 
-    const actualContainerClassName = `py-6 ${containerClassName}`
-    const actualTextClassName = `bg-gray-300 px-20 py-6 max-w-[600px] rounded-2xl  text-black ${textClassName}`
+    const actualContainerClassName = `my-2 bg-gray-300 px-20 py-6 max-w-[600px] rounded-2xl shadow ${containerClassName}`
+    const actualTextClassName = `text-black ${textClassName}`
 
     return (
         <div className={actualContainerClassName}>

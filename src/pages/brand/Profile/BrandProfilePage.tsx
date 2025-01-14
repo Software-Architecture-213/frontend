@@ -5,6 +5,7 @@ import { PencilIcon } from "@heroicons/react/16/solid";
 import ProfilePhotoUpload from "./ProfilePhotoUpload";
 import { brandApi } from "../../../api/brandClient/brandApi";
 import { updateBrandProfileValidator } from "../../../utils/formValidator";
+import DEFAULT_AVATAR from "../../../assets/images/default_avatar.png";
 
 const BrandProfilePage = () => {
     const { profile, fetchProfile } = useAuth();
@@ -46,7 +47,7 @@ const BrandProfilePage = () => {
             {/* Profile Section */}
             <div className="text-center space-y-4 mb-2">
                 <img
-                    src={profile.imageUrl}
+                    src={profile.imageUrl ?? DEFAULT_AVATAR}
                     alt="Profile"
                     className="w-32 h-32 rounded-full border-2 border-gray-300"
                 />
@@ -74,8 +75,8 @@ const BrandProfilePage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${formik.touched.displayName && formik.errors.displayName
-                                ? "border-red-500"
-                                : "border-gray-300"
+                            ? "border-red-500"
+                            : "border-gray-300"
                             }`}
                     />
                     {formik.touched.displayName && formik.errors.displayName && (
@@ -110,8 +111,8 @@ const BrandProfilePage = () => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none ${formik.touched.field && formik.errors.field
-                                ? "border-red-500"
-                                : "border-gray-300"
+                            ? "border-red-500"
+                            : "border-gray-300"
                             }`}
                     />
                     {formik.touched.field && formik.errors.field && (

@@ -59,7 +59,7 @@ export function GameStatisticChart() {
     }
 
     return (
-        <div className='space-y-4'>
+        <div className='space-y-4 justify-items-center'>
             <Title text='Game statistic' />
             {loading ? <Spinner /> : renderChart()}
             <ToastContainer />

@@ -3,6 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { useAuth } from "../../../hooks/AuthContext";
 import imageCompression from "browser-image-compression";
 import { brandApi } from "../../../api/brandClient/brandApi";
+import DEFAULT_AVATAR from "../../../assets/images/default_avatar.png";
 
 interface ProfilePhotoUploadProps {
   open: boolean;
@@ -76,7 +77,7 @@ const ProfilePhotoUpload: React.FC<ProfilePhotoUploadProps> = ({ open, setOpen }
             <h3 className="text-lg font-medium text-gray-900">Update Profile Photo</h3>
             <div className="flex justify-center">
               <img
-                src={previewImage || profile.photoUrl}
+                src={previewImage || (profile.photoUrl ?? DEFAULT_AVATAR)}
                 alt="Profile PreviewImage"
                 className="w-32 h-32 rounded-full border"
               />

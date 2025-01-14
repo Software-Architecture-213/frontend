@@ -287,12 +287,12 @@ const BrandCreateCampaign = () => {
             <div className="w-2/3 p-4">
               <form onSubmit={handleSubmit}>
                 <div className="mb-6">
-                  <label htmlFor="campaignName" className="block text-md font-semibold text-gray-800 mb-2">Name of Campaign *</label>
+                  <label htmlFor="campaignName" className="block text-md font-semibold text-black  mb-2">Name of Campaign *</label>
                   <input
                     type="text"
                     id="campaignName"
                     name="campaignName"
-                    className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                    className="bg-white text-black mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
                     value={campaignName}
                     onChange={handleInputChange}
                   />
@@ -302,7 +302,7 @@ const BrandCreateCampaign = () => {
                   <textarea
                     id="description"
                     name="description"
-                    className="mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                      className="bg-white text-black mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
                     value={description}
                     onChange={handleInputChange}
                   ></textarea>
@@ -331,7 +331,7 @@ const BrandCreateCampaign = () => {
                     />
                   </div>
                 </div>
-                <div className="mb-6">
+                <div className="mb-6 text-black">
                   <p className="text-md font-semibold text-gray-800 mb-2">Choose games *</p>
                   <div className="flex items-center space-x-6">
                     {['SHAKE', 'QUIZ'].map((game) => (
@@ -368,7 +368,7 @@ const BrandCreateCampaign = () => {
                     type="number"
                     id="budget"
                     name="budget"
-                    className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                      className="bg-white text-black mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
                     value={budget}
                     onChange={handleInputChange}
                   />

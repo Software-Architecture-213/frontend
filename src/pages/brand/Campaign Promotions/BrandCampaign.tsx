@@ -47,7 +47,7 @@ const BrandCampaign = () => {
   return (
     <section className="p-6">
       {/* Header and Create Campaign Button */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 text-black">
         <h2 className="text-lg font-semibold">Campaign Promotions</h2>
         <button
           onClick={handleCreateCampaign}
@@ -64,16 +64,16 @@ const BrandCampaign = () => {
             <input
               type="text"
               placeholder="Search campaign name..."
-              className="px-4 py-2 border rounded"
+              className="w-64 p-2 bg-white border border-slate-300 rounded-md text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray-200"
             />
-            <button className="text-gray-600">
+            <button className="text-black bg-gray-300">
               <i className="fas fa-filter"></i>
             </button>
           </div>
         </div>
 
         {/* Table */}
-        <table className="w-full text-left">
+        <table className="w-full text-left text-black">
           <thead>
             <tr className="border-b">
               <th className="p-2"><input type="checkbox" /></th>
@@ -107,20 +107,20 @@ const BrandCampaign = () => {
                 <td className="p-2">${campaign.budget}</td>
                 <td className="p-2">${campaign.remainingBudget}</td>
                 <td className="p-2 relative">
-                  <button className="text-blue-600 hover:text-blue-800" onClick={() => toggleDropdown(campaign.id)}>
+                  <button className="text-black bg-gray-300 hover:bg-gray-400" onClick={() => toggleDropdown(campaign.id)}>
                     <i className="fas fa-ellipsis-h"></i>
                   </button>
                   {dropdownState[campaign.id] && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-                      <ul className="py-1">
+                    <div className="absolute right-2 bg-gray-100 w-48 rounded-lg z-10">
+                      <ul className="space-y-1">
                         <li>
-                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => handleShowDetail(campaign.id)}>
+                          <button className="bg-gray-300 w-full text-left px-4 py-2 flex items-center border-black hover:bg-gray-400" onClick={() => handleShowDetail(campaign.id)}>
                             <i className="fas fa-info-circle mr-2"></i>
                             Detail
                           </button>
                         </li>
                         <li>
-                          <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 flex items-center" onClick={() => navigate(`/brand/campaign/update/${campaign.id}`)}>
+                          <button className="bg-gray-300 w-full text-left px-4 py-2 flex items-center border-black hover:bg-gray-400" onClick={() => navigate(`/brand/campaign/update/${campaign.id}`)}>
                             <i className="fas fa-edit mr-2"></i>
                             Update
                           </button>
@@ -135,10 +135,10 @@ const BrandCampaign = () => {
         </table>
 
         {/* Pagination */}
-        <div className="mt-4 flex justify-between items-center">
+        <div className="mt-4 flex justify-between items-center text-black">
           <div>
-            <span>Rows per page: </span>
-            <select className="border rounded p-1">
+            <span className=''>Rows per page: </span>
+            <select className="border rounded p-1 bg-white border-slate-300">
               <option>5</option>
               <option>10</option>
               <option>15</option>

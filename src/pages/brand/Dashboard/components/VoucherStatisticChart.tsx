@@ -115,14 +115,14 @@ export function VoucherStatisticChart() {
                 }}
             />
         }
-        else{
+        else {
             content = <Empty />
         }
         return content
     }
 
     return (
-        <div className='w-full space-y-4'>
+        <div className='w-full space-y-4 justify-items-center'>
             <CustomTitle text='Voucher statistic' />
             {renderDatePicker()}
             {loading ? <Spinner /> : renderChart()}

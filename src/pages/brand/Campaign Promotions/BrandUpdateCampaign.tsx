@@ -4,6 +4,7 @@ import { brandApi } from '../../../api/brandClient/brandApi';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../../hooks/AuthContext';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import DEFAULT_CAMPAIGN_PROMOTION from '../../../assets/images/default_campaign_promotion.png';
 
 const paypalInitOptions = {
     clientId: 'AZzuAb3tlCCoHK_VNvLp0UAJZ7279cB4eXJcSFAfO1GiwzD_ZaHTa9w7i3t7l1HAtJj8kG9l6SuK2B50',
@@ -202,7 +203,7 @@ const BrandUpdateCampaign = () => {
                     <div className="flex">
                         <div className="w-1/3 p-4">
                             <div className="mt-4 mb-4">
-                                <img src={imageUrl} alt="Campaign Image" className="max-w-full h-auto rounded-lg shadow-lg" />
+                                <img src={imageUrl ?? DEFAULT_CAMPAIGN_PROMOTION} alt="Campaign Image" className="max-w-full h-auto rounded-lg shadow-lg" />
                             </div>
                             <input
                                 type="file"

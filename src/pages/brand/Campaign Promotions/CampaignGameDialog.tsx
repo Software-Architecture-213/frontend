@@ -78,7 +78,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50 text-black">
       <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 h-4/5 overflow-auto">
         <h2 className="text-xl font-bold mb-4">Create a Game</h2>
         <div className="mb-4">
@@ -89,7 +89,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
             type="text"
             id="name"
             name="name"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border-gray-500 border bg-white rounded-md shadow-sm p-2"
             value={gameDetails.name}
             onChange={handleInputChange}
           />
@@ -101,7 +101,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
           <select
             id="type"
             name="type"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border-gray-500 border bg-white rounded-md shadow-sm p-2"
             value={gameDetails.type}
             onChange={handleInputChange}
           >
@@ -116,7 +116,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
           <textarea
             id="description"
             name="description"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border-gray-500 border bg-white rounded-md shadow-sm p-2"
             value={gameDetails.description}
             onChange={handleInputChange}
           />
@@ -128,7 +128,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
           <textarea
             id="guideline"
             name="guideline"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border-gray-500 border bg-white rounded-md shadow-sm p-2"
             value={gameDetails.guideline}
             onChange={handleInputChange}
           />
@@ -149,7 +149,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
           <select
             id="difficulty"
             name="difficulty"
-            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm p-2"
+            className="mt-1 block w-full border-gray-500 border bg-white rounded-md shadow-sm p-2"
             value={gameDetails.difficulty}
             onChange={handleInputChange}
           >
@@ -163,7 +163,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
             <h3 className="text-lg font-semibold mb-4">Quiz Settings</h3>
             <button
               onClick={handleAddQuiz}
-              className="text-blue-500 mb-4 inline-block"
+              className="bg-gray-300 mb-4 inline-block"
             >
               Add Quiz
             </button>
@@ -176,11 +176,11 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                     value={quiz.question}
                     onChange={(e) => handleQuizInputChange(index, e)}
                     placeholder="Enter question"
-                    className="w-full border-gray-300 rounded-md p-2"
+                    className="w-full border-gray-500 border bg-white rounded-md p-2"
                   />
                   <button
                     onClick={() => handleRemoveQuiz(index)}
-                    className="ml-2 text-red-500"
+                    className="ml-2 bg-red-500 text-white"
                   >
                     Remove
                   </button>
@@ -192,7 +192,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                       value={answer.text}
                       onChange={(e) => handleAnswerChange(index, answerIndex, "text", e.target.value)}
                       placeholder="Answer"
-                      className="w-2/3 border-gray-300 rounded-md p-2"
+                      className="w-2/3 border-gray-500 border bg-white rounded-md p-2"
                     />
                     <label className="ml-2">
                       <input
@@ -211,7 +211,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                     updatedQuizzes[index].answers.push({ text: "", isCorrect: false });
                     setQuizzes(updatedQuizzes);
                   }}
-                  className="text-blue-500 mt-2"
+                  className="bg-gray-300 mt-2"
                 >
                   Add Answer
                 </button>
@@ -224,7 +224,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
           <h3 className="text-lg font-semibold mb-4">Item Settings</h3>
           <button
             onClick={handleAddItem}
-            className="text-blue-500 mb-4 inline-block"
+            className="bg-gray-300 mb-4 inline-block"
           >
             Add Item
           </button>
@@ -237,11 +237,11 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                   value={item.name}
                   onChange={(e) => handleItemInputChange(index, e)}
                   placeholder="Item Name"
-                  className="w-full border-gray-300 rounded-md p-2"
+                  className="w-full border-gray-500 border bg-white rounded-md p-2"
                 />
                 <button
                   onClick={() => handleRemoveItem(index)}
-                  className="ml-2 text-red-500"
+                  className="ml-2 bg-red-500 text-white"
                 >
                   Remove
                 </button>
@@ -252,7 +252,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                   value={item.description}
                   onChange={(e) => handleItemInputChange(index, e)}
                   placeholder="Description"
-                  className="w-full border-gray-300 rounded-md p-2"
+                  className="w-full border-gray-500 border bg-white rounded-md p-2"
                 />
               </div>
               <div className="flex space-x-4">
@@ -260,7 +260,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                   name="rarity"
                   value={item.rarity}
                   onChange={(e) => handleItemInputChange(index, e)}
-                  className="w-1/3 border-gray-300 rounded-md p-2"
+                  className="w-1/3 border-gray-500 border bg-white rounded-md p-2"
                 >
                   <option value="common">Common</option>
                   <option value="rare">Rare</option>
@@ -281,14 +281,14 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                   name="maxQuantity"
                   value={item.maxQuantity}
                   onChange={(e) => handleItemInputChange(index, e)}
-                  className="w-1/3 border-gray-300 rounded-md p-2"
+                  className="w-1/3 border-gray-500 border bg-white rounded-md p-2"
                   min="1"
                 />
               </div>
             </div>
           ))}
         </div>
-        <div className="flex justify-end space-x-3">
+        <div className="flex justify-between mt-2">
           <button className="bg-gray-300 px-4 py-2 rounded-md" onClick={onClose}>
             Cancel
           </button>
