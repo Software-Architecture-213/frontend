@@ -126,7 +126,5 @@ export function BrandStatisticChart() {
         </div>
         <ToastContainer />
         </>
-       
-        
     );
 }

@@ -123,6 +123,7 @@ export function UserStatisticChart() {
                     title='Campaign promotion'
                     options={campaignPromotions}
                     onChange={(selectedOption) => setSelectedCampaignPromotion(selectedOption)}
+                    placeholder='Select a promotion'
                 />
                 <CustomDatePicker
                     value={startDate}
@@ -166,7 +167,7 @@ export function UserStatisticChart() {
     }
 
     return (
-        <div className='w-full space-y-4'>
+        <div className='w-full space-y-4 justify-items-center'>
             <CustomTitle text='User statistic' />
             {renderSelector()}
             {loading ? <Spinner /> : renderChart()}

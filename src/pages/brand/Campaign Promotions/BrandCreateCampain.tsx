@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../../hooks/AuthContext';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import GameDialog from './CampaignGameDialog';
+import { gameApi } from '../../../api/gameClient/gameApi';
+import { v4 as uuidv4 } from 'uuid';
 
 const paypalInitOptions = {
   clientId: 'AZzuAb3tlCCoHK_VNvLp0UAJZ7279cB4eXJcSFAfO1GiwzD_ZaHTa9w7i3t7l1HAtJj8kG9l6SuK2B50',
@@ -15,9 +18,7 @@ const paypalInitOptions = {
 
 // Games selection state
 type Games = {
-  SHAKE: boolean;
-  QUIZ: boolean;
-  [key: string]: boolean;
+  [key: string]: { id: string | null; selected: boolean; quizList?: any[]; item?: any[] };
 };
 
 const BrandCreateCampaign = () => {
@@ -25,7 +26,8 @@ const BrandCreateCampaign = () => {
   const auth = useAuth();
 
   // Form state
-  const [campaignName, setCampaignName] = useState('Nhập tên chiến dịch khuyến mãi');
+  const [promotionId, setPromotionId] = useState<string>('');
+  const [campaignName, setCampaignName] = useState('');
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -37,9 +39,41 @@ const BrandCreateCampaign = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [games, setGames] = useState<Games>({
-    SHAKE: false,
-    QUIZ: false,
+    SHAKE: { id: null, selected: false, item: [] },
+    QUIZ: { id: null, selected: false, quizList: [], item: [] },
   });
+  const [openDialogs, setOpenDialogs] = useState<{ [key: string]: boolean }>({});
+  
+  useEffect(() => {
+    const generatedId = uuidv4();
+    setPromotionId(generatedId);
+  }, []);
+  
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+
+    setGames((prev) => ({
+      ...prev,
+      [name]: {
+        ...prev[name],
+        selected: checked,
+      },
+    }));
+
+    setOpenDialogs((prev) => ({
+      ...prev,
+      [name]: checked,
+    }));
+  };
+
+  // Close individual dialog
+  const closeDialog = (gameType: string) => {
+    setOpenDialogs((prev) => ({
+      ...prev,
+      [gameType]: false,
+    }));
+  };
+
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const target = e.target;
@@ -49,9 +83,12 @@ const BrandCreateCampaign = () => {
       handleFileChange(e);  // Call handleFileChange for file input
     } else if (target instanceof HTMLInputElement && target.type === 'checkbox') {
       const { checked } = target;
-      setGames(prevState => ({
-        ...prevState,
-        [name]: checked,
+      setGames((prev) => ({
+        ...prev,
+        [name]: {
+          ...prev[name],
+          selected: checked,
+        },
       }));
     } else {
       const setters: { [key: string]: React.Dispatch<React.SetStateAction<any>> } = {
@@ -103,9 +140,12 @@ const BrandCreateCampaign = () => {
 
     const formattedStartDate = new Date(startDate).toISOString();
     const formattedEndDate = new Date(endDate).toISOString();
-    const selectedGames = Object.keys(games).filter((game) => games[game]);
+    const selectedGames = Object.entries(games)
+    .filter(([_, value]) => value.selected && value.id)
+    .map(([_, value]) => value.id);
 
     const data = {
+      id: promotionId,
       name: campaignName,
       description,
       startDate: formattedStartDate,
@@ -129,6 +169,62 @@ const BrandCreateCampaign = () => {
       navigate('/brand/campaign');
     } catch (error) {
       console.error('Error creating campaign:', error);
+    }
+  };
+
+  const createGame = async (gameType: string, gameDetails: any, quizList: any, itemList: any) => {
+    try {
+      gameDetails.type = gameType.toLowerCase();
+
+      const updatedItemList = itemList.map((item: any) => ({
+        ...item,
+        tradable: item.tradable === "on" ? true : item.tradable === "off" ? false : item.tradable,
+      }));
+
+      const game = {
+        promotionId: promotionId,
+        brandId: auth.profile?.id,
+        campaignName,
+        ...gameDetails,
+      };
+
+      if (gameType === 'QUIZ' && quizList) {
+        const payload = {
+          game,
+          quizquestions: quizList,
+          items: updatedItemList,
+        }
+        const response = await gameApi.createGame(payload);
+        console.log(`Game ${gameType} created successfully:`, response);
+        setGames((prev) => ({
+          ...prev,
+          [gameType]: {
+            ...prev[gameType],
+            id: response.data.data.game.id,
+          },
+        }));
+        console.log("Quiz payload: ", payload)
+      } else {
+        const payload = {
+          game,
+          items: updatedItemList,
+        }
+        const response = await gameApi.createGame(payload); // Call the API
+        console.log(`Game ${gameType} created successfully:`, response);
+        setGames((prev) => ({
+          ...prev,
+          [gameType]: {
+            ...prev[gameType],
+            id: response.data.data.game.id,
+          },
+        }));
+        console.log("Shake payload: ", payload)
+      }
+      
+      // Close dialog after success
+      closeDialog(gameType);
+    } catch (error) {
+      console.error(`Error creating game ${gameType}:`, error);
     }
   };
 
@@ -191,12 +287,13 @@ const BrandCreateCampaign = () => {
             <div className="w-2/3 p-4">
               <form onSubmit={handleSubmit}>
                 <div className="mb-6">
-                  <label htmlFor="campaignName" className="block text-md font-semibold text-gray-800 mb-2">Name of Campaign *</label>
+                  <label htmlFor="campaignName" className="block text-md font-semibold text-black  mb-2">Name of Campaign *</label>
                   <input
                     type="text"
+                    placeholder='Enter name...'
                     id="campaignName"
                     name="campaignName"
-                    className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                    className="bg-white text-black mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
                     value={campaignName}
                     onChange={handleInputChange}
                   />
@@ -206,7 +303,7 @@ const BrandCreateCampaign = () => {
                   <textarea
                     id="description"
                     name="description"
-                    className="mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                      className="bg-white text-black mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
                     value={description}
                     onChange={handleInputChange}
                   ></textarea>
@@ -235,7 +332,7 @@ const BrandCreateCampaign = () => {
                     />
                   </div>
                 </div>
-                <div className="mb-6">
+                <div className="mb-6 text-black">
                   <p className="text-md font-semibold text-gray-800 mb-2">Choose games *</p>
                   <div className="flex items-center space-x-6">
                     {['SHAKE', 'QUIZ'].map((game) => (
@@ -244,21 +341,35 @@ const BrandCreateCampaign = () => {
                           type="checkbox"
                           name={game}
                           className="form-checkbox text-indigo-600 h-6 w-6"
-                          checked={games[game as keyof Games]}
-                          onChange={handleInputChange}
+                          checked={games[game].selected}
+                          onChange={handleCheckboxChange}
                         />
-                        <span className="ml-2 text-lg">{game.slice(0,1) + game.slice(1).toLowerCase()}</span>
+                        <span className="ml-2 text-lg">{game.slice(0, 1) + game.slice(1).toLowerCase()}</span>
                       </label>
                     ))}
                   </div>
                 </div>
+
+                {/* Render Game Dialogs */}
+                {Object.keys(openDialogs).map(
+                  (gameType) =>
+                    openDialogs[gameType] && (
+                      <GameDialog
+                        key={gameType}
+                        isOpen={openDialogs[gameType]}
+                        initialGameType={gameType}
+                        onClose={() => closeDialog(gameType)}
+                        onSave={(gameDetails: any, quizList: any, itemList: any) => createGame(gameType, gameDetails, quizList, itemList)}
+                      />
+                    )
+                )}
                 <div className="mb-6">
                   <label htmlFor="budget" className="block text-md font-semibold text-gray-800 mb-2">Budget *</label>
                   <input
                     type="number"
                     id="budget"
                     name="budget"
-                    className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                      className="bg-white text-black mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
                     value={budget}
                     onChange={handleInputChange}
                   />
@@ -380,3 +491,4 @@ const BrandCreateCampaign = () => {
   )
 };
 export default BrandCreateCampaign;
+

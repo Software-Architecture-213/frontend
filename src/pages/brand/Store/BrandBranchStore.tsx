@@ -103,7 +103,7 @@ const BrandBranchStore = () => {
       </div>
 
       {/* Branch List Section */}
-      <div className="w-1/4 bg-gray-100 p-4 overflow-y-auto">
+      <div className="w-1/4 bg-gray-100 p-4 overflow-y-auto text-black">
         <h2 className="text-lg font-semibold mb-4">Branch List</h2>
         <button
           onClick={() => setIsFormOpen(true)}
