@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import DEFAULT_CAMPAIGN_PROMOTION from '../../../assets/images/default_campaign_promotion.png';
+import EMPTY_IMAGE from '../../../assets/images/empty_image.png';
 
 interface Promotion {
     name: string;
@@ -61,7 +61,7 @@ const BrandCampaignDetail = () => {
 
                 {/* Campaign Image */}
                 <div className="mb-6 justify-items-center">
-                    <img src={promotion.imageUrl ?? DEFAULT_CAMPAIGN_PROMOTION} alt={promotion.name} className="w-auto h-64 object-contain rounded-lg shadow-lg" />
+                    <img src={promotion.imageUrl ?? EMPTY_IMAGE} alt={promotion.name} className="w-auto h-64 object-cover rounded-lg shadow-lg" />
                 </div>
 
                 {/* Details */}

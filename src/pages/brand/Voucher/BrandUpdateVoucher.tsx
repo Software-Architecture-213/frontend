@@ -170,7 +170,7 @@ const BrandUpdateVoucher = () => {
     };
 
     return (
-        <div className="p-3 max-w-6xl mx-auto">
+        <div className="p-3 max-w-6xl mx-auto text-black">
             <div className="text-gray-600 text-lg mb-6">
                 <span>Vouchers</span> / <span className="font-bold">Update</span>
             </div>
@@ -215,7 +215,7 @@ const BrandUpdateVoucher = () => {
                                 type="text"
                                 id="code"
                                 name="code"
-                                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                 value={code}
                                 onChange={handleInputChange}
                             />
@@ -225,7 +225,7 @@ const BrandUpdateVoucher = () => {
                             <select
                                 id="type"
                                 name="type"
-                                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                 value={type}
                                 onChange={handleInputChange}
                             >
@@ -238,7 +238,7 @@ const BrandUpdateVoucher = () => {
                             <select
                                 id="valueType"
                                 name="valueType"
-                                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                 value={valueType}
                                 onChange={handleInputChange}
                             >
@@ -254,7 +254,7 @@ const BrandUpdateVoucher = () => {
                                 type="number"
                                 id="value"
                                 name="value"
-                                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                 value={value}
                                 onChange={handleInputChange}
                             />
@@ -264,7 +264,7 @@ const BrandUpdateVoucher = () => {
                             <textarea
                                 id="description"
                                 name="description"
-                                className="mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full text-lg border border-gray-300 bg-white  rounded-lg shadow-sm px-4"
                                 value={description}
                                 onChange={handleInputChange}
                             ></textarea>
@@ -276,7 +276,7 @@ const BrandUpdateVoucher = () => {
                                     type="date"
                                     id="expiredAt"
                                     name="expiredAt"
-                                    className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                    className="mt-1 block w-full h-12 text-lg border border-gray-300 text-white rounded-lg shadow-sm px-4"
                                     value={expiredAt}
                                     onChange={handleInputChange}
                                 />
@@ -286,7 +286,7 @@ const BrandUpdateVoucher = () => {
                                 <select
                                     id="status"
                                     name="status"
-                                    className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                    className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white  rounded-lg shadow-sm px-4"
                                     value={status}
                                     onChange={handleInputChange}
                                 >
@@ -301,7 +301,7 @@ const BrandUpdateVoucher = () => {
                                 type="number"
                                 id="maxCounts"
                                 name="maxCounts"
-                                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white  rounded-lg shadow-sm px-4"
                                 value={maxCounts}
                                 onChange={handleInputChange}
                             />
@@ -312,7 +312,7 @@ const BrandUpdateVoucher = () => {
                                 type="number"
                                 id="createCounts"
                                 name="createCounts"
-                                className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white  rounded-lg shadow-sm px-4"
                                 value={createCounts}
                                 onChange={handleInputChange}
                             />

@@ -98,7 +98,7 @@ const BrandVoucher = () => {
               </button>
             </div>
             {campaign.vouchers && campaign.vouchers.length !== 0 ? (
-              <table className="w-full table-auto border-collapse border border-gray-300">
+              <table className="w-full table-auto border-collapse border border-gray-300 bg-white">
                 <thead>
                   <tr>
                     <th className="py-2 px-4 border bg-gray-100 w-1/6">Code</th>
@@ -184,7 +184,7 @@ const BrandVoucher = () => {
             <h3 className="text-lg font-semibold mb-4">Redeem Voucher</h3>
             <input
               type="text"
-              className="w-full p-2 border rounded mb-4"
+              className="w-full p-2 border border-gray-500 rounded bg-white mb-4"
               placeholder="Enter User ID"
               value={userIdInput}
               onChange={(e) => setUserIdInput(e.target.value)}
