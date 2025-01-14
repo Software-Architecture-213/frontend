@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { DEFAULT_AVATAR_URL } from '../../../constants/app';
-import { PencilIcon } from '@heroicons/react/16/solid';
 
 import { CampaignRow } from '../../../types/campaign';
-import { mm_dd_yy, yyyy_mm_dd } from '../../../utils/dateUtils';
+import { toLocaleString } from '../../../utils/dateUtils';
 interface CampaignRowProps {
   campaign: CampaignRow;
 }
@@ -39,10 +38,10 @@ const AdminCampaignsRow: React.FC<CampaignRowProps> = ({ campaign }) => {
         <p className="block text-sm text-slate-800">{thisCampaign.budget}</p>
       </td>
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{mm_dd_yy(thisCampaign.startDate!)}</p>
+        <p className="block text-sm text-slate-800">{toLocaleString(thisCampaign.startDate!)}</p>
       </td> 
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{mm_dd_yy(thisCampaign.endDate!)}</p>
+        <p className="block text-sm text-slate-800">{toLocaleString(thisCampaign.endDate!)}</p>
       </td> 
 
     </tr>

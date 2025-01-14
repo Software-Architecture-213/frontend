@@ -18,14 +18,12 @@ const BrandRegisterForm = () => {
       password: "",
       displayName: "",
       field: "",
-      latitude: "",
-      longitude: "",
     },
     validationSchema: brandFormValidator, // Define your validator in formValidator
     onSubmit: async (values) => {
       console.log("Form submitted with values: ", values);
       try {
-        const gps = { latitude: parseFloat(values.latitude), longitude: parseFloat(values.longitude) };
+        const gps = { latitude: 0, longitude: 0};
         const response = await brandApi.register(
           values.username,
           values.password,
@@ -112,7 +110,7 @@ const BrandRegisterForm = () => {
       </div>
 
       {/* Latitude Input */}
-      <div>
+      {/* <div>
         <input
           type="text"
           name="latitude"
@@ -122,10 +120,10 @@ const BrandRegisterForm = () => {
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
         />
-      </div>
+      </div> */}
 
       {/* Longitude Input */}
-      <div>
+      {/* <div>
         <input
           type="text"
           name="longitude"
@@ -135,12 +133,12 @@ const BrandRegisterForm = () => {
           onBlur={formik.handleBlur}
           className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
         />
-      </div>
+      </div> */}
 
       {/* Submit Button */}
       <button
         type="submit"
-        className="w-full py-3 main-text bg-f75f07 text-white rounded-md hover:bg-f75f07/90 focus:outline-none"
+        className="w-full py-3 main-text bg-f75f07 text-white bg-white rounded-md hover:bg-f75f07/90 focus:outline-none"
       >
         Register as Brand
       </button>
