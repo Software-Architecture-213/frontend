@@ -18,8 +18,8 @@ const AdminLoginForm = () => {
   // Formik hook with imported validation schema
   const formik = useFormik({
     initialValues: {
-      email: "admin@gmail.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
     validationSchema: loginFormValidator, // Use the imported schema
     onSubmit: async (values) => {

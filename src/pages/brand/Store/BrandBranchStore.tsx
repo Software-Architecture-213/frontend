@@ -103,7 +103,7 @@ const BrandBranchStore = () => {
       </div>
 
       {/* Branch List Section */}
-      <div className="w-1/4 bg-gray-100 p-4 overflow-y-auto">
+      <div className="w-1/4 bg-gray-100 p-4 overflow-y-auto text-black">
         <h2 className="text-lg font-semibold mb-4">Branch List</h2>
         <button
           onClick={() => setIsFormOpen(true)}
@@ -129,7 +129,7 @@ const BrandBranchStore = () => {
 
       {/* Create Branch Form (Popup) */}
       {isFormOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed top-0 left-0 w-full h-full bg-gray-500 bg-opacity-50 flex justify-center items-center z-50 text-black">
           <div className="bg-white p-6 rounded-lg w-96 shadow-xl z-60">
             <h3 className="text-xl font-semibold mb-4">Create New Branch</h3>
             <form
@@ -145,7 +145,7 @@ const BrandBranchStore = () => {
                   name="name"
                   value={newBranch.name}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-500 rounded-md bg-white"
                   required
                 />
               </div>
@@ -156,7 +156,7 @@ const BrandBranchStore = () => {
                   name="address"
                   value={newBranch.address}
                   onChange={handleInputChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full p-2 border border-gray-500 rounded-md bg-white"
                   required
                 />
               </div>
@@ -168,7 +168,7 @@ const BrandBranchStore = () => {
                     step="0.0001"
                     value={newBranch.gps.lat}
                     onChange={(e) => handleLocationChange(e, "lat")}
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    className="w-full p-2 border border-gray-500 rounded-md bg-white"
                     required
                   />
                 </div>
@@ -179,7 +179,7 @@ const BrandBranchStore = () => {
                     step="0.0001"
                     value={newBranch.gps.lng}
                     onChange={(e) => handleLocationChange(e, "lng")}
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                    className="w-full p-2 border border-gray-500 rounded-md bg-white"
                     required
                   />
                 </div>

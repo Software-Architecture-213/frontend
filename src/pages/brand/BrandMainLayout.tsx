@@ -3,6 +3,7 @@ import { useAuth } from '../../hooks/AuthContext';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon, CreditCardIcon, HomeIcon, PlayIcon, ShoppingBagIcon, TagIcon } from '@heroicons/react/20/solid';
 import { brandApi } from '../../api/brandClient/brandApi';
+import DEFAULT_AVATAR from '../../assets/images/default_avatar.png';
 
 const Header = () => {
   const { profile } = useAuth();
@@ -16,7 +17,7 @@ const Header = () => {
           <div>
             <MenuButton className="inline-flex w-full items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
               <img
-                src={profile.imageUrl}
+                src={profile.imageUrl ?? DEFAULT_AVATAR}
                 alt="Profile"
                 className="w-8 h-8 rounded-full"
               />

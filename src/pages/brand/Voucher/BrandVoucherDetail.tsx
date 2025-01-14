@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
 import { format } from 'date-fns';
+import EMPTY_IMAGE from '../../../assets/images/empty_image.png';
 
 type Voucher = {
     id: string;
@@ -43,11 +44,11 @@ const BrandVoucherDetail = () => {
     }
 
     return (
-        <section className="p-6">
-            <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <section className=" text-black bg-white shadow-lg rounded-lg p-6">
+            <div className="max-w-3xl mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-3xl font-semibold">{voucher.code}</h2>
-                    <span className={`px-4 py-2 rounded-full ${voucher.status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-gray-500 text-white'}`}>
+                    <span className={`px-4 py-2 rounded-full ${voucher.status === 'ACTIVE' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'}`}>
                         {voucher.status}
                     </span>
                 </div>
@@ -55,13 +56,13 @@ const BrandVoucherDetail = () => {
 
             {voucher.imageUrl && (
                 <div className="mb-6">
-                    <img src={voucher.imageUrl} alt={voucher.code} className="w-full h-64 object-cover rounded-lg" />
+                    <img src={voucher.imageUrl ?? EMPTY_IMAGE} alt={voucher.code} className="w-full h-64 object-contain rounded-lg" />
                 </div>
             )}
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                <div className="text-left rounded-lg shadow-lg p-4 bg-gray-100">
-                    <h3 className="text-3xl m-3 font-semibold text-gray-700">Voucher Info</h3>
+                <div className="text-left rounded-lg shadow-lg p-4 bg-gray-200">
+                    <h3 className="text-3xl m-3 font-semibold">Voucher Info</h3>
                     <p className="text-lg font-semibold">Code: {voucher.code}</p>
                     <p className="text-lg">Type: {voucher.type}</p>
                     <p className="text-lg">Value Type: {voucher.valueType}</p>
@@ -71,8 +72,8 @@ const BrandVoucherDetail = () => {
                     <p className="text-lg">Max Counts: {voucher.maxCounts}</p>
                     <p className="text-lg">Create Counts: {voucher.createCounts}</p>
                 </div>
-                <div className="text-left rounded-lg shadow-lg p-4 bg-gray-100">
-                    <h3 className="text-3xl m-3 font-semibold text-gray-700">Timestamps</h3>
+                <div className="text-left rounded-lg shadow-lg p-4 bg-gray-200">
+                    <h3 className="text-3xl m-3 font-semibold">Timestamps</h3>
                     <p className="text-lg">Expired At: {format(new Date(voucher.expiredAt), 'yyyy-MM-dd')}</p>
                     <p className="text-lg">Created At: {format(new Date(voucher.createAt), 'yyyy-MM-dd')}</p>
                     <p className="text-lg">Updated At: {format(new Date(voucher.updateAt), 'yyyy-MM-dd')}</p>

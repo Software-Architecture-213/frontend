@@ -43,6 +43,7 @@ export function VoucherStatisticChart() {
     const [endDate, setEndDate] = useState<Date | null>(currentDate);
 
     const fetchData = async () => {
+        console.log(profile)
         try {
             const response = await brandApi.getVoucherStatisticBrand(brandId, dateToYYYYMMdd(startDate!), dateToYYYYMMdd(endDate!));
             const fetchedData = response.data.data;
@@ -115,14 +116,14 @@ export function VoucherStatisticChart() {
                 }}
             />
         }
-        else{
+        else {
             content = <Empty />
         }
         return content
     }
 
     return (
-        <div className='w-full space-y-4'>
+        <div className='w-full space-y-4 justify-items-center'>
             <CustomTitle text='Voucher statistic' />
             {renderDatePicker()}
             {loading ? <Spinner /> : renderChart()}

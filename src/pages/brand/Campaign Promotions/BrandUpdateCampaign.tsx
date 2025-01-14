@@ -4,6 +4,8 @@ import { brandApi } from '../../../api/brandClient/brandApi';
 import imageCompression from 'browser-image-compression';
 import { useAuth } from '../../../hooks/AuthContext';
 import { PayPalButtons, PayPalScriptProvider } from '@paypal/react-paypal-js';
+import EMPTY_IMAGE from '../../../assets/images/empty_image.png';
+import { toast, ToastContainer } from 'react-toastify';
 
 const paypalInitOptions = {
     clientId: 'AZzuAb3tlCCoHK_VNvLp0UAJZ7279cB4eXJcSFAfO1GiwzD_ZaHTa9w7i3t7l1HAtJj8kG9l6SuK2B50',
@@ -166,7 +168,7 @@ const BrandUpdateCampaign = () => {
             if (image) {
                 await uploadImage(response.data.id);
             }
-
+            toast.info('Campaign updated successfully!');
             navigate('/brand/campaign');
         } catch (error) {
             console.error('Error updating campaign:', error);
@@ -202,7 +204,7 @@ const BrandUpdateCampaign = () => {
                     <div className="flex">
                         <div className="w-1/3 p-4">
                             <div className="mt-4 mb-4">
-                                <img src={imageUrl} alt="Campaign Image" className="max-w-full h-auto rounded-lg shadow-lg" />
+                                <img src={imageUrl ?? EMPTY_IMAGE} alt="Campaign Image" className="max-w-full h-auto rounded-lg shadow-lg object-cover" />
                             </div>
                             <input
                                 type="file"
@@ -231,7 +233,7 @@ const BrandUpdateCampaign = () => {
                                 </div>
                             )}
                         </div>
-                        <div className="w-2/3 p-4">
+                        <div className="w-2/3 p-4 text-black">
                             <form onSubmit={handleSubmit}>
                                 <div className="mb-6">
                                     <label htmlFor="campaignName" className="block text-md font-semibold text-gray-800 mb-2">Name of Campaign *</label>
@@ -239,7 +241,7 @@ const BrandUpdateCampaign = () => {
                                         type="text"
                                         id="campaignName"
                                         name="campaignName"
-                                        className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                        className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                         value={campaignName}
                                         onChange={handleInputChange}
                                     />
@@ -249,7 +251,7 @@ const BrandUpdateCampaign = () => {
                                     <textarea
                                         id="description"
                                         name="description"
-                                        className="mt-1 block w-full text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                        className="mt-1 block w-full text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                         value={description}
                                         onChange={handleInputChange}
                                     ></textarea>
@@ -261,7 +263,7 @@ const BrandUpdateCampaign = () => {
                                             type="date"
                                             id="startDate"
                                             name="startDate"
-                                            className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                            className="mt-1 block w-full h-12 text-lg border border-gray-300 text-white rounded-lg shadow-sm px-4"
                                             value={startDate}
                                             onChange={handleInputChange}
                                         />
@@ -272,7 +274,7 @@ const BrandUpdateCampaign = () => {
                                             type="date"
                                             id="endDate"
                                             name="endDate"
-                                            className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                            className="mt-1 block w-full h-12 text-lg border border-gray-300 text-white rounded-lg shadow-sm px-4"
                                             value={endDate}
                                             onChange={handleInputChange}
                                         />
@@ -301,7 +303,7 @@ const BrandUpdateCampaign = () => {
                                         type="number"
                                         id="budget"
                                         name="budget"
-                                        className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4"
+                                        className="mt-1 block w-full h-12 text-lg border border-gray-300 bg-white rounded-lg shadow-sm px-4"
                                         value={budget}
                                         onChange={handleInputChange}
                                     />
@@ -415,6 +417,7 @@ const BrandUpdateCampaign = () => {
                     </div>
                 </div>
             )}
+            <ToastContainer />
         </div>
     );
 };
