@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { identityUserApi } from "../../../api/identityClient/identityUserApi";
 import { GameRow } from "../../../types/game";
 import AdminGamesRow from "./AdminGamesRow";
 import { gameApi } from "../../../api/gameClient/gameApi";
@@ -11,6 +10,7 @@ const TableHeaders = [
   "Description",
   "Type",
   "Difficulty",
+  "Status",
   "Created At",
   "Action",
 ];

@@ -40,6 +40,9 @@ const AdminGamesRow: React.FC<GameRowProps> = ({ game }) => {
         <p className="block text-sm text-slate-800">{thisGame.difficulty.toUpperCase()}</p>
       </td>
       <td className="p-4 py-5">
+        <p className="block text-sm main-text font-bold text-slate-800 cursor-pointer">Ongoing</p>
+      </td>
+      <td className="p-4 py-5">
         <p className="block text-sm text-slate-800">{toLocaleString(thisGame.createdAt!)}</p>
       </td>
       {/* <td className="p-4 py-5">

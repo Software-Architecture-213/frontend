@@ -170,7 +170,7 @@ const UpdateUserDialog: React.FC<UpdateUserDialogProps> = ({ open, setOpen, user
                 className="ml-2 px-4 main-bg py-2 text-sm text-white bg-blue-600 rounded hover:bg-blue-500"
                 disabled={isLoading}
               >
-                {isLoading ? "Creating..." : "Update"}
+                {isLoading ? "Updating..." : "Update"}
               </button>
             </div>
           </form>
