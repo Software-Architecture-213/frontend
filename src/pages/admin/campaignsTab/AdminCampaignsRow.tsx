@@ -35,7 +35,7 @@ const AdminCampaignsRow: React.FC<CampaignRowProps> = ({ campaign }) => {
       </td>
   
       <td className="p-4 py-5">
-        <p className="block text-sm text-slate-800">{thisCampaign.budget}</p>
+        <p className="block text-sm text-slate-800">{thisCampaign.budget}$</p>
       </td>
       <td className="p-4 py-5">
         <p className="block text-sm text-slate-800">{toLocaleString(thisCampaign.startDate!)}</p>

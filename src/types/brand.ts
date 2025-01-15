@@ -49,3 +49,13 @@ export interface IChartData{
         borderWidth: number;
     }[];
 }
+
+
+export interface PaymentRow {
+    orderId: string,
+    brandName: string | null,
+    brandImageUrl: string | null,
+    createdAt: string,
+    currency: string,
+    amount: number,
+}
