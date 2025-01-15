@@ -160,6 +160,9 @@ export const brandApi = {
       endDate: endDate
     };
     return axiosInstance.get(`/api/brands/statistic/brands/${brandId}/vouchers`, { params: queryParams });
+  },
+  getAllPayments: async () => {
+    return axiosInstance.get(`/api/brands/checkout/all`);
   }, 
   createConversionRule: async(data: any) => {
     return axiosInstance.post('/api/brands/promotions/promotion/conversions-rule', data)

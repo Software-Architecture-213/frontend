@@ -26,6 +26,7 @@ import BrandPayment from './pages/brand/BrandPayment';
 import AdminBrandsTab from './pages/admin/brandsTab/AdminBrandsTab';
 import AdminGamesTab from './pages/admin/gamesTab/AdminGamesTab';
 import AdminCampaignsTab from './pages/admin/campaignsTab/AdminCampaignsTab';
+import AdminPaymentsTab from './pages/admin/paymentsTab/AdminPaymentsTab';
 
 
 
@@ -46,6 +47,7 @@ function App() {
                 <Route path='brands' element={<AdminBrandsTab/>} />
                 <Route path='games' element={<AdminGamesTab/>} />
                 <Route path='campaigns' element={<AdminCampaignsTab/>} />
+                <Route path='payments' element={<AdminPaymentsTab/>} />
               </Route>
               {/* Brand route */}
               <Route path="brand" element={<BrandMainLayout/>}>

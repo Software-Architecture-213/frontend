@@ -2,7 +2,7 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/AuthContext';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { BriefcaseIcon, ChevronDownIcon, HomeIcon, PaperClipIcon, UserIcon } from '@heroicons/react/20/solid';
+import { BriefcaseIcon, ChevronDownIcon, CreditCardIcon, HomeIcon, PaperClipIcon, UserIcon } from '@heroicons/react/20/solid';
 import { identityAuthApi } from '../../api/identityClient/identityAuthApi';
 import { PuzzlePieceIcon } from '@heroicons/react/16/solid';
 import AppLogo from '../../components/AppLogo';
@@ -95,6 +95,12 @@ const Sidebar = () => {
           <Link to="/admin/campaigns" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
             <PaperClipIcon className="w-5 h-5 text-gray-300 mr-3" />
             Campaigns
+          </Link>
+        </li>
+        <li>
+          <Link to="/admin/payments" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">
+            <CreditCardIcon className="w-5 h-5 text-gray-300 mr-3" />
+            Payments
           </Link>
         </li>
       </ul>
