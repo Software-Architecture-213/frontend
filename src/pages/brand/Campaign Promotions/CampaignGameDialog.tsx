@@ -162,6 +162,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quiz Settings</h3>
             <button
+              type="button"
               onClick={handleAddQuiz}
               className="bg-gray-300 mb-4 inline-block"
             >
@@ -206,6 +207,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
                   </div>
                 ))}
                 <button
+                  type="button"
                   onClick={() => {
                     const updatedQuizzes = [...quizzes];
                     updatedQuizzes[index].answers.push({ text: "", isCorrect: false });
@@ -223,6 +225,7 @@ const GameDialog = ({ isOpen, onClose, onSave, initialGameType }: any) => {
         <div>
           <h3 className="text-lg font-semibold mb-4">Item Settings</h3>
           <button
+            type="button"
             onClick={handleAddItem}
             className="bg-gray-300 mb-4 inline-block"
           >

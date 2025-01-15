@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { brandApi } from '../../../api/brandClient/brandApi';
 import imageCompression from 'browser-image-compression';
+import { gameApi } from '../../../api/gameClient/gameApi';
 
 const BrandCreateVoucher = () => {
   const { promotionId } = useParams<{ promotionId: string }>();
@@ -20,6 +21,19 @@ const BrandCreateVoucher = () => {
   const [createCounts, setCreateCounts] = useState<number>(0);
   const [message, setMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [items, setItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      console.log(promotionId);
+      const response = await gameApi.getItemsByPromotionId(promotionId!);
+      if (response.data){
+        setItems(response.data.data);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const target = e.target;
@@ -46,7 +60,6 @@ const BrandCreateVoucher = () => {
     }
   };
 
-  // Handle file change for image preview and compression
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const selectedFile = (event.target as HTMLInputElement).files?.[0];
     if (selectedFile) {
@@ -94,6 +107,20 @@ const BrandCreateVoucher = () => {
 
     try {
       const response = await brandApi.createVoucher(data);
+      const voucherId = response.data.id;
+      console.log(items)
+      if (items != null){
+        const conversionRuleData = {
+          voucherId,
+          promotionId,
+          items: items.map((item: any) => ({
+            itemId: item.id,
+            quantity: item.maxQuantity || 1,
+          })),
+        };
+  
+        await brandApi.createConversionRule(conversionRuleData);
+      }
 
       if (image) {
         const formData = new FormData();
@@ -241,7 +268,7 @@ const BrandCreateVoucher = () => {
                   type="date"
                   id="expiredAt"
                   name="expiredAt"
-                  className="mt-1 block w-full h-12 text-lg border border-gray-300 text-white rounded-lg shadow-sm px-4"
+                  className="mt-1 block w-full h-12 text-lg border border-gray-300 rounded-lg shadow-sm px-4 text-gray-800"
                   value={expiredAt}
                   onChange={handleInputChange}
                 />

@@ -27,5 +27,8 @@ export const gameApi = {
     }, 
     createGame: async (createRequest: any) => {
         return axios.post("http://localhost:8081/bulk-create", createRequest)
+    },
+    getItemsByPromotionId: async (promotionId: string) => {
+        return axios.get(`http://localhost:8081/items/promotion/${promotionId}`)
     }
 }

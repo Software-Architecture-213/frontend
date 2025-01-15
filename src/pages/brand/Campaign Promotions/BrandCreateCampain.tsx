@@ -203,6 +203,7 @@ const BrandCreateCampaign = () => {
             id: response.data.data.game.id,
           },
         }));
+        
         console.log("Quiz payload: ", payload)
       } else {
         const payload = {

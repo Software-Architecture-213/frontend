@@ -36,7 +36,6 @@ const BrandUpdateCampaign = () => {
     const [message, setMessage] = useState("");
     const [status, setStatus] = useState("INACTIVE");
     const [budget, setBudget] = useState(0);
-    const [cost, setCost] = useState(350);
     const [isLoading, setIsLoading] = useState(false);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [games, setGames] = useState<Games>({
@@ -110,7 +109,6 @@ const BrandUpdateCampaign = () => {
             if (setter) {
                 setter(value);
             }
-            setCost(budget);
         }
     };
 
@@ -390,7 +388,7 @@ const BrandUpdateCampaign = () => {
                                                                 );
                                                                 if (orderData.status === "COMPLETED") {
                                                                     setMessage("Transaction completed by " + orderData.payer.name.given_name + orderData.payer.name.surname);
-                                                                    setStatus("PAID");
+                                                                    setStatus("ACTIVE");
                                                                 }
                                                             }
                                                         } catch (error) {

@@ -160,5 +160,8 @@ export const brandApi = {
       endDate: endDate
     };
     return axiosInstance.get(`/api/brands/statistic/brands/${brandId}/vouchers`, { params: queryParams });
+  }, 
+  createConversionRule: async(data: any) => {
+    return axiosInstance.post('/api/brands/promotions/promotion/conversions-rule', data)
   }
 };
