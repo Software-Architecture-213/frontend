@@ -56,6 +56,10 @@
   color: #FBF6F4 !important;
 }
 
+img {
+  mix-blend-mode: multiply; /* Adjust based on image and background */
+}
+
 td {
   max-width: 150px;
   white-space: normal;

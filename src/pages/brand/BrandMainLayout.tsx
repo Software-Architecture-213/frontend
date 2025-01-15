@@ -4,12 +4,13 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon, CreditCardIcon, HomeIcon, PlayIcon, ShoppingBagIcon, TagIcon } from '@heroicons/react/20/solid';
 import { brandApi } from '../../api/brandClient/brandApi';
 import DEFAULT_AVATAR from '../../assets/images/default_avatar.png';
+import AppLogo from '../../components/AppLogo';
 
 const Header = () => {
   const { profile } = useAuth();
   const navigate = useNavigate();
   return (
-    <div className="bg-white shadow-md p-4 flex justify-between items-center">
+    <div className="bg-gray-50  shadow-md p-4 flex justify-between items-center">
       {/* Profile Dropdown */}
       <div className="ml-auto mr-3 flex items-center space-x-4">
         <Menu as="div" className="relative inline-block text-left">
@@ -60,7 +61,7 @@ const Header = () => {
 const Sidebar = () => {
   return (
     <div className="main-bg text-white w-64 space-y-6 py-7 px-3">
-      <h2 className="text-3xl font-semibold text-center text-white mb-8">Brand</h2>
+      <AppLogo/>
       <ul className="text-left space-y-4">
         <li>
           <Link to="/brand/dashboard" className="flex items-center py-2 px-4 text-left secondary-text rounded-md hover:bg-gray-800">

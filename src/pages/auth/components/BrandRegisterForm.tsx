@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { brandFormValidator } from "../../../utils/formValidator";
 import { useNavigate } from "react-router-dom";
 import { brandApi } from "../../../api/brandClient/brandApi";
+import AppLogo from "../../../components/AppLogo";
 
 const BrandRegisterForm = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const BrandRegisterForm = () => {
     onSubmit: async (values) => {
       console.log("Form submitted with values: ", values);
       try {
-        const gps = { latitude: 0, longitude: 0};
+        const gps = { latitude: 0, longitude: 0 };
         const response = await brandApi.register(
           values.username,
           values.password,
@@ -36,81 +37,81 @@ const BrandRegisterForm = () => {
           navigate("/login");
         }
       } catch (err) {
-          navigate("/register");
+        navigate("/register");
       }
     },
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} className="space-y-4">
-      {/* Username Input */}
-      <div>
-        <input
-          type="email"
-          name="username"
-          placeholder="Email"
-          value={formik.values.username}
-          onChange={handleInputChange}  // Call handleInputChange here
-          onBlur={formik.handleBlur}
-          className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${
-            formik.touched.username && formik.errors.username
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-f75f07"
-          }`}
-        />
-        {formik.touched.username && formik.errors.username && (
-          <p className="text-black text-sm mt-1">{formik.errors.username}</p>
-        )}
-      </div>
+    <>
+      <AppLogo />
+      <form onSubmit={formik.handleSubmit} className="space-y-4">
+        {/* Username Input */}
+        <div>
+          <input
+            type="email"
+            name="username"
+            placeholder="Email"
+            value={formik.values.username}
+            onChange={handleInputChange}  // Call handleInputChange here
+            onBlur={formik.handleBlur}
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${formik.touched.username && formik.errors.username
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:ring-f75f07"
+              }`}
+          />
+          {formik.touched.username && formik.errors.username && (
+            <p className="text-black text-sm mt-1">{formik.errors.username}</p>
+          )}
+        </div>
 
-      {/* Password Input */}
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formik.values.password}
-          onChange={handleInputChange}  // Call handleInputChange here
-          onBlur={formik.handleBlur}
-          className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${
-            formik.touched.password && formik.errors.password
-              ? "border-red-500 focus:ring-red-500"
-              : "border-gray-300 focus:ring-f75f07"
-          }`}
-        />
-        {formik.touched.password && formik.errors.password && (
-          <p className="text-black text-sm mt-1">{formik.errors.password}</p>
-        )}
-      </div>
+        {/* Password Input */}
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={formik.values.password}
+            onChange={handleInputChange}  // Call handleInputChange here
+            onBlur={formik.handleBlur}
+            className={`w-full p-3 text-black bg-white border rounded-md focus:outline-none focus:ring-2 ${formik.touched.password && formik.errors.password
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:ring-f75f07"
+              }`}
+          />
+          {formik.touched.password && formik.errors.password && (
+            <p className="text-black text-sm mt-1">{formik.errors.password}</p>
+          )}
+        </div>
 
-      {/* Display Name Input */}
-      <div>
-        <input
-          type="text"
-          name="displayName"
-          placeholder="Name"
-          value={formik.values.displayName}
-          onChange={handleInputChange}  // Call handleInputChange here
-          onBlur={formik.handleBlur}
-          className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
-        />
-      </div>
+        {/* Display Name Input */}
+        <div>
+          <input
+            type="text"
+            name="displayName"
+            placeholder="Name"
+            value={formik.values.displayName}
+            onChange={handleInputChange}  // Call handleInputChange here
+            onBlur={formik.handleBlur}
+            className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
+          />
+        </div>
 
-      {/* Field Input */}
-      <div>
-        <input
-          type="text"
-          name="field"
-          placeholder="Field"
-          value={formik.values.field}
-          onChange={handleInputChange}  // Call handleInputChange here
-          onBlur={formik.handleBlur}
-          className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
-        />
-      </div>
+        {/* Field Input */}
+        <div>
+          <input
+            type="text"
+            name="field"
+            placeholder="Field"
+            value={formik.values.field}
+            onChange={handleInputChange}  // Call handleInputChange here
+            onBlur={formik.handleBlur}
+            className="w-full p-3 text-black bg-white border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-f75f07"
+          />
+        </div>
 
-      {/* Latitude Input */}
-      {/* <div>
+        {/* Latitude Input */}
+        {/* <div>
         <input
           type="text"
           name="latitude"
@@ -122,8 +123,8 @@ const BrandRegisterForm = () => {
         />
       </div> */}
 
-      {/* Longitude Input */}
-      {/* <div>
+        {/* Longitude Input */}
+        {/* <div>
         <input
           type="text"
           name="longitude"
@@ -135,14 +136,16 @@ const BrandRegisterForm = () => {
         />
       </div> */}
 
-      {/* Submit Button */}
-      <button
-        type="submit"
-        className="w-full py-3 main-text bg-f75f07 text-white bg-white rounded-md hover:bg-f75f07/90 focus:outline-none"
-      >
-        Register as Brand
-      </button>
-    </form>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full py-3 main-text bg-f75f07 text-white bg-white rounded-md hover:bg-f75f07/90 focus:outline-none"
+        >
+          Register as Brand
+        </button>
+      </form>
+    </>
+
   );
 };
 
