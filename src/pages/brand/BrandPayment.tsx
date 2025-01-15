@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { brandApi } from "../../api/brandClient/brandApi";
-import { parseISO } from "date-fns/parseISO";
-import { format } from "date-fns";
 
 
 interface Payment {
@@ -48,11 +46,10 @@ const BrandPayment: React.FC = () => {
         <table className="w-full border-collapse border border-gray-200 bg-white">
           <thead>
             <tr className="bg-gray-100">
-              <th className="border border-gray-200 p-3 text-left">Payment ID</th>
-              <th className="border border-gray-200 p-3 text-left">Amount</th>
-              <th className="border border-gray-200 p-3 text-left">Date</th>
-              <th className="border border-gray-200 p-3 text-left">Status</th>
-              <th className="border border-gray-200 p-3 text-left">Currency</th>
+              <th className="border border-gray-200 p-3 text">Payment ID</th>
+              <th className="border border-gray-200 p-3 text">Amount</th>
+              <th className="border border-gray-200 p-3 text">Date</th>
+              <th className="border border-gray-200 p-3 text">Currency</th>
             </tr>
           </thead>
           <tbody>
@@ -61,7 +58,6 @@ const BrandPayment: React.FC = () => {
                 <td className="border border-gray-200 p-3">{payment.id}</td>
                 <td className="border border-gray-200 p-3">{payment.amount.toFixed(2)}</td>
                 <td className="border border-gray-200 p-3">{payment.createAt ? new Date(payment.createAt).toLocaleDateString() : 'Invalid Date'}</td>
-                <td className="border border-gray-200 p-3">{payment.status}</td>
                 <td className="border border-gray-200 p-3">{payment.currency}</td>
               </tr>
             ))}

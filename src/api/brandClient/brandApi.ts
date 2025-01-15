@@ -163,5 +163,8 @@ export const brandApi = {
   },
   getAllPayments: async () => {
     return axiosInstance.get(`/api/brands/checkout/all`);
+  }, 
+  createConversionRule: async(data: any) => {
+    return axiosInstance.post('/api/brands/promotions/promotion/conversions-rule', data)
   }
 };
